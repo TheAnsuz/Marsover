@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>dev.amrv</groupId>
+    <artifactId>marsover</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <inceptionYear>2022</inceptionYear>
+    <name>Marsover-maven</name>
+    <description>
+        Marsover is a fork on MARS (Mips Assembler and Runtime Simulator)
+        that aims to renew its look and feel and also supply it with more
+        functions and optimizations.
+    </description>
+    <url>https://github.com/TheAnsuz/Marsover</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>amrv</id>
+            <name>Adrian Martin Ruiz del Valle</name>
+            <email>adrianmrv02@gmail.com</email>
+            <url>https://github.com/TheAnsuz</url>
+            <timezone>Europe/Spain</timezone>
+            <properties>
+                <discord>Ansuz#2658</discord>
+            </properties>
+        </developer>
+    </developers>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <exec.mainClass>dev.amrv.marsover.Marsover</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>2.6</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <directory>${basedir}/dist</directory>
+        <finalName>${name}-${version}</finalName>
+        <resources>
+            <resource>
+                <directory>${basedir}/res</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>
+                                        dev.amrv.marsover.Marsover
+                                    </mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
