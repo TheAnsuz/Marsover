@@ -2,7 +2,6 @@
    import mars.*;
    import java.awt.event.*;
    import javax.swing.*;
-   import javax.swing.event.*;
 	
 	/*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar

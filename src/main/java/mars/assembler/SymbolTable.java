@@ -1,6 +1,6 @@
    package mars.assembler;
-   import mars.*;
    import java.util.*;
+   import mars.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -37,8 +37,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	**/
 
     public class SymbolTable {
-      private static String startLabel = "main";
-      private String filename;
+      private static final String startLabel = "main";
+      private final String filename;
       private ArrayList table;
    	// Note -1 is legal 32 bit address (0xFFFFFFFF) but it is the high address in 
    	// kernel address space so highly unlikely that any symbol will have this as 

@@ -6,7 +6,6 @@
    import mars.*;
    import java.awt.*;
    import javax.swing.event.*;
-   import javax.swing.text.*;
    import javax.swing.undo.*;
    import javax.swing.*;
 
@@ -26,10 +25,10 @@
      
       private EditPane editPane;
       private UndoManager undoManager;
-      private UndoableEditListener undoableEditListener;
+      private final UndoableEditListener undoableEditListener;
       private boolean isCompoundEdit = false;
       private CompoundEdit compoundEdit;
-      private JEditBasedTextArea sourceCode;
+      private final JEditBasedTextArea sourceCode;
      
        
     

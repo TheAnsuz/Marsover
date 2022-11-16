@@ -41,10 +41,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
     public class MemoryConfiguration {
-	   // Identifier is used for saving setting; name is used for display
-      private String configurationIdentifier, configurationName;
-      private String[] configurationItemNames;
-      private int[] configurationItemValues;
+      // Identifier is used for saving setting; name is used for display
+    private final String configurationIdentifier;
+      private String configurationName;
+      private final String[] configurationItemNames;
+      private final int[] configurationItemValues;
    	
    
        public MemoryConfiguration(String ident, String name, String[] items, int[] values) {

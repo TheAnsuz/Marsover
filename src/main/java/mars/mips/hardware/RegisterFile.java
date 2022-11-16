@@ -1,7 +1,6 @@
    package mars.mips.hardware;
 
    import java.util.Observer;
-
    import mars.Globals;
    import mars.assembler.SymbolTable;
    import mars.mips.instructions.Instruction;
@@ -46,7 +45,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       public static final int GLOBAL_POINTER_REGISTER = 28;
       public static final int STACK_POINTER_REGISTER = 29;
    
-      private static Register [] regFile = 
+      private static final Register [] regFile = 
           { new Register("$zero", 0, 0), new Register("$at", 1, 0),
          	new Register("$v0", 2, 0),new Register("$v1", 3, 0),
          	new Register("$a0", 4, 0),new Register("$a1", 5, 0),
@@ -66,9 +65,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          	new Register("$fp", 30, 0),new Register("$ra", 31, 0)
            };
          												  
-      private static Register programCounter= new Register("pc", 32, Memory.textBaseAddress); 
-      private static Register hi= new Register("hi", 33, 0);//this is an internal register with arbitrary number
-      private static Register lo= new Register("lo", 34, 0);// this is an internal register with arbitrary number
+      private static final Register programCounter= new Register("pc", 32, Memory.textBaseAddress); 
+      private static final Register hi= new Register("hi", 33, 0);//this is an internal register with arbitrary number
+      private static final Register lo= new Register("lo", 34, 0);// this is an internal register with arbitrary number
    		 
    
    	/**
@@ -146,14 +145,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	  **/
    	
        public static int getValue(int num){
-         if(num==33){
-            return hi.getValue();
-         }
-         else if(num==34){
-            return lo.getValue();
-         }
-         else  
-            return regFile[num].getValue();
+        switch (num) {
+            case 33:
+                return hi.getValue();
+            case 34:
+                return lo.getValue();
+            default:
+                return regFile[num].getValue();
+        }
             
       }
       		

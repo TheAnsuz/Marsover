@@ -5,7 +5,6 @@
    import mars.assembler.*;
    import mars.venus.*;
    import mars.util.*;
-   import java.io.*;
    import java.util.*;
 	
 /*
@@ -45,8 +44,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     public class Globals
    {
       // List these first because they are referenced by methods called at initialization.
-      private static String configPropertiesFile = "Config";
-      private static String syscallPropertiesFile = "Syscall";
+      private static final String configPropertiesFile = "Config";
+      private static final String syscallPropertiesFile = "Syscall";
    	
     /** The set of implemented MIPS instructions. **/
       public static InstructionSet instructionSet;

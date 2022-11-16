@@ -38,10 +38,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
  
 public class SimulatorNotice {
-   private int action;
-	private int maxSteps;
-	private double runSpeed;
-	private int programCounter;
+   private final int action;
+	private final int maxSteps;
+	private final double runSpeed;
+	private final int programCounter;
 	public static final int SIMULATOR_START = 0;
 	public static final int SIMULATOR_STOP  = 1;
 

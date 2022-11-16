@@ -1,7 +1,6 @@
 package mars.tools;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -9,12 +8,12 @@ import javax.swing.border.EmptyBorder;
 
 public class FunctionUnitVisualization extends JFrame {
 
-	private JPanel contentPane;
-	private String instruction;
-	private int register = 1;
-	private int control = 2;
-	private int aluControl = 3;
-	private int alu = 4;
+	private final JPanel contentPane;
+	private final String instruction;
+	private final int register = 1;
+	private final int control = 2;
+	private final int aluControl = 3;
+	private final int alu = 4;
 	private int currentUnit;
 
 	/**

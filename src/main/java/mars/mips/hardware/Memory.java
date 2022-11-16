@@ -1,9 +1,9 @@
    package mars.mips.hardware;
-   import mars.*;
-   import mars.util.*;
-   import mars.simulator.*;
-   import mars.mips.instructions.*;
    import java.util.*;
+   import mars.*;
+   import mars.mips.instructions.*;
+   import mars.simulator.*;
+   import mars.util.*;
 	
 	/*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -196,7 +196,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     // (greedy rather than lazy instantiation).  The constructor is private and getInstance()
     // always returns this instance.
     
-      private static Memory uniqueMemoryInstance = new Memory(); 
+      private static final Memory uniqueMemoryInstance = new Memory(); 
    	
     
     /*
@@ -769,7 +769,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          }
          else if (inTextSegment(address) || inKernelTextSegment(address)) {
             try { 
-               value = (getStatementNoNotify(address) == null) ? null : new Integer(getStatementNoNotify(address).getBinaryStatement());
+               value = (getStatementNoNotify(address) == null) ? null : getStatementNoNotify(address).getBinaryStatement();
             } 
                 catch (AddressErrorException aee) { 
                   value = null;               }
@@ -1176,7 +1176,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        // Private class whose objects will represent an observable-observer pair 
    	 // for a given memory address or range.
        private class MemoryObservable extends Observable implements Comparable {
-         private int lowAddress, highAddress; 
+         private final int lowAddress; 
+         private int highAddress;
       	
           public MemoryObservable(Observer obs, int startAddr, int endAddr) {
             lowAddress = startAddr;
@@ -1221,7 +1222,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    // The "|| Globals.getGui()==null" is a hack added 19 July 2012 DPS.  IF MIPS simulation
    // is from command mode, Globals.program is null but still want ability to observe.
        private void notifyAnyObservers(int type, int address, int length, int value) {
-         if ((Globals.program != null || Globals.getGui()==null) && this.observables.size() > 0) {
+         if ((Globals.program != null || Globals.getGui()==null) && !this.observables.isEmpty()) {
             Iterator it = this.observables.iterator();
             MemoryObservable mo;
             while (it.hasNext()) {
@@ -1382,7 +1383,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          else {
             value = blockTable[block][offset];
          }
-         return new Integer(value);
+         return value;
       }
    	   
    ////////////////////////////////////////////////////////////////////////////////////

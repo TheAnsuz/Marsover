@@ -1,6 +1,5 @@
    package mars.mips.dump;
 
-   import mars.Globals;
    import mars.mips.hardware.*;
    import java.io.*;
 /*

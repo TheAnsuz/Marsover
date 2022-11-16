@@ -1,13 +1,11 @@
    package mars;
 	
-   import mars.venus.*;
    import mars.assembler.*;
    import mars.simulator.*;
    import mars.mips.hardware.*;
 	
    import java.util.*;
    import java.io.*;
-   import java.awt.event.*;
    import javax.swing.*;
 
 /*
@@ -274,7 +272,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             preparee.readSource(filename);
             preparee.tokenize();
          	// I want "this" MIPSprogram to be the first in the list...except for exception handler
-            if (preparee == this && MIPSprogramsToAssemble.size()>0) {
+            if (preparee == this && !MIPSprogramsToAssemble.isEmpty()) {
                MIPSprogramsToAssemble.add(leadFilePosition,preparee);
             } 
             else {

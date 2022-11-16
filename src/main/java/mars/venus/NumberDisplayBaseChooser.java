@@ -1,7 +1,6 @@
    package mars.venus;
    import mars.*;
    import mars.util.*;
-   import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
 	
@@ -207,7 +206,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             return Binary.intToHexString(value);
          } 
          else {
-            return new Integer(value).toString();
+            return Integer.toString(value);
          }
       }
    

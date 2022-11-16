@@ -1,9 +1,9 @@
    package mars.mips.instructions;
+   import java.util.*;
    import mars.*;
-   import mars.util.*;
    import mars.assembler.*;
    import mars.mips.hardware.*;
-   import java.util.*;
+   import mars.util.*;
 	
 	/*
 Copyright (c) 2003-2008,  Pete Sanderson and Kenneth Vollmar
@@ -620,7 +620,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
      * Returns 0 if the ArrayList is null or empty.
      */   
        private int getInstructionLength(ArrayList translationList) {
-         if (translationList == null || translationList.size() == 0) {
+         if (translationList == null || translationList.isEmpty()) {
             return 0;
          }
        // If instruction template is DBNOP, that means generate a "nop" instruction but only

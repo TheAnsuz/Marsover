@@ -9,11 +9,11 @@
 
    package mars.venus.editors.jeditsyntax;
 
-   import javax.swing.text.*;
-   import javax.swing.JPopupMenu;
-   import java.awt.event.*;
    import java.awt.Component;
+   import java.awt.event.*;
    import java.util.*;
+   import javax.swing.JPopupMenu;
+   import javax.swing.text.*;
 
 /**
  * An input handler converts the user's key strokes into concrete actions.
@@ -82,7 +82,7 @@
    // Default action
       public static final ActionListener INSERT_CHAR = new insert_char();
    
-      private static Hashtable actions;
+      private static final Hashtable actions;
    
       static
       {
@@ -576,7 +576,7 @@
    
        public static class end implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public end(boolean select)
          {
@@ -636,7 +636,7 @@
    
        public static class document_end implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public document_end(boolean select)
          {
@@ -657,7 +657,7 @@
    
        public static class home implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public home(boolean select)
          {
@@ -703,7 +703,7 @@
    
        public static class document_home implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public document_home(boolean select)
          {
@@ -754,7 +754,7 @@
    
        public static class next_char implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public next_char(boolean select)
          {
@@ -781,7 +781,7 @@
    
        public static class next_line implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public next_line(boolean select)
          {
@@ -819,7 +819,7 @@
    
        public static class next_page implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public next_page(boolean select)
          {
@@ -853,7 +853,7 @@
    
        public static class next_word implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public next_word(boolean select)
          {
@@ -906,7 +906,7 @@
    
        public static class prev_char implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public prev_char(boolean select)
          {
@@ -933,7 +933,7 @@
    
        public static class prev_line implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public prev_line(boolean select)
          {
@@ -971,7 +971,7 @@
    
        public static class prev_page implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public prev_page(boolean select)
          {
@@ -1001,7 +1001,7 @@
    
        public static class prev_word implements ActionListener
       {
-         private boolean select;
+         private final boolean select;
       
           public prev_word(boolean select)
          {
@@ -1079,7 +1079,7 @@
          
             if(textArea.isEditable())
             {
-               StringBuffer buf = new StringBuffer();
+               StringBuilder buf = new StringBuilder();
                for(int i = 0; i < repeatCount; i++)
                   buf.append(str);
                textArea.overwriteSetSelectedText(buf.toString());

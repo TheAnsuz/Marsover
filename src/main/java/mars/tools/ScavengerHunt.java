@@ -1,11 +1,10 @@
    package mars.tools;
-   import mars.*;
-   import mars.mips.hardware.*;
    import java.awt.*;
    import java.awt.event.*;
-   import javax.swing.*;
    import java.util.*;
-   import javax.swing.JOptionPane;
+   import javax.swing.*;
+   import mars.*;
+   import mars.mips.hardware.*;
    import mars.util.*;
 
 /**
@@ -74,9 +73,9 @@
       private int authenticationValue = 0;
       private boolean GameOn = false;  // MIPS programs readiness
       private static int SetWordCounter = 0;
-      private static int accessCounter = 0;
+      private static final int accessCounter = 0;
       private static int playerID = ADMINISTRATOR_ID;   // Range 0...(NUM_PLAYERS-1), plus ADMINISTRATOR_ID
-      private boolean KENVDEBUG = false;
+      private final boolean KENVDEBUG = false;
    
    
     // Used to define (X,Y) coordinate of a location to which ScavengerHunt players
@@ -140,8 +139,8 @@
       //public int getLocationID() {  return locID; }
       } // end class PlayerData
     
-      private static PlayerData[] pd = new PlayerData[NUM_PLAYERS];
-      private static Location[] loc = new Location[NUM_LOCATIONS];
+      private static final PlayerData[] pd = new PlayerData[NUM_PLAYERS];
+      private static final Location[] loc = new Location[NUM_LOCATIONS];
       private Random randomStream;
       private long startTime;
    
@@ -242,8 +241,8 @@
         */
        private class ScavengerHuntDisplay extends JPanel
       {
-         private int width;
-         private int height;
+         private final int width;
+         private final int height;
          private boolean clearTheDisplay = true;
         
       

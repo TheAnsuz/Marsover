@@ -47,7 +47,7 @@ package mars.tools;//.bhtsim;
 public class BHTEntry {
 	
 	/** the history of the BHT entry. Each boolean value signals if the branch was taken or not. The value at index n-1 represents the most recent branch outcome. */
-	private boolean m_history[];
+	private final boolean m_history[];
 
 	/** the current prediction */
 	private boolean m_prediction;

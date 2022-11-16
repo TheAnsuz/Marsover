@@ -1,6 +1,5 @@
    package mars.tools;
 
-   import java.text.*;
    import java.awt.*;
    import java.awt.event.*;
    import java.awt.image.*;
@@ -394,10 +393,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       JButton applyButton, cancelButton;
       JCheckBox captureResizeCheckBox, captureMoveCheckBox, captureRescaleCheckBox;
       JRadioButton captureDisplayCenteredButton, captureDisplayUpperleftButton;
-      Integer[] scribblerLineWidthSettings = { new Integer(1), new Integer(2), 
-                                              new Integer(3), new Integer(4),
-         												 new Integer(5), new Integer(6),
-         												 new Integer(7), new Integer(8) };
+      Integer[] scribblerLineWidthSettings = { 1, 2, 3, 4, 5, 6, 7, 8};
       JComboBox lineWidthSetting;
       JButton lineColorSetting;
       JCheckBox dialogCentered; // Whether or not dialog appears centered over the magnfier frame.
@@ -603,7 +599,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     class MagnifierImage extends JPanel  {
     
       // Enclosing JFrame for this panel -- the Screen Magnifier itself.
-      private Magnifier frame;   	
+      private final Magnifier frame;   	
       // Rectangle representing screen pixels to be magnified.
       private Rectangle screenRectangle;   	
       // Robot used to perform the screen capture.
@@ -716,7 +712,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	  *  are not saved.
    	  */   	
        private class Scribbler {
-         private ScribblerSettings scribblerSettings;
+         private final ScribblerSettings scribblerSettings;
          private BasicStroke drawingStroke;
          // coordinates of previous mouse position 
          protected int last_x, last_y; 

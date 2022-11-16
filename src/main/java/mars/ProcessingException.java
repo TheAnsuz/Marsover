@@ -1,8 +1,8 @@
    package mars;
-   import mars.util.*;
    import mars.mips.hardware.*;
    import mars.mips.instructions.Instruction;
    import mars.simulator.*;
+   import mars.util.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar

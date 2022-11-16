@@ -1,9 +1,9 @@
    package mars.venus;
-   import mars.*;
-	import mars.venus.editors.MARSTextEditingArea;
    import java.awt.*;
-   import java.awt.event.*;
+	import java.awt.event.*;
    import javax.swing.*;
+   import mars.*;
+   import mars.venus.editors.MARSTextEditingArea;
 	
 	/*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar

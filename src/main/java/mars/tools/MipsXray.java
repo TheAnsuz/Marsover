@@ -2,9 +2,7 @@ package mars.tools;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -15,14 +13,12 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
@@ -45,11 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.UIManager;
-//import java.util.Timer;
-import javax.swing.event.InternalFrameEvent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -130,7 +122,7 @@ public class MipsXray extends AbstractMarsToolAndApplication{
              						"\n"+
 										"To see the datapath of register bank and control units click inside the functional unit.\n\n" +
              						"Version 2.0\n" + 
-             						"Developed by Márcio Roberto, Guilherme Sales, Fabrício Vivas, Flávio Cardeal and Fábio Lúcio\n" +
+             						"Developed by Mï¿½rcio Roberto, Guilherme Sales, Fabrï¿½cio Vivas, Flï¿½vio Cardeal and Fï¿½bio Lï¿½cio\n" +
              						"Contact Marcio Roberto at marcio.rdaraujo@gmail.com with questions or comments.\n"
              						;
           JButton help = new JButton("Help");
@@ -299,18 +291,18 @@ public class MipsXray extends AbstractMarsToolAndApplication{
            try{
                runAssembleAction = new RunAssembleAction("Assemble",  
                        new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath+"Assemble22.png"))),
-   							  "Assemble the current file and clear breakpoints", new Integer(KeyEvent.VK_A),
+   							  "Assemble the current file and clear breakpoints", KeyEvent.VK_A,
    							  KeyStroke.getKeyStroke( KeyEvent.VK_F3, 0), 
    							  mainUI);			
 
                runStepAction = new RunStepAction("Step", 
                        new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath+"StepForward22.png"))),
-   							  "Run one step at a time", new Integer(KeyEvent.VK_T),
+   							  "Run one step at a time", KeyEvent.VK_T,
    							  KeyStroke.getKeyStroke( KeyEvent.VK_F7, 0),
    							  mainUI);	
                runBackstepAction = new RunBackstepAction("Backstep", 
                        new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath+"StepBack22.png"))),
-   							  "Undo the last step", new Integer(KeyEvent.VK_B),
+   							  "Undo the last step", KeyEvent.VK_B,
    							  KeyStroke.getKeyStroke( KeyEvent.VK_F8, 0), 
    							  mainUI);		
            }
@@ -338,8 +330,8 @@ class Vertex {
    	private Color color;
    	private boolean first_interaction;
    	private boolean active;
-   	private boolean isText;
-   	private ArrayList<Integer> targetVertex;
+   	private final boolean isText;
+   	private final ArrayList<Integer> targetVertex;
    	
    	public Vertex(int index, int init, int end, String name, int oppositeAxis, boolean isMovingXaxis, 
    			String listOfColors, String listTargetVertex, boolean isText){
@@ -368,7 +360,7 @@ class Vertex {
    				direction = movingDownside;
    		}
    		String[] list =  listTargetVertex.split("#");
-   		targetVertex = new ArrayList<Integer>();
+   		targetVertex = new ArrayList<>();
    		for(int i = 0; i < list.length; i++){
    			targetVertex.add(Integer.parseInt(list[i]));
    		//	System.out.println("Adding " + i + " " +  Integer.parseInt(list[i])+ " in target");
@@ -450,7 +442,7 @@ class Vertex {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-}
+    }
 
 
 //Internal class that set the parameters value, control the basic behavior of the animation , and execute the animation of the 
@@ -463,13 +455,13 @@ class DatapathAnimation extends JPanel
 	 private static final long serialVersionUID = -2681757800180958534L;
 
 	 //config variables
-	 private int PERIOD = 5;    // velocity of frames in ms
+	 private final int PERIOD = 5;    // velocity of frames in ms
 	 private static final int PWIDTH = 1000;     // size of this panel
 	 private static final int PHEIGHT = 574;
-	 private GraphicsConfiguration gc;
-	 private GraphicsDevice gd;   	// for reporting accl. memory usage
-	 private int accelMemory;   
-	 private DecimalFormat df;
+	 private final GraphicsConfiguration gc;
+	 private final GraphicsDevice gd;   	// for reporting accl. memory usage
+	 private final int accelMemory;   
+	 private final DecimalFormat df;
 	 
 	 private int counter;			//verify then remove.
 	 private boolean justStarted; 	//flag to start movement
@@ -483,32 +475,32 @@ class DatapathAnimation extends JPanel
 
 //	 private Vertex[][] inputGraph;
 	 private Vector<Vector<Vertex>>  outputGraph;
-	 private ArrayList<Vertex> vertexList;
+	 private final ArrayList<Vertex> vertexList;
 	 private ArrayList<Vertex> vertexTraversed;
 	 //Screen Label variables
 	 
-	 private HashMap<String, String> opcodeEquivalenceTable;
-	 private HashMap<String, String> functionEquivalenceTable;
-	 private HashMap<String, String> registerEquivalenceTable;
+	 private final HashMap<String, String> opcodeEquivalenceTable;
+	 private final HashMap<String, String> functionEquivalenceTable;
+	 private final HashMap<String, String> registerEquivalenceTable;
 
 	 private String instructionCode;
 	 
-	 private int countRegLabel;
-	 private int countALULabel;
-	 private int countPCLabel;
+	 private final int countRegLabel;
+	 private final int countALULabel;
+	 private final int countPCLabel;
 	 
 	 //Colors variables
-	 private Color green1 = new Color(0,153,0);
-	 private Color green2 = new Color( 0,77,0);
-	 private Color yellow2 = new Color(185,182,42);
-	 private Color orange1 = new Color(255,102,0);
-	 private Color orange = new Color(119,34,34);
-	 private Color blue2 = new Color(0,153,255);
+	 private final Color green1 = new Color(0,153,0);
+	 private final Color green2 = new Color( 0,77,0);
+	 private final Color yellow2 = new Color(185,182,42);
+	 private final Color orange1 = new Color(255,102,0);
+	 private final Color orange = new Color(119,34,34);
+	 private final Color blue2 = new Color(0,153,255);
 	 
-	 private int register = 1;
-	 private int control = 2;
-	 private int aluControl = 3;
-	 private int alu = 4;
+	 private final int register = 1;
+	 private final int control = 2;
+	 private final int aluControl = 3;
+	 private final int alu = 4;
 	 private int currentUnit;
 	 private Graphics2D g2d;
 	 
@@ -534,15 +526,15 @@ class DatapathAnimation extends JPanel
 		 // load and initialise the images
 		 initImages();
 		  
-		 vertexList = new ArrayList<Vertex>();
+		 vertexList = new ArrayList<>();
 		 counter = 0;
 		 justStarted = true;
 		 instructionCode = instructionBinary;
 		 
 		 //declaration of labels definition.
-		 opcodeEquivalenceTable = new  HashMap<String, String>();
-		 functionEquivalenceTable = new  HashMap<String, String>();
-		 registerEquivalenceTable = new  HashMap<String, String>();
+		 opcodeEquivalenceTable = new  HashMap<>();
+		 functionEquivalenceTable = new  HashMap<>();
+		 registerEquivalenceTable = new  HashMap<>();
 		 
 		 countRegLabel = 400;
 		 countALULabel = 380;
@@ -646,15 +638,15 @@ class DatapathAnimation extends JPanel
 					}
 				}
 				//loading matrix of control of vertex.
-				outputGraph = new Vector<Vector<Vertex>>();
-				vertexTraversed = new ArrayList<Vertex>();
+				outputGraph = new Vector<>();
+				vertexTraversed = new ArrayList<>();
 				int size = vertexList.size();
 				Vertex vertex;
 				ArrayList<Integer> targetList;
 				for(int i = 0; i < vertexList.size(); i++){
 					vertex = vertexList.get(i);
 					targetList = vertex.getTargetVertex();
-					Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+					Vector<Vertex> vertexOfTargets = new Vector<>();
 					for(int k = 0; k < targetList.size(); k++){
 						vertexOfTargets.add(vertexList.get(targetList.get(k)));
 					}

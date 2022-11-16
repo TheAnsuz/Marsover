@@ -8,7 +8,6 @@
    import java.awt.*;
    import java.awt.event.*;
    import javax.swing.undo.*;
-   import java.text.*;
    import java.util.*;
    import java.io.*;
 
@@ -53,10 +52,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private MARSTextEditingArea sourceCode;
       private VenusUI mainUI;
       private String currentDirectoryPath;
-      private JLabel caretPositionLabel;
+      private final JLabel caretPositionLabel;
       private JCheckBox showLineNumbers;
       private JLabel lineNumbers;
-      private static int count = 0;
+      private static final int count = 0;
       private boolean isCompoundEdit = false;
       private CompoundEdit compoundEdit;
       private FileStatus fileStatus;
@@ -212,17 +211,18 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	 */
       private static final String spaces = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
       public String getLineNumbersList(javax.swing.text.Document doc) {
-         StringBuffer lineNumberList = new StringBuffer("<html>");
+         StringBuilder lineNumberList = new StringBuilder("<html>");
          int lineCount = doc.getDefaultRootElement().getElementCount(); //this.getSourceLineCount();
          int digits = Integer.toString(lineCount).length();
          for (int i=1; i<=lineCount;i++) {
             String lineStr = Integer.toString(i);
             int leadingSpaces = digits-lineStr.length();
             if (leadingSpaces == 0) {
-               lineNumberList.append(lineStr+"&nbsp;<br>");
+                lineNumberList.append(lineStr).append("&nbsp;<br>");
             } 
             else {
-               lineNumberList.append(spaces.substring(0,leadingSpaces*6)+lineStr+"&nbsp;<br>");
+                lineNumberList.append(spaces.substring(0,leadingSpaces*6))
+                        .append(lineStr).append("&nbsp;<br>");
             }
          }
          lineNumberList.append("<br></html>");

@@ -35,9 +35,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	**/
   
   public class Symbol{
-      private String name;
+      private final String name;
       private int address;
-      private boolean data; // boolean true if data symbol false if text symbol.
+      private final boolean data; // boolean true if data symbol false if text symbol.
       public static final boolean TEXT_SYMBOL = false;
       public static final boolean DATA_SYMBOL = true;
    

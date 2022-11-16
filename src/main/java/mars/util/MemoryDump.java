@@ -2,11 +2,6 @@
 
    import mars.Globals;
    import mars.mips.hardware.*;
-   import java.io.File;
-   import java.io.FileNotFoundException;
-   import java.io.FileOutputStream;
-   import java.io.IOException;
-   import java.io.PrintStream;
    import java.util.*;
 
 	/*
@@ -46,8 +41,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private static final HashMap segmentBoundMap = new HashMap();
       
       private static final String[] segmentNames = { ".text", ".data" };
-      private static int[] baseAddresses = new int[2];
-      private static int[] limitAddresses = new int[2];
+      private static final int[] baseAddresses = new int[2];
+      private static final int[] limitAddresses = new int[2];
    
    
       /**
@@ -61,8 +56,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          for (int i=0; i< segmentNames.length; i++) {
             if (segmentNames[i].equals(segment)) {
                Integer[] bounds = new Integer[2];
-               bounds[0] = new Integer(getBaseAddresses(segmentNames)[i]);
-               bounds[1] = new Integer(getLimitAddresses(segmentNames)[i]);
+               bounds[0] = getBaseAddresses(segmentNames)[i];
+               bounds[1] = getLimitAddresses(segmentNames)[i];
                return bounds;
             }
          }

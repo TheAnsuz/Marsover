@@ -3,7 +3,6 @@
    import java.io.IOException;
    import java.net.URI;
    import java.net.URISyntaxException;
-   import java.net.URL;
    import java.util.ArrayList;
    import java.util.Enumeration;
    import java.util.StringTokenizer;
@@ -192,7 +191,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        													 ArrayList fileExtensions  ) {
          ArrayList filenameList = new ArrayList();
          String fileExtension;
-         if (fileExtensions==null || fileExtensions.size()==0) {
+         if (fileExtensions==null || fileExtensions.isEmpty()) {
             filenameList = getFilenameList(classLoader,directoryPath,"");
          } 
          else {
@@ -248,7 +247,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        public static ArrayList getFilenameList(String directoryPath, ArrayList fileExtensions) {
          ArrayList filenameList = new ArrayList();
          String fileExtension;
-         if (fileExtensions==null || fileExtensions.size()==0) {
+         if (fileExtensions==null || fileExtensions.isEmpty()) {
             filenameList = getFilenameList(directoryPath,"");
          } 
          else {
@@ -299,7 +298,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        public static ArrayList getFilenameList(ArrayList nameList, ArrayList fileExtensions) {
          ArrayList filenameList = new ArrayList();
          String fileExtension;
-         if (fileExtensions==null || fileExtensions.size()==0) {
+         if (fileExtensions==null || fileExtensions.isEmpty()) {
             filenameList = getFilenameList(nameList,"");
          } 
          else {
@@ -445,9 +444,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	
        private static class MarsFileFilter extends FileFilter {
       
-         private ArrayList extensions;
-         private String fullDescription;
-         private boolean acceptDirectories;
+         private final ArrayList extensions;
+         private final String fullDescription;
+         private final boolean acceptDirectories;
         
           private MarsFileFilter(ArrayList extensions, String description, boolean acceptDirectories) {
             this.extensions = extensions;
@@ -461,7 +460,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	// generated here will be "Assembler Programs (*.s; *.asm)"
           private String buildFullDescription(String description, ArrayList extensions) {
             String result = (description == null) ? "" : description;
-            if (extensions.size() > 0) {
+            if (!extensions.isEmpty()) {
                result += "  (";
             }
             for (int i=0; i<extensions.size(); i++) {
@@ -470,7 +469,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                   result += ((i==0)?"":"; ")+"*"+((extension.charAt(0)=='.')? "" : ".")+extension;
                }
             }
-            if (extensions.size() > 0) {
+            if (!extensions.isEmpty()) {
                result += ")";
             }
             return result;

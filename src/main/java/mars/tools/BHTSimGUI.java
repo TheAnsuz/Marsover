@@ -34,7 +34,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.DecimalFormat;
 import java.util.Vector;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -82,7 +81,7 @@ public class BHTSimGUI extends JPanel {
 	private JComboBox m_cbBHTinitVal;
 	
 	/** the table representing the BHT */
-	private JTable m_tabBHT;
+	private final JTable m_tabBHT;
 	
 	/** text field for log output */
 	private JTextArea m_taLog;
@@ -133,7 +132,7 @@ public class BHTSimGUI extends JPanel {
 		
 		// create a default renderer for double values (percentage) 
 		DefaultTableCellRenderer doubleRenderer = new DefaultTableCellRenderer() {
-		    private DecimalFormat formatter = new DecimalFormat("##0.00");
+		    private final DecimalFormat formatter = new DecimalFormat("##0.00");
 		    
 			public void setValue(Object value) {				        			   
 			    setText((value == null) ? "" : formatter.format(value));
@@ -217,13 +216,13 @@ public class BHTSimGUI extends JPanel {
 		JPanel panel = new JPanel();
 		
 		Vector sizes = new Vector();
-		sizes.add(new Integer(8));
-		sizes.add(new Integer(16));
-		sizes.add(new Integer(32));
+		sizes.add(8);
+		sizes.add(16);
+		sizes.add(32);
 		
 		Vector bits = new Vector();
-		bits.add(new Integer(1));
-		bits.add(new Integer(2));
+		bits.add(1);
+		bits.add(2);
 		
 		Vector initVals = new Vector();		
 		initVals.add(BHTSimGUI.BHT_DO_NOT_TAKE_BRANCH);
@@ -342,4 +341,4 @@ public class BHTSimGUI extends JPanel {
 	}
 
 
-}
+} //.bhtsim;

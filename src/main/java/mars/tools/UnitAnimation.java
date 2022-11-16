@@ -1,23 +1,15 @@
 package mars.tools;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.MouseInfo;
-import java.awt.PointerInfo;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -26,7 +18,6 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.xml.parsers.DocumentBuilder;
@@ -50,13 +41,13 @@ implements ActionListener {
  private static final long serialVersionUID = -2681757800180958534L;
 
  //config variables
- private int PERIOD = 8;    // velocity of frames in ms
+ private final int PERIOD = 8;    // velocity of frames in ms
  private static final int PWIDTH = 1000;     // size of this panel
  private static final int PHEIGHT = 574;
- private GraphicsConfiguration gc;
- private GraphicsDevice gd;   	// for reporting accl. memory usage
- private int accelMemory;   
- private DecimalFormat df;
+ private final GraphicsConfiguration gc;
+ private final GraphicsDevice gd;   	// for reporting accl. memory usage
+ private final int accelMemory;   
+ private final DecimalFormat df;
  
  private int counter;			//verify then remove.
  private boolean justStarted; 	//flag to start movement
@@ -68,25 +59,26 @@ implements ActionListener {
 
 // private Vertex[][] inputGraph;
  private Vector<Vector<Vertex>>  outputGraph;
- private ArrayList<Vertex> vertexList;
+ private final ArrayList<Vertex> vertexList;
  private ArrayList<Vertex> vertexTraversed;
  //Screen Label variables
  
- private HashMap<String, String> registerEquivalenceTable;
+ private final HashMap<String, String> registerEquivalenceTable;
 
  private String instructionCode;
  
- private int countRegLabel;
- private int countALULabel;
- private int countPCLabel;
+ private final int countRegLabel;
+ private final int countALULabel;
+ private final int countPCLabel;
  
-private int register = 1;
-private int control = 2;
-private int aluControl = 3;
-private int alu = 4;
-private int datapatTypeUsed;
+private final int register = 1;
+private final int control = 2;
+private final int aluControl = 3;
+private final int alu = 4;
+private final int datapatTypeUsed;
+    private final Boolean cursorInIM;
   
- private Boolean cursorInIM, cursorInALU, cursorInDataMem, cursorInReg;
+ private Boolean cursorInALU, cursorInDataMem, cursorInReg;
  
  private Graphics2D g2d;
  
@@ -108,8 +100,8 @@ private int datapatTypeUsed;
 	   	private Color color;
 	   	private boolean first_interaction;
 	   	private boolean active;
-	   	private boolean isText;
-	   	private ArrayList<Integer> targetVertex;
+	   	private final boolean isText;
+	   	private final ArrayList<Integer> targetVertex;
 	   	
 	   	public Vertex(int index, int init, int end, String name, int oppositeAxis, boolean isMovingXaxis, 
 	   			String listOfColors, String listTargetVertex, boolean isText){
@@ -138,7 +130,7 @@ private int datapatTypeUsed;
 	   				direction = movingDownside;
 	   		}
 	   		String[] list =  listTargetVertex.split("#");
-	   		targetVertex = new ArrayList<Integer>();
+	   		targetVertex = new ArrayList<>();
 	   		for(int i = 0; i < list.length; i++){
 	   			targetVertex.add(Integer.parseInt(list[i]));
 	   		//	System.out.println("Adding " + i + " " +  Integer.parseInt(list[i])+ " in target");
@@ -240,13 +232,13 @@ private int datapatTypeUsed;
 	 // load and initialise the images
 	 initImages();
 	  
-	 vertexList = new ArrayList<Vertex>();
+	 vertexList = new ArrayList<>();
 	 counter = 0;
 	 justStarted = true;
 	 instructionCode = instructionBinary;
 	 
 	 //declaration of labels definition.
-	 registerEquivalenceTable = new  HashMap<String, String>();
+	 registerEquivalenceTable = new  HashMap<>();
 	 
 	 countRegLabel = 400;
 	 countALULabel = 380;
@@ -359,15 +351,15 @@ private int datapatTypeUsed;
 				}
 			}
 			//loading matrix of control of vertex.
-			outputGraph = new Vector<Vector<Vertex>>();
-			vertexTraversed = new ArrayList<Vertex>();
+			outputGraph = new Vector<>();
+			vertexTraversed = new ArrayList<>();
 			int size = vertexList.size();
 			Vertex vertex;
 			ArrayList<Integer> targetList;
 			for(int i = 0; i < vertexList.size(); i++){
 				vertex = vertexList.get(i);
 				targetList = vertex.getTargetVertex();
-				Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+				Vector<Vertex> vertexOfTargets = new Vector<>();
 				for(int k = 0; k < targetList.size(); k++){
 					vertexOfTargets.add(vertexList.get(targetList.get(k)));
 				}
@@ -463,15 +455,15 @@ private int datapatTypeUsed;
 				}
 			}
 			//loading matrix of control of vertex.
-			outputGraph = new Vector<Vector<Vertex>>();
-			vertexTraversed = new ArrayList<Vertex>();
+			outputGraph = new Vector<>();
+			vertexTraversed = new ArrayList<>();
 			int size = vertexList.size();
 			Vertex vertex;
 			ArrayList<Integer> targetList;
 			for(int i = 0; i < vertexList.size(); i++){
 				vertex = vertexList.get(i);
 				targetList = vertex.getTargetVertex();
-				Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+				Vector<Vertex> vertexOfTargets = new Vector<>();
 				for(int k = 0; k < targetList.size(); k++){
 					vertexOfTargets.add(vertexList.get(targetList.get(k)));
 				}

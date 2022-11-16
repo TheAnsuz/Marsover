@@ -3,7 +3,6 @@
    import mars.*;
    import mars.simulator.*;
    import mars.mips.hardware.*;
-   import mars.mips.instructions.*;
    import javax.swing.*;
    import java.awt.*;
    import java.awt.event.*;
@@ -45,8 +44,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 **/  
 	 
     public class TextSegmentWindow extends JInternalFrame implements Observer {
-      private  JPanel programArgumentsPanel;  // DPS 17-July-2008
-      private  JTextField programArgumentsTextField; // DPS 17-July-2008
+      private final  JPanel programArgumentsPanel;  // DPS 17-July-2008
+      private final  JTextField programArgumentsTextField; // DPS 17-July-2008
       private static final int PROGRAM_ARGUMENT_TEXTFIELD_COLUMNS = 40;
       private  JTable table;
       private  JScrollPane tableScroller;
@@ -61,16 +60,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private  int[] intAddresses;      // index is table model row, value is text address
       private  Hashtable addressRows;   // key is text address, value is table model row
       private  Hashtable<Integer, ModifiedCode> executeMods;   // key is table model row, value is original code, basic, source.
-      private  Container contentPane;
+      private final  Container contentPane;
       private  TextTableModel tableModel;
-      private Font tableCellFont = new Font("Monospaced",Font.PLAIN,12);
+      private final Font tableCellFont = new Font("Monospaced",Font.PLAIN,12);
       private  boolean codeHighlighting;
       private boolean breakpointsEnabled;  // Added 31 Dec 2009
       private int highlightAddress;
       private TableModelListener tableModelListener;
       private boolean inDelaySlot; // Added 25 June 2007
    	
-      private static String[] columnNames = {"Bkpt", "Address", "Code", "Basic", "Source"};
+      private static final String[] columnNames = {"Bkpt", "Address", "Code", "Basic", "Source"};
       private static final int BREAK_COLUMN = 0;
       private static final int ADDRESS_COLUMN = 1;
       private static final int CODE_COLUMN = 2;
@@ -112,7 +111,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          data = new Object[sourceStatementList.size()][columnNames.length];
          intAddresses = new int[data.length];
          addressRows = new Hashtable(data.length);
-         executeMods = new Hashtable<Integer,ModifiedCode>(data.length);
+         executeMods = new Hashtable<>(data.length);
       	// Get highest source line number to determine #leading spaces so line numbers will vertically align
       	// In multi-file situation, this will not necessarily be the last line b/c sourceStatementList contains
       	// source lines from all files.  DPS 3-Oct-10
@@ -129,13 +128,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          for (int i = 0; i < sourceStatementList.size(); i++) {
             ProgramStatement statement = (ProgramStatement) sourceStatementList.get(i);
             intAddresses[i] = statement.getAddress();
-            addressRows.put(new Integer(intAddresses[i]), new Integer(i));
+            addressRows.put(intAddresses[i], i);
             data[i][BREAK_COLUMN] = Boolean.FALSE;
             data[i][ADDRESS_COLUMN] = NumberDisplayBaseChooser.formatUnsignedInteger(statement.getAddress(), addressBase);
             data[i][CODE_COLUMN] = NumberDisplayBaseChooser.formatNumber(statement.getBinaryStatement(), 16);
             data[i][BASIC_COLUMN] = statement.getPrintableBasicAssemblyStatement();
             String sourceString = "";
-            if (!statement.getSource().equals("")) {
+            if (!statement.getSource().isEmpty()) {
                leadingSpaces = sourceLineDigits - ("" + statement.getSourceLine()).length();
                String lineNumber = "          ".substring(0, leadingSpaces)
                   + statement.getSourceLine()+ ": ";
@@ -668,7 +667,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        private int findRowForAddress(int address) throws IllegalArgumentException {
          int addressRow = 0;
          try {
-            addressRow = ((Integer)addressRows.get(new Integer(address))).intValue();
+            addressRow = ((Integer)addressRows.get(address)).intValue();
          } 
              catch (NullPointerException e) {
                throw new IllegalArgumentException(); // address not found in map
@@ -721,12 +720,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           public boolean isCellEditable(int row, int col) {
             //Note that the data/cell address is constant,
             //no matter where the cell appears onscreen.
-            if (col == BREAK_COLUMN  || (col == CODE_COLUMN && Globals.getSettings().getBooleanSetting(Settings.SELF_MODIFYING_CODE_ENABLED))) { 
-               return true;
-            } 
-            else {
-               return false;
-            }
+            return col == BREAK_COLUMN  || (col == CODE_COLUMN && Globals.getSettings().getBooleanSetting(Settings.SELF_MODIFYING_CODE_ENABLED));
          }
       
         /**
@@ -794,8 +788,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }  
    
        private class ModifiedCode {
-         private Integer row;
-         private Object code, basic, source;
+         private final Integer row;
+        private final Object code;
+         private Object basic, source;
           private ModifiedCode(Integer row, Object code, Object basic, Object source) {
             this.row = row;
             this.code = code;
@@ -985,7 +980,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             super(m);
          }       
          
-         private String[] columnToolTips = {
+         private final String[] columnToolTips = {
                /* break */   "If checked, will set an execution breakpoint. Click header to disable/enable breakpoints",
                /* address */ "Text segment address of binary instruction code",
                /* code */    "32-bit binary MIPS instruction",

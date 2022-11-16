@@ -4,14 +4,12 @@ import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.Timer;
 
 import mars.Globals;
 import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Coprocessor0;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
-import mars.simulator.Exceptions;
 @SuppressWarnings("serial")
 /* Add these two lines in exceptions.java file
  * public static final int EXTERNAL_INTERRUPT_TIMER = 0x00000100; //Add for digital Lab Sim
@@ -19,7 +17,7 @@ import mars.simulator.Exceptions;
 */
 
 /*
- * Didier Teifreto LIFC Université de franche-Comté www.lifc.univ-fcomte.fr/~teifreto
+ * Didier Teifreto LIFC Universitï¿½ de franche-Comtï¿½ www.lifc.univ-fcomte.fr/~teifreto
  * didier.teifreto@univ-fcomte.fr
  */
 public class DigitalLabSim extends AbstractMarsToolAndApplication {
@@ -279,10 +277,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
     	else{
     		updateMMIOControlAndData(OUT_ADRESS_HEXA_KEYBOARD, 0);
     	}
-    	if ((row & 0xF0) != 0) 
-    		KeyboardInterruptOnOff = true;
-    	else
-    		KeyboardInterruptOnOff = false;
+        KeyboardInterruptOnOff = (row & 0xF0) != 0;
     }
     public class HexaKeyboard extends JPanel{
 		public JButton[] button;	
@@ -307,7 +302,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication {
 	 	   	}
 	    }
 		public class EcouteurClick implements MouseListener{
-			private int buttonValue;
+			private final int buttonValue;
 			public EcouteurClick(int val){ 
 				buttonValue=val;
 			}

@@ -1,11 +1,11 @@
    package mars.mips.instructions;
-   import mars.simulator.*;
+   import java.io.*;
+   import java.util.*;
+   import mars.*;
    import mars.mips.hardware.*;
    import mars.mips.instructions.syscalls.*;
-   import mars.*;
+   import mars.simulator.*;
    import mars.util.*;
-   import java.util.*;
-   import java.io.*;
 	
 	/*
 Copyright (c) 2003-2013,  Pete Sanderson and Kenneth Vollmar
@@ -46,7 +46,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     public class InstructionSet
    {
-      private ArrayList instructionList;
+      private final ArrayList instructionList;
 	  private ArrayList opcodeMatchMaps;
       private SyscallLoader syscallLoader;
     /**
@@ -1643,8 +1643,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      Coprocessor1.updateRegister(operands[0], ceiling);
                   }
                }));
-         instructionList.add(
-                new BasicInstruction("round.w.s $f0,$f1",
+         instructionList.add(new BasicInstruction("round.w.s $f0,$f1",
                 "Round single precision to word : Set $f0 to 32-bit integer round of single-precision float in $f1",
             	 BasicInstructionFormat.R_FORMAT,
                 "010001 10000 00000 sssss fffff 001100",
@@ -1672,7 +1671,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                         round = Integer.MAX_VALUE;
                      } 
                      else {
-                        Float floatObj = new Float(floatValue);
+                        Float floatObj = floatValue;
                         // If we are EXACTLY in the middle, then round to even!  To determine this,
                         // find next higher integer and next lower integer, then see if distances 
                         // are exactly equal.
@@ -1892,8 +1891,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                      Coprocessor1.updateRegister(operands[0], ceiling);
                   }
                }));
-         instructionList.add(
-                new BasicInstruction("round.w.d $f1,$f2",
+         instructionList.add(new BasicInstruction("round.w.d $f1,$f2",
             	 "Round double precision to word : Set $f1 to 32-bit integer round of double-precision float in $f2",
                 BasicInstructionFormat.R_FORMAT,
                 "010001 10001 00000 sssss fffff 001100",
@@ -1920,7 +1918,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                         round = Integer.MAX_VALUE;
                      } 
                      else {
-                        Double doubleObj = new Double(doubleValue);
+                        Double doubleObj = doubleValue;
                         // If we are EXACTLY in the middle, then round to even!  To determine this,
                         // find next higher integer and next lower integer, then see if distances 
                         // are exactly equal.
@@ -3080,8 +3078,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		 	Object rawInstr = instructionList.get(i);
 			if (rawInstr instanceof BasicInstruction) {
 				BasicInstruction basic = (BasicInstruction) rawInstr;
-				Integer mask = Integer.valueOf(basic.getOpcodeMask());
-				Integer match = Integer.valueOf(basic.getOpcodeMatch());
+				Integer mask = basic.getOpcodeMask();
+				Integer match = basic.getOpcodeMatch();
 				HashMap matchMap = (HashMap) maskMap.get(mask);
 				if (matchMap == null) {
 					matchMap = new HashMap();
@@ -3313,9 +3311,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }
 
 	  private static class MatchMap implements Comparable {
-	  	private int mask;
-		private int maskLength; // number of 1 bits in mask
-		private HashMap matchMap;
+	  	private final int mask;
+		private final int maskLength; // number of 1 bits in mask
+		private final HashMap matchMap;
 
 		public MatchMap(int mask, HashMap matchMap) {
 			this.mask = mask;
@@ -3342,7 +3340,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		}
 
 		public BasicInstruction find(int instr) {
-			int match = Integer.valueOf(instr & mask);
+			int match = instr & mask;
 			return (BasicInstruction) matchMap.get(match);
 		}
 	}

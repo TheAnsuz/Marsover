@@ -1,14 +1,14 @@
    package mars.venus;
-   import mars.*;
-   import mars.assembler.*;
-   import mars.mips.instructions.*;
-   import java.util.*;
-   import java.io.*;
    import java.awt.*;
    import java.awt.event.*;
+   import java.io.*;
+   import java.util.*;
    import javax.swing.*;
    import javax.swing.event.*;
    import javax.swing.text.html.*;
+   import mars.*;
+   import mars.assembler.*;
+   import mars.mips.instructions.*;
 	
 	/*
 Copyright (c) 2003-2008,  Pete Sanderson and Kenneth Vollmar
@@ -122,9 +122,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             InputStream is = this.getClass().getResourceAsStream(Globals.helpPath+filename);
             BufferedReader in = new BufferedReader(new InputStreamReader(is));        
             String line;
-            StringBuffer text = new StringBuffer();
+            StringBuilder text = new StringBuilder();
             while ( (line=in.readLine()) != null ) {
-               text.append(line+"\n");
+                text.append(line).append("\n");
             }
             in.close();
             helpDisplay = new JEditorPane("text/html",text.toString());
@@ -152,9 +152,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             InputStream is = this.getClass().getResourceAsStream("/MARSlicense.txt");
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
             String line;
-            StringBuffer text = new StringBuffer("<pre>");
+            StringBuilder text = new StringBuilder("<pre>");
             while ( (line=in.readLine()) != null ) {
-               text.append(line+"\n");
+                text.append(line).append("\n");
             }
             in.close();
             text.append("</pre>");        

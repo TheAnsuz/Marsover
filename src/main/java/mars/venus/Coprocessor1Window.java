@@ -1,14 +1,14 @@
    package mars.venus;
-   import mars.*;
-   import mars.simulator.*;
-   import mars.mips.hardware.*;
-   import mars.util.*;
-   import javax.swing.*;
    import java.awt.*;
    import java.awt.event.*;
    import java.util.*;
-   import javax.swing.table.*;
+   import javax.swing.*;
    import javax.swing.event.*;
+   import javax.swing.table.*;
+   import mars.*;
+   import mars.mips.hardware.*;
+   import mars.simulator.*;
+   import mars.util.*;
 
 /*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -50,7 +50,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private boolean highlighting;
       private int highlightRow;
       private ExecutePane executePane;
-      private JCheckBox[] conditionFlagCheckBox;
+      private final JCheckBox[] conditionFlagCheckBox;
       private static final int NAME_COLUMN = 0;
       private static final int FLOAT_COLUMN = 1;
       private static final int DOUBLE_COLUMN = 2;
@@ -202,7 +202,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	
        private void updateConditionFlagDisplay() {
          for (int i=0; i<conditionFlagCheckBox.length; i++) {
-            conditionFlagCheckBox[i].setSelected((Coprocessor1.getConditionFlag(i)==0)? false : true);
+            conditionFlagCheckBox[i].setSelected((Coprocessor1.getConditionFlag(i) != 0));
          }
       }
    	
@@ -304,8 +304,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    * all columns.
    */
        private class RegisterCellRenderer extends DefaultTableCellRenderer { 
-         private Font font;
-         private int alignment;
+         private final Font font;
+         private final int alignment;
       	 
           public RegisterCellRenderer(Font font, int alignment) {
             super();
@@ -380,12 +380,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           public boolean isCellEditable(int row, int col) {
             //Note that the data/cell address is constant,
             //no matter where the cell appears onscreen.
-            if (col == FLOAT_COLUMN || (col == DOUBLE_COLUMN && row%2==0)) { 
-               return true;
-            } 
-            else {
-               return false;
-            }
+            return col == FLOAT_COLUMN || (col == DOUBLE_COLUMN && row%2==0);
          }
       
       
@@ -505,7 +500,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             this.setSelectionBackground(Color.GREEN);
          }
       
-         private String[] regToolTips = {
+         private final String[] regToolTips = {
             /* $f0  */  "floating point subprogram return value",  
             /* $f1  */  "should not be referenced explicitly in your program",
             /* $f2  */  "floating point subprogram return value",
@@ -563,7 +558,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             return tip;
          }
         
-         private String[] columnToolTips = {
+         private final String[] columnToolTips = {
             /* name */   "Each register has a tool tip describing its usage convention",
             /* float */ "32-bit single precision IEEE 754 floating point register",
             /* double */  "64-bit double precision IEEE 754 floating point register (uses a pair of 32-bit registers)"

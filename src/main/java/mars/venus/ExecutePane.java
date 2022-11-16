@@ -2,7 +2,6 @@
    import mars.*;
    import javax.swing.*;
    import java.awt.*;
-   import java.util.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -38,15 +37,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	**/
 
     public class ExecutePane extends JDesktopPane {
-      private RegistersWindow registerValues;
-      private Coprocessor1Window coprocessor1Values;
-      private Coprocessor0Window coprocessor0Values;
-      private DataSegmentWindow dataSegment;
-      private TextSegmentWindow  textSegment;
-      private LabelsWindow labelValues;
-      private VenusUI mainUI;   
-      private NumberDisplayBaseChooser valueDisplayBase;
-      private NumberDisplayBaseChooser addressDisplayBase;
+      private final RegistersWindow registerValues;
+      private final Coprocessor1Window coprocessor1Values;
+      private final Coprocessor0Window coprocessor0Values;
+      private final DataSegmentWindow dataSegment;
+      private final TextSegmentWindow  textSegment;
+      private final LabelsWindow labelValues;
+      private final VenusUI mainUI;   
+      private final NumberDisplayBaseChooser valueDisplayBase;
+      private final NumberDisplayBaseChooser addressDisplayBase;
       private boolean labelWindowVisible;
    
    /**

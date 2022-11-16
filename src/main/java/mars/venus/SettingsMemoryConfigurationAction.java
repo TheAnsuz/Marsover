@@ -7,10 +7,7 @@
    import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
-   import javax.swing.text.*;
    import javax.swing.border.*;
-   import javax.swing.event.*;
-   import java.io.*;
 	
 	/*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -282,7 +279,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       
    	 // Handy class to connect button to its configuration...     	
        private class ConfigurationButton extends JRadioButton {
-         private MemoryConfiguration configuration;
+         private final MemoryConfiguration configuration;
       	  
           public ConfigurationButton(MemoryConfiguration config) {
             super(config.getConfigurationName(), config == MemoryConfigurations.getCurrentConfiguration());

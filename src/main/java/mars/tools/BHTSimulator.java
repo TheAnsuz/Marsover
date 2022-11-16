@@ -30,18 +30,13 @@ package mars.tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
-
 import javax.swing.JComponent;
-
 import mars.ProgramStatement;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
 import mars.mips.hardware.RegisterFile;
-//import mars.tools.bhtsim.BHTSimGUI;
-//import mars.tools.bhtsim.BHTableModel;
-
 
 /**
  * A MARS tool for simulating branch prediction with a Branch History Table (BHT)
@@ -119,8 +114,8 @@ public class BHTSimulator extends AbstractMarsToolAndApplication implements Acti
 		m_bhtModel = new BHTableModel(BHTSimulator.BHT_DEFAULT_SIZE, BHTSimulator.BHT_DEFAULT_HISTORY, BHT_DEFAULT_INITVAL);		
 		
 		m_gui.getTabBHT().setModel(m_bhtModel);														
-		m_gui.getCbBHThistory().setSelectedItem(new Integer(BHTSimulator.BHT_DEFAULT_HISTORY));
-		m_gui.getCbBHTentries().setSelectedItem(new Integer(BHTSimulator.BHT_DEFAULT_SIZE));
+		m_gui.getCbBHThistory().setSelectedItem(BHTSimulator.BHT_DEFAULT_HISTORY);
+		m_gui.getCbBHTentries().setSelectedItem(BHTSimulator.BHT_DEFAULT_SIZE);
 		
 		m_gui.getCbBHTentries().addActionListener(this);
 		m_gui.getCbBHThistory().addActionListener(this);		
@@ -253,10 +248,11 @@ public class BHTSimulator extends AbstractMarsToolAndApplication implements Acti
 			if (0x10 <= funct && funct <= 0x13) return true; // bltzal, bgezal, bltzall, bgczall			
 		}
 
-		if (0x04 <= opCode && opCode <= 0x07) return true; // beq, bne, blez, bgtz
-		if (0x14 <= opCode && opCode <= 0x17) return true; // beql, bnel, blezl, bgtzl
+		if (0x04 <= opCode && opCode <= 0x07) return true;
+        // beql, bnel, blezl, bgtzl
+        // beq, bne, blez, bgtz
 		
-		return false;
+		return 0x14 <= opCode && opCode <= 0x17;
 	}
 	
 	
@@ -385,3 +381,5 @@ public class BHTSimulator extends AbstractMarsToolAndApplication implements Acti
 		}
 	}
 }
+//import mars.tools.bhtsim.BHTSimGUI;
+//import mars.tools.bhtsim.BHTableModel;

@@ -8,7 +8,6 @@
    import java.io.*;
    import mars.*;
    import mars.util.*;
-   import mars.tools.*;
    import mars.mips.hardware.*;
 
 /*
@@ -61,23 +60,23 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	
    	// Major GUI components
       JLabel headingLabel;
-      private String title;  // descriptive title for title bar provided to constructor.
-      private String heading; // Text to be displayed in the top portion of the main window.
+      private final String title;  // descriptive title for title bar provided to constructor.
+      private final String heading; // Text to be displayed in the top portion of the main window.
    	
    	// Some GUI settings
-      private EmptyBorder emptyBorder = new EmptyBorder(4,4,4,4);
-      private Color backgroundColor = Color.WHITE;
+      private final EmptyBorder emptyBorder = new EmptyBorder(4,4,4,4);
+      private final Color backgroundColor = Color.WHITE;
    	
    	
-      private int lowMemoryAddress = Memory.dataSegmentBaseAddress;
-      private int highMemoryAddress = Memory.stackBaseAddress;
+      private final int lowMemoryAddress = Memory.dataSegmentBaseAddress;
+      private final int highMemoryAddress = Memory.stackBaseAddress;
    	// For MarsTool, is set true when "Connect" clicked, false when "Disconnect" clicked.
    	// For app, is set true when "Assemble and Run" clicked, false when program terminates.
       private volatile boolean observing = false;
    
    	// Several structures required for stand-alone use only (not MarsTool use)
       private File mostRecentlyOpenedFile = null; 
-      private Runnable interactiveGUIUpdater = new GUIUpdater();
+      private final Runnable interactiveGUIUpdater = new GUIUpdater();
       private MessageField operationStatusMessages;
       private JButton openFileButton, assembleRunButton, stopButton;
       private boolean multiFileAssemble = false;
@@ -787,8 +786,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        // Little inner-inner class to display processing error message on AWT thread.  
        // Used only by stand-alone app.
           private class MessageWriter implements Runnable {
-            private String text;
-            private boolean terminatingMessage;
+            private final String text;
+            private final boolean terminatingMessage;
              public MessageWriter(String text, boolean terminating) {
                this.text = text;
                this.terminatingMessage = terminating;

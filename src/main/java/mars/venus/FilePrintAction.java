@@ -1,11 +1,7 @@
    package mars.venus;
-   import mars.*;
-   import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
    import java.io.*;
-   import java.awt.print.*;
-   import java.util.*;
  
  /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -67,7 +63,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                return;
             }
          BufferedReader in = new BufferedReader(new StringReader(editPane.getSource()));
-         int lineNumberDigits = new Integer(editPane.getSourceLineCount()).toString().length();      
+         int lineNumberDigits = Integer.toString(editPane.getSourceLineCount()).length();      
          String line;
 			String lineNumberString = "";
          int lineNumber = 0;
@@ -77,7 +73,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             while(line != null) {
                if (editPane.showingLineNumbers()) {
                   lineNumber++;
-                  lineNumberString = new Integer(lineNumber).toString() + ": ";
+                  lineNumberString = Integer.toString(lineNumber) + ": ";
                   while (lineNumberString.length() < lineNumberDigits) {
                      lineNumberString = lineNumberString + " ";
                   }

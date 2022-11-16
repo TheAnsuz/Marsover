@@ -5,7 +5,6 @@
    import java.awt.*;
    import java.awt.event.*;
    import java.util.*;
-   import mars.tools.*;
    import mars.mips.hardware.*;
 
 /*

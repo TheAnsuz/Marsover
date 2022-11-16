@@ -9,12 +9,12 @@
 
    package mars.venus.editors.jeditsyntax;
 
-   import mars.venus.editors.jeditsyntax.tokenmarker.*;
-   import mars.Globals;
-   import javax.swing.text.*;
-   import javax.swing.*;
    import java.awt.*;
    import java.awt.event.*;
+   import javax.swing.*;
+   import javax.swing.text.*;
+   import mars.Globals;
+   import mars.venus.editors.jeditsyntax.tokenmarker.*;
 
 /**
  * Class with several utility functions used by jEdit's syntax colorizing
@@ -224,7 +224,7 @@
    }
 	
     class InstructionMouseEvent extends MouseEvent {
-      private Segment line;
+      private final Segment line;
        public InstructionMouseEvent(Component component, int x, int y, Segment line) {
          super(component, MouseEvent.MOUSE_MOVED, new java.util.Date().getTime(), 0, x, y, 0, false);
          System.out.println("Create InstructionMouseEvent "+x+" "+y+" "+line);

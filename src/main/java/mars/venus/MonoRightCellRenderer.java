@@ -1,5 +1,4 @@
    package mars.venus;
-   import mars.*;
    import javax.swing.table.*;
 	import javax.swing.*;
 	import java.awt.*;

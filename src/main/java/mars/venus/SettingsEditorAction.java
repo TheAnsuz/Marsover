@@ -1,17 +1,13 @@
    package mars.venus;
-   import mars.simulator.*;
    import mars.*;
-   import mars.util.*;
    import mars.venus.editors.jeditsyntax.*;
    import mars.venus.editors.jeditsyntax.tokenmarker.*;
-   import java.util.*;
    import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
    import javax.swing.text.*;
    import javax.swing.border.*;
    import javax.swing.event.*;
-   import java.io.*;
 	
 	/*
 Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
@@ -262,10 +258,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	// Perform reset on miscellaneous editor settings
           private void resetOtherSettings() {
             tabSizeSelector.setValue(initialEditorTabSize);
-            tabSizeSpinSelector.setValue(new Integer(initialEditorTabSize));
+            tabSizeSpinSelector.setValue(initialEditorTabSize);
             lineHighlightCheck.setSelected(initialLineHighlighting);
 				autoIndentCheck.setSelected(initialAutoIndent); 
-            blinkRateSpinSelector.setValue(new Integer(initialCaretBlinkRate));
+            blinkRateSpinSelector.setValue(initialCaretBlinkRate);
             blinkCaret.setBlinkRate(initialCaretBlinkRate);
             popupGuidanceOptions[initialPopupGuidance].setSelected(true);				
          }
@@ -278,10 +274,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             initialEditorTabSize = Globals.getSettings().getEditorTabSize();
             tabSizeSelector = new JSlider(Editor.MIN_TAB_SIZE, Editor.MAX_TAB_SIZE, initialEditorTabSize);
             tabSizeSelector.setToolTipText("Use slider to select tab size from "+Editor.MIN_TAB_SIZE+" to "+Editor.MAX_TAB_SIZE+".");
-            tabSizeSelector.addChangeListener(
-                   new ChangeListener() {
+            tabSizeSelector.addChangeListener(new ChangeListener() {
                       public void stateChanged(ChangeEvent e) {
-                        Integer value = new Integer(((JSlider)e.getSource()).getValue());
+                        Integer value = ((JSlider)e.getSource()).getValue();
                         tabSizeSpinSelector.setValue(value);
                      }
                   });  
@@ -513,13 +508,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       ///////////////////////////////////////////////////////////////////////////
       // Toggle bold or italic style on preview button when B or I button clicked	
           private class BoldItalicChanger implements ActionListener {
-            private int row;
+            private final int row;
              public BoldItalicChanger(int row) {
                this.row = row;
             }
              public void actionPerformed(ActionEvent e) {
                Font f = samples[row].getFont();
-               if (e.getActionCommand()==BOLD_BUTTON_TOOL_TIP_TEXT) {
+               if (e.getActionCommand() == null ? BOLD_BUTTON_TOOL_TIP_TEXT == null : e.getActionCommand()
+                        .equals(BOLD_BUTTON_TOOL_TIP_TEXT)) {
                   if (bold[row].isSelected()) {
                      samples[row].setFont(f.deriveFont(f.getStyle() | Font.BOLD));
                   } 
@@ -547,7 +543,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        //  Class that handles click on the foreground selection button
        //   		
           private class ForegroundChanger implements ActionListener {
-            private int row;
+            private final int row;
              public ForegroundChanger(int pos) {
                row = pos;
             }
@@ -569,7 +565,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        // Class that handles action (check, uncheck) on the Default checkbox.
        //   	
           private class DefaultChanger implements ItemListener {
-            private int row;
+            private final int row;
              public DefaultChanger(int pos) {
                row = pos;
             }

@@ -9,9 +9,9 @@
 
    package mars.venus.editors.jeditsyntax;
 
-   import mars.Settings;
-   import javax.swing.JPopupMenu;
    import java.awt.Color;
+   import javax.swing.JPopupMenu;
+   import mars.Settings;
 
 /**
  * Encapsulates default settings for a text area. This can be passed

@@ -31,13 +31,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    import java.awt.GridBagLayout;
    import java.awt.Insets;
    import java.util.Observable;
-
    import javax.swing.JComponent;
    import javax.swing.JLabel;
    import javax.swing.JPanel;
    import javax.swing.JProgressBar;
    import javax.swing.JTextField;
-
    import mars.ProgramStatement;
    import mars.mips.hardware.AccessNotice;
    import mars.mips.hardware.AddressErrorException;

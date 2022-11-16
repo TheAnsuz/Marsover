@@ -1,9 +1,7 @@
    package mars.simulator;
    import mars.*;
-   import mars.venus.*;
    import mars.mips.hardware.*;
    import mars.mips.instructions.*;
-   import java.util.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -59,7 +57,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private static final int NOT_PC_VALUE = -1;
    	
       private boolean engaged;
-      private BackstepStack backSteps;
+      private final BackstepStack backSteps;
    	
    	// One can argue using java.util.Stack, given its clumsy implementation.
    	// A homegrown linked implementation will be more streamlined, but
@@ -386,10 +384,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	// and make life easier for the garbage collector.
    	
        private class BackstepStack {
-         private int capacity;
+         private final int capacity;
          private int size;
          private int top;
-         private BackStep[] stack;
+         private final BackStep[] stack;
       
           // Stack is created upon successful assembly or reset.  The one-time overhead of
       	 // creating all the BackStep objects will not be noticed by the user, and enhances

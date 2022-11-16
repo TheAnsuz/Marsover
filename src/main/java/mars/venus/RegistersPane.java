@@ -1,13 +1,5 @@
    package mars.venus;
-   import mars.*;
    import javax.swing.*;
-   import javax.swing.event.*;
-   import java.awt.*;
-   import java.awt.event.*;
-   import javax.swing.undo.*;
-   import java.text.*;
-   import java.util.*;
-   import java.io.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -48,7 +40,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		Coprocessor1Window cop1Tab;
 		Coprocessor0Window cop0Tab;
    	
-      private VenusUI mainUI;
+      private final VenusUI mainUI;
    
     /**
       *  Constructor for the RegistersPane class. 

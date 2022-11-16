@@ -1,7 +1,7 @@
    package mars.mips.hardware;
-   import mars.util.*;
-   import mars.Globals;
    import java.util.*;
+   import mars.Globals;
+   import mars.util.*;
 
 /*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -48,7 +48,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // storing into registers, and reassembled upon retrieval.
 
     public  class Coprocessor1 {
-      private static Register [] registers = 
+      private static final Register [] registers = 
           { new Register("$f0", 0, 0),  new Register("$f1", 1, 0),
          	new Register("$f2", 2, 0),  new Register("$f3", 3, 0),
          	new Register("$f4", 4, 0),  new Register("$f5", 5, 0),
@@ -67,8 +67,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          	new Register("$f30", 30, 0),new Register("$f31", 31, 0)
            };
    	// The 8 condition flags will be stored in bits 0-7 for flags 0-7.
-      private static Register condition = new Register("cf",32, 0);	 
-      private static int numConditionFlags = 8;
+      private static final Register condition = new Register("cf",32, 0);	 
+      private static final int numConditionFlags = 8;
    	
    	/**
    	  *  Method for displaying the register values for debugging.

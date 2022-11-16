@@ -1,7 +1,6 @@
 package mars.assembler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import mars.ErrorList;
@@ -44,7 +43,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 public class Macro {
    private String name;
    private MIPSprogram program;
-   private ArrayList<String> labels;
+   private final ArrayList<String> labels;
 
 /**
  * first and last line number of macro definition. first line starts with
@@ -62,8 +61,8 @@ public class Macro {
       program = null;
       fromLine = toLine = 0;
       origFromLine = origToLine = 0;
-      args = new ArrayList<String>();
-      labels = new ArrayList<String>();
+      args = new ArrayList<>();
+      labels = new ArrayList<>();
    }
 
    public String getName() {

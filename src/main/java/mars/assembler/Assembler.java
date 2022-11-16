@@ -3,7 +3,6 @@
    import java.util.ArrayList;
    import java.util.Collections;
    import java.util.Comparator;
-
    import mars.ErrorList;
    import mars.ErrorMessage;
    import mars.Globals;
@@ -182,7 +181,7 @@
       public ArrayList assemble(ArrayList tokenizedProgramFiles, boolean extendedAssemblerEnabled,
        	boolean warningsAreErrors) throws ProcessingException {
       	
-         if (tokenizedProgramFiles == null || tokenizedProgramFiles.size() == 0)
+         if (tokenizedProgramFiles == null || tokenizedProgramFiles.isEmpty())
             return null;
          textAddress = new UserKernelAddressSpace(Memory.textBaseAddress,
             Memory.kernelTextBaseAddress);
@@ -344,7 +343,7 @@
                   // If this is the case, skip remainder of loop iteration. This should only
                   // happen if template substitution was for "nop" instruction but delayed branching
                   // is disabled so the "nop" is not generated.
-                     if (instruction == null || instruction == "") {
+                     if (instruction == null || "".equals(instruction)) {
                         continue;
                      }
                   
@@ -452,7 +451,7 @@
       private ArrayList<ProgramStatement> parseLine(TokenList tokenList, String source,
        	int sourceLineNumber, boolean extendedAssemblerEnabled) { 
       	
-         ArrayList<ProgramStatement> ret = new ArrayList<ProgramStatement>();
+         ArrayList<ProgramStatement> ret = new ArrayList<>();
       
          ProgramStatement programStatement;
          TokenList tokens = this.stripComment(tokenList);
@@ -1427,7 +1426,7 @@
    // the integer directives: .word, .half, .byte)
    // - the label's token. Normally need only the name but error message needs more.
       private class DataSegmentForwardReferences {
-         private ArrayList forwardReferenceList;
+         private final ArrayList forwardReferenceList;
       
          private DataSegmentForwardReferences() {
             forwardReferenceList = new ArrayList();

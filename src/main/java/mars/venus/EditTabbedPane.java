@@ -5,9 +5,6 @@
    import javax.swing.*;
    import javax.swing.event.*;
    import java.awt.*;
-   import java.awt.event.*;
-   import javax.swing.undo.*;
-   import java.text.*;
    import java.util.*;
    import java.io.*;
    import java.beans.PropertyChangeListener;
@@ -50,9 +47,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       EditPane editTab;
       MainPane mainPane;
    	
-      private VenusUI mainUI;
-      private Editor editor;
-      private FileOpener fileOpener;
+      private final VenusUI mainUI;
+      private final Editor editor;
+      private final FileOpener fileOpener;
    
     /**
       *  Constructor for the EditTabbedPane class. 
@@ -532,11 +529,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	
        private class FileOpener {
          private File mostRecentlyOpenedFile;
-         private JFileChooser fileChooser;
+         private final JFileChooser fileChooser;
          private int fileFilterCount;
-         private ArrayList fileFilterList;
-         private PropertyChangeListener listenForUserAddedFileFilter;
-         private Editor theEditor;
+         private final ArrayList fileFilterList;
+         private final PropertyChangeListener listenForUserAddedFileFilter;
+         private final Editor theEditor;
       
           public FileOpener(Editor theEditor) {
             this.mostRecentlyOpenedFile = null;
@@ -626,11 +623,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                // StringBuffer is preallocated to full filelength to eliminate dynamic
                // expansion as lines are added to it. Previously, each line was appended 
                // to the Edit pane as it was read, way slower due to dynamic string alloc.  
-               StringBuffer fileContents = new StringBuffer((int)theFile.length());
+               StringBuilder fileContents = new StringBuilder((int)theFile.length());
                int lineNumber = 1;
                String line = Globals.program.getSourceLine(lineNumber++);
                while (line != null) {
-                  fileContents.append(line+"\n");
+                   fileContents.append(line).append("\n");
                   line = Globals.program.getSourceLine(lineNumber++);
                }
                editPane.setSourceCode(fileContents.toString(), true);
@@ -715,7 +712,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       
           private class ChoosableFileFilterChangeListener implements PropertyChangeListener {
              public void propertyChange(java.beans.PropertyChangeEvent e) {
-               if (e.getPropertyName()==JFileChooser.CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY) {
+               if (e.getPropertyName() == null ? JFileChooser.CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY == null : e.getPropertyName()
+                        .equals(JFileChooser.CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY)) {
                   FileFilter[] newFilters = (FileFilter[]) e.getNewValue();
                   FileFilter[] oldFilters = (FileFilter[]) e.getOldValue();
                   if (newFilters.length > fileFilterList.size()) {

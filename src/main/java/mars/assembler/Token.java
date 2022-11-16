@@ -40,9 +40,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     public class Token {
    
       private TokenTypes type;
-      private String value;
-      private MIPSprogram sourceMIPSprogram;
-      private int sourceLine, sourcePos;
+      private final String value;
+      private final MIPSprogram sourceMIPSprogram;
+      private final int sourceLine;
+      private int sourcePos;
    // original program and line will differ from the above if token was defined in an included file
       private MIPSprogram originalMIPSprogram;
       private int originalSourceLine;  

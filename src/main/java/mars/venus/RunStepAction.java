@@ -2,7 +2,6 @@
 	import mars.*;
 	import mars.simulator.*;
 	import mars.mips.hardware.*;
-   import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
 	

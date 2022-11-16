@@ -6,9 +6,7 @@
    import mars.simulator.*;
    import java.io.*;
    import java.util.*;
-   import java.awt.*;
    import javax.swing.*;
-   import javax.swing.JOptionPane;   // KENV 9/8/2004
 
 /*
 Copyright (c) 2003-2012,  Pete Sanderson and Kenneth Vollmar
@@ -186,8 +184,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                try {
                   String[] memoryRange = checkMemoryAddressRange(triple[0]);
                   segInfo = new Integer[2];
-                  segInfo[0] = new Integer(Binary.stringToInt(memoryRange[0])); // low end of range
-                  segInfo[1] = new Integer(Binary.stringToInt(memoryRange[1])); // high end of range
+                  segInfo[0] = Binary.stringToInt(memoryRange[0]); // low end of range
+                  segInfo[1] = Binary.stringToInt(memoryRange[1]); // high end of range
                }    
                   catch (NumberFormatException nfe) {
                      segInfo = null;
@@ -405,7 +403,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             }
          
          
-            if (args[i].indexOf("$") == 0) {
+            if (args[i].indexOf('$') == 0) {
                if (RegisterFile.getUserRegister(args[i])==null &&
                       Coprocessor1.getRegister(args[i])==null) {
                   out.println("Invalid Register Name: "+args[i]);
@@ -461,7 +459,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	
       private boolean runCommand() {
          boolean programRan = false;
-         if (filenameList.size()==0) {
+         if (filenameList.isEmpty()) {
             return programRan;
          }
          try {
@@ -635,41 +633,41 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                if (verbose) {
                   out.print(reg+"\t");
                }
-               if (displayFormat == HEXADECIMAL) {
-                  // display float (and double, if applicable) in hex
-                  out.print(
-                           Binary.binaryStringToHexString(
-                                          Binary.intToBinaryString(ivalue)));							
-                  if (hasDouble) {
-                     out.println("\t"+
-                              Binary.binaryStringToHexString(
-                                          Binary.longToBinaryString(lvalue)));
-                  } 
-                  else {
-                     out.println("");
-                  }
-               } 
-               else if (displayFormat == DECIMAL) {
-                  // display float (and double, if applicable) in decimal
-                  out.print(fvalue);
-                  if (hasDouble) {
-                     out.println("\t"+dvalue);
-                  } 
-                  else {
-                     out.println("");
-                  }
-               } 
-               else { // displayFormat == ASCII
-                  out.print(Binary.intToAscii(ivalue));
-                  if (hasDouble) {
-                     out.println("\t"+ 
+                switch (displayFormat) {
+                    case HEXADECIMAL:
+                        // display float (and double, if applicable) in hex
+                        out.print(
+                                Binary.binaryStringToHexString(
+                                        Binary.intToBinaryString(ivalue)));
+                        if (hasDouble) {
+                            out.println("\t"+
+                                    Binary.binaryStringToHexString(
+                                            Binary.longToBinaryString(lvalue)));
+                        }
+                        else {
+                            out.println("");
+                        }     break;
+                    case DECIMAL:
+                        // display float (and double, if applicable) in decimal
+                        out.print(fvalue);
+                        if (hasDouble) {
+                            out.println("\t"+dvalue);
+                        }
+                        else {
+                            out.println("");
+                        }     break;
+                    default:
+                        // displayFormat == ASCII
+                        out.print(Binary.intToAscii(ivalue));
+                        if (hasDouble) {
+                                out.println("\t"+ 
                             Binary.intToAscii(Binary.highOrderLongToInt(lvalue))+
                             Binary.intToAscii(Binary.lowOrderLongToInt(lvalue)));
-                  } 
-                  else {
-                     out.println("");
-                  }
-               }
+                                }
+                                else {
+                                        out.println("");
+                                        }     break;
+                }
             }
          }
       }

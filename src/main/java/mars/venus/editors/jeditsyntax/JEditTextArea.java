@@ -1,11 +1,4 @@
-/*
- * JEditTextArea.java - jEdit's text component
- * Copyright (C) 1999 Slava Pestov
- *
- * You may use and modify this package for any purpose. Redistribution is
- * permitted, in both source and binary form, provided that this notice
- * remains intact in all source distributions of this package.
- */
+
 
 package mars.venus.editors.jeditsyntax;
 
@@ -16,7 +9,6 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicMenuItemUI;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -1196,7 +1188,7 @@ public class JEditTextArea extends JComponent
             start = tmp;
          }
       
-         StringBuffer buf = new StringBuffer();
+         StringBuilder buf = new StringBuilder();
          Segment seg = new Segment();
       
          for(int i = selectionStartLine; i <= selectionEndLine; i++)
@@ -1528,7 +1520,7 @@ public class JEditTextArea extends JComponent
          String selection = getSelectedText();
       
          int repeatCount = inputHandler.getRepeatCount();
-         StringBuffer buf = new StringBuffer();
+         StringBuilder buf = new StringBuilder();
          for(int i = 0; i < repeatCount; i++)
             buf.append(selection);
       
@@ -1554,7 +1546,7 @@ public class JEditTextArea extends JComponent
                .replace('\r','\n');
          
             int repeatCount = inputHandler.getRepeatCount();
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             for(int i = 0; i < repeatCount; i++)
                buf.append(selection);
             selection = buf.toString();
@@ -1842,7 +1834,7 @@ public class JEditTextArea extends JComponent
       private Component center;
       private Component right;
       private Component bottom;
-      private Vector leftOfScrollBar = new Vector();
+      private final Vector leftOfScrollBar = new Vector();
    }
 
    static class CaretBlinker implements ActionListener
@@ -2406,7 +2398,8 @@ public class JEditTextArea extends JComponent
     // Carries out the instruction/directive completion when popup menu
 	 // item is selected. 
    private class PopupHelpActionListener implements ActionListener {
-      private String tokenText, text;
+        private final String tokenText;
+        private String text;
       public PopupHelpActionListener(String tokenText, String text) {
          this.tokenText = tokenText;
          this.text = text.split(" ")[0];

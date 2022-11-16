@@ -1,8 +1,7 @@
    package mars.util;
-   import mars.*;
    import java.awt.*;
    import java.util.*;
-   import java.awt.Font;
+   import mars.*;
 	
 	/*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -192,7 +191,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        public static String substituteSpacesForTabs(String string, int tabSize) {
          if (!string.contains(TAB_STRING)) 
             return string;
-         StringBuffer result = new StringBuffer(string);
+         StringBuilder result = new StringBuilder(string);
          for (int i=0; i<result.length(); i++) {
             if (result.charAt(i) == TAB_CHAR) {
                result.replace(i,i+1,SPACES.substring(0, tabSize - (i % tabSize)));

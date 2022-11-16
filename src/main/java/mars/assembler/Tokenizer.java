@@ -1,7 +1,7 @@
    package mars.assembler;
-   import mars.*;
-   import java.util.*;
    import java.io.*;
+   import java.util.*;
+   import mars.*;
 
 /*
 Copyright (c) 2003-2013,  Pete Sanderson and Kenneth Vollmar
@@ -85,10 +85,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
        public ArrayList tokenize(MIPSprogram p) throws ProcessingException {
          sourceMIPSprogram = p;
-         equivalents = new HashMap<String,String>(); // DPS 11-July-2012
+         equivalents = new HashMap<>(); // DPS 11-July-2012
          ArrayList tokenList = new ArrayList();
          //ArrayList source = p.getSourceList();
-         ArrayList<SourceLine> source = processIncludes(p, new HashMap<String,String>()); // DPS 9-Jan-2013
+         ArrayList<SourceLine> source = processIncludes(p, new HashMap<>()); // DPS 9-Jan-2013
          p.setSourceLineList(source);
          TokenList currentLineTokens;
          String sourceLine;
@@ -101,7 +101,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          	// not the same object as the original line.  Thus I can use != instead of !equals()
          	// This IF statement will replace original source with source modified by .eqv substitution.
          	// Not needed by assembler, but looks better in the Text Segment Display.
-            if (sourceLine.length() > 0 && sourceLine != currentLineTokens.getProcessedLine()) {
+            if (sourceLine.length() > 0 && (sourceLine == null ? currentLineTokens.getProcessedLine() != null : !sourceLine.equals(currentLineTokens.getProcessedLine()))) {
                source.set(i,new SourceLine(currentLineTokens.getProcessedLine(),source.get(i).getMIPSprogram(), source.get(i).getLineNumber())); 
             } 
          }
@@ -122,7 +122,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    // DPS 11-Jan-2013
        private ArrayList<SourceLine> processIncludes(MIPSprogram program, Map<String,String> inclFiles) throws ProcessingException {
          ArrayList source = program.getSourceList();
-         ArrayList<SourceLine> result = new ArrayList<SourceLine>(source.size());
+         ArrayList<SourceLine> result = new ArrayList<>(source.size());
          for (int i=0; i<source.size(); i++) {
             String line = (String) source.get(i);
             TokenList tl = tokenizeLine(program, i+1, line, false);

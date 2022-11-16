@@ -1,12 +1,12 @@
    package mars.venus;
-   import mars.*;
-   import mars.util.*;
-   import mars.mips.hardware.*;
-   import java.util.*;
-   import java.io.*;
    import java.awt.*;
    import java.awt.event.*;
+   import java.io.*;
+   import java.util.*;
    import javax.swing.*;
+   import mars.*;
+   import mars.mips.hardware.*;
+   import mars.util.*;
  
  /*
 Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar

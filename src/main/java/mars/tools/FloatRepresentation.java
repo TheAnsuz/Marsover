@@ -1,17 +1,12 @@
    package mars.tools;
    import mars.*;
    import mars.util.*;
-   import mars.assembler.*;
-   import mars.mips.instructions.*;
    import mars.mips.hardware.*;
    import java.util.*;
-   import java.io.*;
    import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
-   import javax.swing.event.*;
    import javax.swing.border.*;
-   import javax.swing.text.html.*;
 	
 	/*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -483,7 +478,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                                     ((hexString.indexOf("0X")==0 || hexString.indexOf("0x")==0)
                						  ? hexString.substring(2) : hexString), maxLengthHex);
             this.binaryString = Binary.hexStringToBinaryString(this.hexString); 
-            this.decimalString = new Float(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString))).toString();
+            this.decimalString = Float.toString(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString)));
             this.expansionString = buildExpansionFromBinaryString(this.binaryString);
             this.intValue = Binary.binaryStringToInt(this.binaryString);
             return this;
@@ -493,7 +488,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           private FlavorsOfFloat buildOneFromBinaryString() {
             this.binaryString = getFullBinaryStringFromDisplays();
             this.hexString = Binary.binaryStringToHexString(binaryString);
-            this.decimalString = new Float(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString))).toString();
+            this.decimalString = Float.toString(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString)));
             this.expansionString = buildExpansionFromBinaryString(this.binaryString);
             this.intValue = Binary.binaryStringToInt(this.binaryString);
             return this;
@@ -508,7 +503,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 catch (NumberFormatException nfe) {
                   return null;
                }
-            this.decimalString = new Float(floatValue).toString();
+            this.decimalString = Float.toString(floatValue);
             this.intValue = Float.floatToIntBits(floatValue);// use floatToRawIntBits?
             this.binaryString = Binary.intToBinaryString(this.intValue);
             this.hexString = Binary.binaryStringToHexString(this.binaryString);
@@ -521,7 +516,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             this.intValue = intValue;
             this.binaryString = Binary.intToBinaryString(intValue);
             this.hexString = Binary.binaryStringToHexString(this.binaryString);
-            this.decimalString = new Float(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString))).toString();
+            this.decimalString = Float.toString(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString)));
             this.expansionString = buildExpansionFromBinaryString(this.binaryString);
             return this;
          }
@@ -577,7 +572,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	//
        private class HexDisplayKeystrokeListener extends KeyAdapter {
       
-         private int digitLength; // maximum number of digits long
+         private final int digitLength; // maximum number of digits long
       	
           public HexDisplayKeystrokeListener(int length) {
             digitLength = length;
@@ -635,7 +630,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	//   		
        private class BinaryDisplayKeystrokeListener extends KeyAdapter {
       	
-         private int bitLength;  // maximum number of bits permitted
+         private final int bitLength;  // maximum number of bits permitted
       	  
           public BinaryDisplayKeystrokeListener(int length) {
             bitLength = length;

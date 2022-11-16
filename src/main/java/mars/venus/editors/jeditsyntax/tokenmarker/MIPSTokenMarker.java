@@ -9,11 +9,11 @@
 
    package mars.venus.editors.jeditsyntax.tokenmarker;
 
-   import mars.venus.editors.jeditsyntax.*;
-   import mars.mips.instructions.*;
-   import mars.assembler.*;
-   import javax.swing.text.Segment;
    import java.util.*;
+   import javax.swing.text.Segment;
+   import mars.assembler.*;
+   import mars.mips.instructions.*;
+   import mars.venus.editors.jeditsyntax.*;
 
 /**
  * MIPS token marker.
@@ -234,7 +234,7 @@
          ArrayList matches = null;
          if (token != null && token.id == Token.KEYWORD1) {
             ArrayList instrMatches =  mars.Globals.instructionSet.matchOperator(tokenText);
-            if (instrMatches.size() > 0) {
+            if (!instrMatches.isEmpty()) {
                int realMatches = 0;
                matches = new ArrayList();
                for (int i=0; i<instrMatches.size(); i++) {

@@ -1,15 +1,15 @@
    package mars.venus;
-   import mars.*;
-   import mars.util.*;
-   import mars.mips.dump.*;
-   import mars.mips.hardware.*;
    import java.awt.*;
    import java.awt.event.*;
-   import javax.swing.*;
-   import javax.swing.border.*;
    import java.io.*;
    import java.util.*;
+   import javax.swing.*;
+   import javax.swing.border.*;
    import javax.swing.plaf.basic.*;
+   import mars.*;
+   import mars.mips.dump.*;
+   import mars.mips.hardware.*;
+   import mars.util.*;
 	
 	/*
 Copyright (c) 2003-2008,  Pete Sanderson and Kenneth Vollmar
@@ -270,7 +270,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	// http://forum.java.sun.com/thread.jspa?threadID=488762&messageID=2292482
    	
        private class DumpFormatComboBoxRenderer extends BasicComboBoxRenderer {
-         private JComboBox myMaster;
+         private final JComboBox myMaster;
       	 
           public DumpFormatComboBoxRenderer(JComboBox myMaster) {
             super();

@@ -1,16 +1,8 @@
-/*
- * SyntaxStyle.java - A simple text style class
- * Copyright (C) 1999 Slava Pestov
- *
- * You may use and modify this package for any purpose. Redistribution is
- * permitted, in both source and binary form, provided that this notice
- * remains intact in all source distributions of this package.
- */
+
 
    package mars.venus.editors.jeditsyntax;
 
    import java.awt.*;
-   import java.util.StringTokenizer;
 
 /**
  * A simple text style class. It can specify the color, italic flag,
@@ -143,9 +135,9 @@
       }
    
    // private members
-      private Color color;
-      private boolean italic;
-      private boolean bold;
+      private final Color color;
+      private final boolean italic;
+      private final boolean bold;
       private Font lastFont;
       private Font lastStyledFont;
       private FontMetrics fontMetrics;

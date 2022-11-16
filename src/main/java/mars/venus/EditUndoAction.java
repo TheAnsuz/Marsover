@@ -1,9 +1,6 @@
    package mars.venus;
-   import mars.*;
-   import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
-   import javax.swing.undo.*;
 	
 	/*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar

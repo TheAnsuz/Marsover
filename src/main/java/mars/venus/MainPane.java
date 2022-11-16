@@ -3,11 +3,6 @@
    import javax.swing.*;
    import javax.swing.event.*;
    import java.awt.*;
-   import java.awt.event.*;
-   import javax.swing.undo.*;
-   import java.text.*;
-   import java.util.*;
-   import java.io.*;
    import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 	
@@ -50,7 +45,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       ExecutePane executeTab;
       EditTabbedPane editTabbedPane;
    	
-      private VenusUI mainUI;
+      private final VenusUI mainUI;
    
     /**
       *  Constructor for the MainPane class. 

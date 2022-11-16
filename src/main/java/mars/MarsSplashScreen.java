@@ -37,7 +37,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     public class MarsSplashScreen extends JWindow {
       
-      private int duration;
+      private final int duration;
       
        public MarsSplashScreen(int d) {
          duration = d;

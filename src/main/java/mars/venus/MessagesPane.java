@@ -1,15 +1,15 @@
    package mars.venus;
-   import mars.*;
-   import javax.swing.*;
-   import javax.swing.text.*;
    import java.awt.*;
    import java.awt.event.*;
    import java.util.concurrent.ArrayBlockingQueue;
-   import javax.swing.event.DocumentListener;
-   import javax.swing.undo.UndoableEdit;
-   import mars.simulator.Simulator;
+   import javax.swing.*;
    import javax.swing.event.DocumentEvent;
+   import javax.swing.event.DocumentListener;
+   import javax.swing.text.*;
    import javax.swing.text.Position.Bias;
+   import javax.swing.undo.UndoableEdit;
+   import mars.*;
+   import mars.simulator.Simulator;
 
 /*
 Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar
@@ -377,9 +377,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	  
    	  ////////////////////////////////////////////////////////////////////////////
    	  // Thread class for obtaining user input in the Run I/O window (MessagesPane)
-   	  // Written by Ricardo Fernández Pascual [rfernandez@ditec.um.es] December 2009.
+   	  // Written by Ricardo Fernï¿½ndez Pascual [rfernandez@ditec.um.es] December 2009.
        class Asker implements Runnable {
-         ArrayBlockingQueue<String> resultQueue = new ArrayBlockingQueue<String>(1);
+         ArrayBlockingQueue<String> resultQueue = new ArrayBlockingQueue<>(1);
          int initialPos;
          int maxLen;
           Asker(int maxLen) {

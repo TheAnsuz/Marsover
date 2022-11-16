@@ -1,12 +1,7 @@
    package mars.simulator;
    import mars.*;
-   import mars.venus.*;
-   import mars.util.*;
    import mars.mips.hardware.*;
-   import mars.mips.instructions.*;
    import java.util.*;
-   import javax.swing.*;
-   import java.awt.event.*;
 	
 	/*
 Copyright (c) 2003-2008,  Pete Sanderson and Kenneth Vollmar
@@ -127,7 +122,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	// to the argument count (argc), and $a1 is set to the stack
    	// address holding the first argument pointer (argv).
        public void storeProgramArguments() {
-         if (programArgumentList == null || programArgumentList.size() == 0) {
+         if (programArgumentList == null || programArgumentList.isEmpty()) {
             return;
          }
       	// Runtime stack initialization from stack top-down (each is 4 bytes) :

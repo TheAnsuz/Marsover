@@ -5,7 +5,6 @@
    import java.awt.event.*;
    import java.util.*;
 	import mars.util.*;
-   import mars.tools.*;
    import mars.mips.hardware.*;
 
 /*
@@ -554,15 +553,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	
    
        private void  updateMemoryAccessCountDisplay() {
-         memoryAccessCountDisplay.setText(new Integer(memoryAccessCount).toString());
+         memoryAccessCountDisplay.setText(Integer.toString(memoryAccessCount));
       }
    	
        private void	updateCacheHitCountDisplay() {
-         cacheHitCountDisplay.setText(new Integer(cacheHitCount).toString());
+         cacheHitCountDisplay.setText(Integer.toString(cacheHitCount));
       }
    	
        private void	updateCacheMissCountDisplay() {
-         cacheMissCountDisplay.setText(new Integer(cacheMissCount).toString());
+         cacheMissCountDisplay.setText(Integer.toString(cacheMissCount));
       }
    	
        private void	updateCacheHitRateDisplay() {
@@ -600,7 +599,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
        private class CacheBlock {
          private boolean valid;
          private int tag;
-         private int sizeInWords;
+         private final int sizeInWords;
          private int mostRecentAccessTime;
           public CacheBlock(int sizeInWords) {
             this.valid = false;
@@ -616,8 +615,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	// In the case of a hit, the block associated with address.  In the case of
    	// a miss, the block where new association is made.	DPS 23-Dec-2010
        private class CacheAccessResult {
-         private boolean hitOrMiss;
-         private int blockNumber;
+         private final boolean hitOrMiss;
+         private final int blockNumber;
           public CacheAccessResult(boolean hitOrMiss, int blockNumber) {
             this.hitOrMiss = hitOrMiss;
             this.blockNumber = blockNumber;
@@ -633,7 +632,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	//////////////////////////////////////////////////////////////////////
    	// Abstract Cache class.  Subclasses will implement specific policies.
        private abstract class AbstractCache {
-         private int numberOfBlocks, blockSizeInWords, setSizeInBlocks, numberOfSets;
+
+        private final int numberOfBlocks;
+         private int blockSizeInWords, setSizeInBlocks, numberOfSets;
          protected CacheBlock[] blocks;
       	
           protected AbstractCache(int numberOfBlocks, int blockSizeInWords, int setSizeInBlocks) {
@@ -844,7 +845,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	//
        private class Animation {
        
-         private Box animation;
+         private final Box animation;
          private JTextField[] blocks;
          public final Color hitColor = Color.GREEN;
          public final Color missColor = Color.RED;

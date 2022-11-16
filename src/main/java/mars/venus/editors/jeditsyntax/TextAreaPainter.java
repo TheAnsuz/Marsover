@@ -11,12 +11,12 @@
 
    package mars.venus.editors.jeditsyntax;
 
-   import mars.venus.editors.jeditsyntax.tokenmarker.*;
+   import java.awt.*;
+   import java.awt.event.MouseEvent;
+   import javax.swing.JComponent;
    import javax.swing.ToolTipManager;
    import javax.swing.text.*;
-   import javax.swing.JComponent;
-   import java.awt.event.MouseEvent;
-   import java.awt.*;
+   import mars.venus.editors.jeditsyntax.tokenmarker.*;
 
 /**
  * The text area repaint manager. It performs double buffering and paints

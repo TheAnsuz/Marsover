@@ -1,5 +1,4 @@
    package mars.mips.dump;
-   import mars.*;
    import mars.util.*;
    import java.util.*;
    import java.lang.reflect.*;

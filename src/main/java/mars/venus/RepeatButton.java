@@ -1,9 +1,6 @@
 package mars.venus;
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import javax.swing.*;
-import javax.swing.event.*;
  
 /////////////////////////////  CREDIT  /////////////////////////////////////
 // http://forums.sun.com/thread.jspa?threadID=499183&messageID=2505646

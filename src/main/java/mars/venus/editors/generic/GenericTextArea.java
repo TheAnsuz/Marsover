@@ -7,7 +7,6 @@
    import javax.swing.*;
    import javax.swing.event.*;
    import javax.swing.undo.*;
-   import java.util.*;
 
 /*
 Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar
@@ -42,9 +41,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
       private EditPane editPane;
       private UndoManager undoManager;
-      private UndoableEditListener undoableEditListener;
-      private JTextArea sourceCode;
-      private JScrollPane editAreaScrollPane;
+      private final UndoableEditListener undoableEditListener;
+      private final JTextArea sourceCode;
+      private final JScrollPane editAreaScrollPane;
    
       private boolean isCompoundEdit = false;
       private CompoundEdit compoundEdit;

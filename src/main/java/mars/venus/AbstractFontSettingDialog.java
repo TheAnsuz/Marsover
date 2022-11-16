@@ -1,15 +1,11 @@
    package mars.venus;
-   import mars.simulator.*;
-   import mars.*;
    import mars.util.*;
    import java.util.*;
    import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
-   import javax.swing.text.*;
    import javax.swing.border.*;
    import javax.swing.event.*;
-   import java.io.*;
 	
 	/*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
@@ -109,10 +105,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       
          fontSizeSelector = new JSlider(EditorFont.MIN_SIZE, EditorFont.MAX_SIZE, currentFont.getSize());
          fontSizeSelector.setToolTipText("Use slider to select font size from "+EditorFont.MIN_SIZE+" to "+EditorFont.MAX_SIZE+".");
-         fontSizeSelector.addChangeListener(
-                new ChangeListener() {
+         fontSizeSelector.addChangeListener(new ChangeListener() {
                    public void stateChanged(ChangeEvent e) {
-                     Integer value = new Integer(((JSlider)e.getSource()).getValue());
+                     Integer value = ((JSlider)e.getSource()).getValue();
                      fontSizeSpinSelector.setValue(value);
                      fontSample.setFont(getFont());
                   }
@@ -189,7 +184,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          fontFamilySelector.setSelectedItem(initialFontFamily);
          fontStyleSelector.setSelectedItem(initialFontStyle);
          fontSizeSelector.setValue(EditorFont.sizeStringToSizeInt(initialFontSize));
-         fontSizeSpinSelector.setValue(new Integer(EditorFont.sizeStringToSizeInt(initialFontSize)));
+         fontSizeSpinSelector.setValue(EditorFont.sizeStringToSizeInt(initialFontSize));
       }
    	 
    	/**
@@ -213,7 +208,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    //
    /////////////////////////////////////////////////////////////////////
    
-      private static String SEPARATOR = "___SEPARATOR____";
+      private static final String SEPARATOR = "___SEPARATOR____";
    
    // Given an array of string arrays, will produce a Vector contenating
    // the arrays with a separator between each.

@@ -1,5 +1,4 @@
    package mars.util;
-   import mars.*;
    import java.util.*;
    import java.io.*;
 	

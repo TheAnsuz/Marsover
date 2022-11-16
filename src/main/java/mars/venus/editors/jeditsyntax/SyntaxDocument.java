@@ -9,10 +9,10 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import  mars.venus.editors.jeditsyntax.tokenmarker.*;
-import javax.swing.event.*;
+import  javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.undo.UndoableEdit;
+import mars.venus.editors.jeditsyntax.tokenmarker.*;
 
 /**
  * A document implementation that can be tokenized by the syntax highlighting

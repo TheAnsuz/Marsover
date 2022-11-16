@@ -10,8 +10,8 @@
 
    package mars.venus.editors.jeditsyntax;
 
-   import mars.venus.editors.jeditsyntax.tokenmarker.*;
    import javax.swing.text.Segment;
+   import mars.venus.editors.jeditsyntax.tokenmarker.*;
 
 /**
  * A <code>KeywordMap</code> is similar to a hashtable in that it maps keys

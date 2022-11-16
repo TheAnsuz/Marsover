@@ -1,7 +1,6 @@
    package mars.venus.editors;
    import javax.swing.text.*;
    import javax.swing.undo.*;
-   import javax.swing.*;
    import java.awt.*;
 
 /*

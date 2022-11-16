@@ -1,7 +1,7 @@
 package mars.mips.instructions;
-import mars.assembler.*;
-import mars.*;
 import java.util.*;
+import mars.*;
+import mars.assembler.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar

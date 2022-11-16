@@ -1,8 +1,8 @@
    package mars.mips.dump;
 
+   import java.io.*;
    import mars.Globals;
    import mars.mips.hardware.*;
-   import java.io.*;
 
 /**
  * Intel's Hex memory initialization format

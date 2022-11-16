@@ -1,7 +1,6 @@
    package mars.tools;
    import mars.*;
    import mars.mips.hardware.*;
-   import mars.venus.*;
    import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
@@ -30,7 +29,7 @@
     // of elements of the array. arrayOfTrack[i] is the start pt, arrayOfTrack[i+1] is
     // the end point of a path that should leave a track.
       private final int trackPts = 256;  // TBD Hardcoded. Array contains start-end points for segments in track.
-      private Point[] arrayOfTrack = new Point[trackPts];
+      private final Point[] arrayOfTrack = new Point[trackPts];
       private int trackIndex = 0;
    
     // private inner class
@@ -161,8 +160,8 @@
     /* ------------------------------------------------------------------------- */
        private class MarsBotDisplay extends JPanel
       {
-         private int width;
-         private int height;
+         private final int width;
+         private final int height;
          private boolean clearTheDisplay = true;
         
       
@@ -283,69 +282,64 @@
             if (address < 0 && notice.getAccessType() == AccessNotice.WRITE)
             {
                String message = "";
-               if (address == ADDR_HEADING)
-               {
-                  message = "MarsBot.update: got move heading value: ";
-                  MarsBotHeading = notice.getValue();
-                    //System.out.println(message + notice.getValue() );
-               }
-               else if (address == ADDR_LEAVETRACK)
-               {
-                  message = "MarsBot.update: got leave track directive value ";
-                    
-                    // If we HAD NOT been leaving a track, but we should NOW leave
-                    // a track, put start point into array.
-                  if (MarsBotLeaveTrack == false && notice.getValue() == 1)
-                  {
-                     MarsBotLeaveTrack = true;
-                     arrayOfTrack[trackIndex] = new Point((int) MarsBotXPosition, (int) MarsBotYPosition);
-                     trackIndex++;  // the index of the end point
-                  }
-                    // If we HAD NOT been leaving a track, and get another directive
-                    // to NOT leave a track, do nothing (nothing to do).
-                  else if (MarsBotLeaveTrack == false && notice.getValue() == 0)
-                  {
-                      // NO ACTION
-                  }
-                    // If we HAD been leaving a track, and get another directive
-                    // to LEAVE a track, do nothing (nothing to do).
-                  else if (MarsBotLeaveTrack == true && notice.getValue() == 1)
-                  {
-                      // NO ACTION
-                  }
-                    // If we HAD been leaving a track, and get another directive
-                    // to NOT leave a track, put end point into array.
-                  else if (MarsBotLeaveTrack == true && notice.getValue() == 0)
-                  {
-                     MarsBotLeaveTrack = false;
-                     arrayOfTrack[trackIndex] = new Point((int) MarsBotXPosition, (int) MarsBotYPosition);
-                     trackIndex++;  // the index of the next start point
-                  }
-               
-                    //System.out.println("MarsBotDisplay.paintComponent: putting point in track array at " + trackIndex);
-               
-                    //System.out.println(message + notice.getValue() );
-               }
-               else if (address == ADDR_MOVE)
-               {
-                  message = "MarsBot.update: got move control value: ";
-                  if (notice.getValue() == 0) MarsBotMoving = false;
-                  else MarsBotMoving = true;
-                    //System.out.println(message + notice.getValue() );
-               }
-               else if (address == ADDR_WHEREAREWEX ||
-                         address == ADDR_WHEREAREWEY)
-               {
-                  // Ignore these memory writes, because the writes originated within
-                  // this tool. This tool is being notified of the writes in the usual
-                  // manner, but the writes are already known to this tool.
-                  // NO ACTION
-               }
-               else
-               {
-                    //message = "MarsBot.update: HEY!!! unknown address of " + Integer.toString(address) + ", value: ";
-                    //System.out.println(message + notice.getValue() );
-               }
+                switch (address) {
+                    case ADDR_HEADING:
+                        message = "MarsBot.update: got move heading value: ";
+                        MarsBotHeading = notice.getValue();
+                        //System.out.println(message + notice.getValue() );
+                        break;
+                    case ADDR_LEAVETRACK:
+                        message = "MarsBot.update: got leave track directive value ";
+                        // If we HAD NOT been leaving a track, but we should NOW leave
+                        // a track, put start point into array.
+                        if (MarsBotLeaveTrack == false && notice.getValue() == 1)
+                        {
+                            MarsBotLeaveTrack = true;
+                            arrayOfTrack[trackIndex] = new Point((int) MarsBotXPosition, (int) MarsBotYPosition);
+                            trackIndex++;  // the index of the end point
+                        }
+                        // If we HAD NOT been leaving a track, and get another directive
+                        // to NOT leave a track, do nothing (nothing to do).
+                        else if (MarsBotLeaveTrack == false && notice.getValue() == 0)
+                        {
+                            // NO ACTION
+                        }
+                        // If we HAD been leaving a track, and get another directive
+                        // to LEAVE a track, do nothing (nothing to do).
+                        else if (MarsBotLeaveTrack == true && notice.getValue() == 1)
+                        {
+                            // NO ACTION
+                        }
+                        // If we HAD been leaving a track, and get another directive
+                        // to NOT leave a track, put end point into array.
+                        else if (MarsBotLeaveTrack == true && notice.getValue() == 0)
+                        {
+                            MarsBotLeaveTrack = false;
+                            arrayOfTrack[trackIndex] = new Point((int) MarsBotXPosition, (int) MarsBotYPosition);
+                            trackIndex++;  // the index of the next start point
+                        }
+                        
+                        //System.out.println("MarsBotDisplay.paintComponent: putting point in track array at " + trackIndex);
+                        
+                        //System.out.println(message + notice.getValue() );
+                        break;
+                    case ADDR_MOVE:
+                        message = "MarsBot.update: got move control value: ";
+                        MarsBotMoving = notice.getValue() != 0;
+                        //System.out.println(message + notice.getValue() );
+                        break;
+                // Ignore these memory writes, because the writes originated within
+                // this tool. This tool is being notified of the writes in the usual
+                // manner, but the writes are already known to this tool.
+                // NO ACTION
+                    case ADDR_WHEREAREWEX:
+                    case ADDR_WHEREAREWEY:
+                        break;
+                //message = "MarsBot.update: HEY!!! unknown address of " + Integer.toString(address) + ", value: ";
+                //System.out.println(message + notice.getValue() );
+                    default:
+                        break;
+                }
             
             }
          }

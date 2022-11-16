@@ -1,6 +1,6 @@
    package mars.venus;
-   import mars.*;
    import java.io.*;
+   import mars.*;
 
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar

@@ -1,7 +1,7 @@
    package mars.venus;
-	import mars.tools.*;
+	import java.awt.event.*;
    import javax.swing.*;
-   import java.awt.event.*;
+   import mars.tools.*;
 	
 	/*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -41,7 +41,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  */
 	  
     public class ToolAction extends AbstractAction {
-      private Class toolClass; //MarsTool tool;
+      private final Class toolClass; //MarsTool tool;
    	
 		/**
 		 *  Simple constructor.

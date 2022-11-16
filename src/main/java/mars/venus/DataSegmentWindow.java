@@ -8,7 +8,6 @@
    import java.awt.event.*;
    import java.util.*;
    import javax.swing.table.*;
-   import javax.swing.border.*;
    import javax.swing.event.*;
 
 /*
@@ -54,7 +53,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private Container contentPane;
       private JPanel tablePanel;
       private JButton dataButton, nextButton, prevButton, stakButton, globButton, heapButton, kernButton, extnButton, mmioButton, textButton;
-      private JCheckBox asciiDisplayCheckBox;
+      private final JCheckBox asciiDisplayCheckBox;
    	
       static final int VALUES_PER_ROW = 8;
       static final int NUMBER_OF_ROWS = 16;  // with 8 value columns, this shows 512 bytes;  
@@ -262,15 +261,17 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       	// different than the one just displayed.
          int baseAddress = displayBaseAddressArray[desiredComboBoxIndex];
          if (baseAddress == -1) {
-            if (desiredComboBoxIndex == GLOBAL_POINTER_ADDRESS_INDEX) {
-               baseAddress = RegisterFile.getValue(RegisterFile.GLOBAL_POINTER_REGISTER) 
-                             - (RegisterFile.getValue(RegisterFile.GLOBAL_POINTER_REGISTER) % BYTES_PER_ROW);
-            } 
-            else if (desiredComboBoxIndex == STACK_POINTER_BASE_ADDRESS_INDEX) {
-               baseAddress = RegisterFile.getValue(RegisterFile.STACK_POINTER_REGISTER) 
-                             - (RegisterFile.getValue(RegisterFile.STACK_POINTER_REGISTER) % BYTES_PER_ROW);            } 
-            else {
-               return null;// shouldn't happen since these are the only two
+            switch (desiredComboBoxIndex) {
+                case GLOBAL_POINTER_ADDRESS_INDEX:
+                    baseAddress = RegisterFile.getValue(RegisterFile.GLOBAL_POINTER_REGISTER)
+                            - (RegisterFile.getValue(RegisterFile.GLOBAL_POINTER_REGISTER) % BYTES_PER_ROW);
+                    break;
+                case STACK_POINTER_BASE_ADDRESS_INDEX:
+                    baseAddress = RegisterFile.getValue(RegisterFile.STACK_POINTER_REGISTER)
+                            - (RegisterFile.getValue(RegisterFile.STACK_POINTER_REGISTER) % BYTES_PER_ROW);
+                    break;
+                default:
+                    return null;// shouldn't happen since these are the only two
             }
          }
          int byteOffset  = address - baseAddress;
@@ -915,12 +916,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          public boolean isCellEditable(int row, int col) {
             //Note that the data/cell address is constant,
             //no matter where the cell appears onscreen.
-            if (col != ADDRESS_COLUMN && !asciiDisplay) { 
-               return true;
-            } 
-            else {
-               return false;
-            }
+            return col != ADDRESS_COLUMN && !asciiDisplay;
          }
       
       
@@ -1044,7 +1040,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             super(m);
          }       
          
-         private String[] columnToolTips = {
+         private final String[] columnToolTips = {
                /* address  */ "Base MIPS memory address for this row of the table.",
                /* value +0 */ "32-bit value stored at base address for its row.",
             	/* value +n */ "32-bit value stored ",

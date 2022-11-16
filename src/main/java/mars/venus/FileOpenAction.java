@@ -1,11 +1,7 @@
    package mars.venus;
-   import mars.*;
-   import mars.util.*;
    import java.util.ArrayList;
-   import java.awt.*;
    import java.awt.event.*;
    import javax.swing.*;
-   import javax.swing.filechooser.FileFilter;
    import java.io.*;
    import java.beans.*;
 	

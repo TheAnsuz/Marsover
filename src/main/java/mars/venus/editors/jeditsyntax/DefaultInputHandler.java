@@ -1,11 +1,4 @@
-/*
- * DefaultInputHandler.java - Default implementation of an input handler
- * Copyright (C) 1999 Slava Pestov
- *
- * You may use and modify this package for any purpose. Redistribution is
- * permitted, in both source and binary form, provided that this notice
- * remains intact in all source distributions of this package.
- */
+
 
    package mars.venus.editors.jeditsyntax;
 
@@ -14,7 +7,6 @@
    import java.awt.Toolkit;
    import java.util.Hashtable;
    import java.util.StringTokenizer;
-   import java.util.Properties;
 
 /**
  * The default input handler. It maps sequences of keystrokes into actions
@@ -354,37 +346,37 @@
             }
          }
          String key = keyStroke.substring(index + 1);
-         if(key.length() == 1)
-         {
-            char ch = Character.toUpperCase(key.charAt(0));
-            if(modifiers == 0)
-               return KeyStroke.getKeyStroke(ch);
-            else
-               return KeyStroke.getKeyStroke(ch,modifiers);
-         }
-         else if(key.length() == 0)
-         {
-            System.err.println("Invalid key stroke: " + keyStroke);
-            return null;
-         }
-         else
-         {
-            int ch;
-         
-            try
+        switch (key.length()) {
+            case 1:
             {
-               ch = KeyEvent.class.getField("VK_".concat(key))
-                  .getInt(null);
+                char ch = Character.toUpperCase(key.charAt(0));
+                if(modifiers == 0)
+                    return KeyStroke.getKeyStroke(ch);
+                else
+                    return KeyStroke.getKeyStroke(ch,modifiers);
             }
-                catch(Exception e)
-               {
-                  System.err.println("Invalid key stroke: "
-                     + keyStroke);
-                  return null;
-               }
-         
-            return KeyStroke.getKeyStroke(ch,modifiers);
-         }
+            case 0:
+                System.err.println("Invalid key stroke: " + keyStroke);
+                return null;
+            default:
+                {
+                        int ch;
+                        
+                        try
+                                {
+                                        ch = KeyEvent.class.getField("VK_".concat(key))
+                    .getInt(null);
+                                        }
+                                catch(Exception e)
+                                {
+                                        System.err.println("Invalid key stroke: "
+                    + keyStroke);
+                                        return null;
+                                        }
+                        
+                        return KeyStroke.getKeyStroke(ch,modifiers);
+                        }
+        }
       }
    
    // private members
