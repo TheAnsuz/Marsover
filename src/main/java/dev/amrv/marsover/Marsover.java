@@ -26,7 +26,7 @@ public class Marsover {
 
         // enable openGL render pipeline
         System.setProperty("sun.java2d.opengl", "true");
-        
+
         // For debugging purposes I will remove the files on each run
         new File(FILE_SETTINGS).delete();
 

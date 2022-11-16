@@ -1,7 +1,8 @@
-   package mars.mips.instructions.syscalls;
-   import mars.mips.hardware.*;
-   import mars.*;
-   import java.util.Random;
+package mars.mips.instructions.syscalls;
+
+import mars.mips.hardware.*;
+import mars.*;
+import java.util.Random;
 
 /*
 Copyright (c) 2003-2008,  Pete Sanderson and Kenneth Vollmar
@@ -30,36 +31,35 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
  */
-
-
 /**
  * Service to return a random integer.
  *
  */
+public class SyscallRandInt extends AbstractSyscall {
 
-    public class SyscallRandInt extends AbstractSyscall {
-   /**
-    * Build an instance of the syscall with its default service number and name.
-    */
-       public SyscallRandInt() {
-         super(41, "RandInt");
-      }
-      
-   /**
-   * System call to the random number generator.
-   * Return in $a0 the next pseudorandom, uniformly distributed int value from this random number generator's sequence.
-   */
-       public void simulate(ProgramStatement statement) throws ProcessingException {
-          // Input arguments: $a0 = index of pseudorandom number generator
-          // Return: $a0 = the next pseudorandom, uniformly distributed int value from this random number generator's sequence.
-          Integer index = RegisterFile.getValue(4);
-			 Random stream = (Random) RandomStreams.randomStreams.get(index);
-          if (stream == null) {
-			    stream = new Random(); // create a non-seeded stream
-			    RandomStreams.randomStreams.put(index, stream);
-			 } 
-			 RegisterFile.updateRegister(4, stream.nextInt() );
-       }
+    /**
+     * Build an instance of the syscall with its default service number and
+     * name.
+     */
+    public SyscallRandInt() {
+        super(41, "RandInt");
+    }
 
-   }
+    /**
+     * System call to the random number generator. Return in $a0 the next
+     * pseudorandom, uniformly distributed int value from this random number
+     * generator's sequence.
+     */
+    public void simulate(ProgramStatement statement) throws ProcessingException {
+        // Input arguments: $a0 = index of pseudorandom number generator
+        // Return: $a0 = the next pseudorandom, uniformly distributed int value from this random number generator's sequence.
+        Integer index = RegisterFile.getValue(4);
+        Random stream = (Random) RandomStreams.randomStreams.get(index);
+        if (stream == null) {
+            stream = new Random(); // create a non-seeded stream
+            RandomStreams.randomStreams.put(index, stream);
+        }
+        RegisterFile.updateRegister(4, stream.nextInt());
+    }
 
+}

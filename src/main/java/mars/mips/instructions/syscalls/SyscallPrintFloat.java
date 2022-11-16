@@ -1,31 +1,30 @@
-   package mars.mips.instructions.syscalls;
-   import mars.*;
-   import mars.mips.hardware.*;
-   import mars.util.*;
+package mars.mips.instructions.syscalls;
 
+import mars.*;
+import mars.mips.hardware.*;
+import mars.util.*;
 
-
-/** 
+/**
  * Service to display on the console float whose bits are stored in $f12
  */
- 
-    public class SyscallPrintFloat extends AbstractSyscall {
-   /**
-    * Build an instance of the Print Float syscall.  Default service number
-    * is 2 and name is "PrintFloat".
-    */
-       public SyscallPrintFloat() {
-         super(2, "PrintFloat");
-      }
-      
-   /**
-   * Performs syscall function to display float whose bits are stored in $f12
-   */
-       public void simulate(ProgramStatement statement) throws ProcessingException {
-         SystemIO.printString(Float.toString(Float.intBitsToFloat(
-                 Coprocessor1.getValue(12))));
-      }
-   }
+public class SyscallPrintFloat extends AbstractSyscall {
+
+    /**
+     * Build an instance of the Print Float syscall. Default service number is 2
+     * and name is "PrintFloat".
+     */
+    public SyscallPrintFloat() {
+        super(2, "PrintFloat");
+    }
+
+    /**
+     * Performs syscall function to display float whose bits are stored in $f12
+     */
+    public void simulate(ProgramStatement statement) throws ProcessingException {
+        SystemIO.printString(Float.toString(Float.intBitsToFloat(
+                Coprocessor1.getValue(12))));
+    }
+}
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
@@ -47,4 +46,4 @@ ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
- */ 
+ */

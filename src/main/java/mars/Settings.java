@@ -1403,14 +1403,17 @@ public class Settings extends Observable {
 
     // Default values.  Will be replaced if available from property file or Preferences object.
     private void applyDefaultSettings() {
-        System.arraycopy(defaultBooleanSettingsValues, 0, booleanSettingsValues, 0, booleanSettingsValues.length);
-        System.arraycopy(defaultStringSettingsValues, 0, stringSettingsValues, 0, stringSettingsValues.length);
+        System
+                .arraycopy(defaultBooleanSettingsValues, 0, booleanSettingsValues, 0, booleanSettingsValues.length);
+        System
+                .arraycopy(defaultStringSettingsValues, 0, stringSettingsValues, 0, stringSettingsValues.length);
         for (int i = 0; i < fontFamilySettingsValues.length; i++) {
             fontFamilySettingsValues[i] = defaultFontFamilySettingsValues[i];
             fontStyleSettingsValues[i] = defaultFontStyleSettingsValues[i];
             fontSizeSettingsValues[i] = defaultFontSizeSettingsValues[i];
         }
-        System.arraycopy(defaultColorSettingsValues, 0, colorSettingsValues, 0, colorSettingsValues.length);
+        System
+                .arraycopy(defaultColorSettingsValues, 0, colorSettingsValues, 0, colorSettingsValues.length);
         initializeEditorSyntaxStyles();
     }
 
@@ -1499,7 +1502,8 @@ public class Settings extends Observable {
                 settingValue = Globals
                         .getPropertyEntry(filename, booleanSettingsKeys[i]);
                 if (settingValue != null) {
-                    booleanSettingsValues[i] = defaultBooleanSettingsValues[i] = Boolean.parseBoolean(settingValue);
+                    booleanSettingsValues[i] = defaultBooleanSettingsValues[i] = Boolean
+                            .parseBoolean(settingValue);
                 }
             }
             for (int i = 0; i < stringSettingsKeys.length; i++) {

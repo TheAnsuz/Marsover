@@ -1,9 +1,10 @@
-   package mars.venus;
-	import mars.*;
-   import java.awt.event.*;
-   import javax.swing.*;
-	
-	/*
+package mars.venus;
+
+import mars.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+/*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
 
 Developed by Pete Sanderson (psanderson@otterbein.edu)
@@ -30,22 +31,22 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
  */
-	
-   /**
-    * Action class for the Settings menu item to control display of Labels window (symbol table).
-    */
-    public class SettingsLabelAction extends GuiAction  {
-   	
-   
-       public SettingsLabelAction(String name, Icon icon, String descrip,
-                             Integer mnemonic, KeyStroke accel, VenusUI gui) {
-         super(name, icon, descrip, mnemonic, accel, gui);
-      }
-   		 
-       public void actionPerformed(ActionEvent e) {
-		   boolean visibility = ((JCheckBoxMenuItem) e.getSource()).isSelected();
-		   Globals.getGui().getMainPane().getExecutePane().setLabelWindowVisibility(visibility);
-         Globals.getSettings().setLabelWindowVisibility(visibility);
-      }
-   	   	
-   }
+/**
+ * Action class for the Settings menu item to control display of Labels window
+ * (symbol table).
+ */
+public class SettingsLabelAction extends GuiAction {
+
+    public SettingsLabelAction(String name, Icon icon, String descrip,
+            Integer mnemonic, KeyStroke accel, VenusUI gui) {
+        super(name, icon, descrip, mnemonic, accel, gui);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        boolean visibility = ((JCheckBoxMenuItem) e.getSource()).isSelected();
+        Globals.getGui().getMainPane().getExecutePane()
+                .setLabelWindowVisibility(visibility);
+        Globals.getSettings().setLabelWindowVisibility(visibility);
+    }
+
+}
