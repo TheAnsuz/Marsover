@@ -1,351 +1,215 @@
-/*
-Copyright (c) 2009,  Ingo Kofler, ITEC, Klagenfurt University, Austria
-
-Developed by Ingo Kofler (ingo.kofler@itec.uni-klu.ac.at)
-Based on the Instruction Counter tool by Felipe Lessa (felipe.lessa@gmail.com)
-
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
-to the following conditions:
-
-The above copyright notice and this permission notice shall be 
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-(MIT license, http://www.opensource.org/licenses/mit-license.html)
- */
-   package mars.tools;
-
-   import java.awt.GridBagConstraints;
-   import java.awt.GridBagLayout;
-   import java.awt.Insets;
-   import java.util.Observable;
-
-   import javax.swing.JComponent;
-   import javax.swing.JLabel;
-   import javax.swing.JPanel;
-   import javax.swing.JProgressBar;
-   import javax.swing.JTextField;
-
-   import mars.ProgramStatement;
-   import mars.mips.hardware.AccessNotice;
-   import mars.mips.hardware.AddressErrorException;
-   import mars.mips.hardware.Memory;
-   import mars.mips.hardware.MemoryAccessNotice;
 
 
-/**
- * 
- * A MARS tool for obtaining instruction statistics by instruction category.  
- * <p> 
- * The code of this tools is initially based on the Instruction counter tool by Felipe Lassa.  
- * 
- * @author Ingo Kofler <ingo.kofler@itec.uni-klu.ac.at>
- *
- */
-   // @SuppressWarnings("serial")
-    public class InstructionStatistics extends AbstractMarsToolAndApplication {
+package mars.tools;
+
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.AccessNotice;
+import java.util.Observable;
+import mars.ProgramStatement;
+import mars.mips.hardware.Memory;
+import java.awt.Component;
+import javax.swing.JLabel;
+import java.awt.Insets;
+import java.awt.GridBagConstraints;
+import java.awt.LayoutManager;
+import javax.swing.JPanel;
+import java.awt.GridBagLayout;
+import javax.swing.JComponent;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
+
+public class InstructionStatistics extends AbstractMarsToolAndApplication
+{
+    private static String NAME;
+    private static String VERSION;
+    private static String HEADING;
+    private static final int MAX_CATEGORY = 5;
+    private static final int CATEGORY_ALU = 0;
+    private static final int CATEGORY_JUMP = 1;
+    private static final int CATEGORY_BRANCH = 2;
+    private static final int CATEGORY_MEM = 3;
+    private static final int CATEGORY_OTHER = 4;
+    private JTextField m_tfTotalCounter;
+    private JTextField[] m_tfCounters;
+    private JProgressBar[] m_pbCounters;
+    private int m_totalCounter;
+    private int[] m_counters;
+    private String[] m_categoryLabels;
+    protected int lastAddress;
     
-   /** name of the tool */
-      private static String NAME    = "Instruction Statistics";
-   
-   /** version and author information of the tool */
-      private static String VERSION = "Version 1.0 (Ingo Kofler)";
+    public InstructionStatistics(final String title, final String heading) {
+        super(title, heading);
+        this.m_totalCounter = 0;
+        this.m_counters = new int[5];
+        this.m_categoryLabels = new String[] { "ALU", "Jump", "Branch", "Memory", "Other" };
+        this.lastAddress = -1;
+    }
     
-    /** heading of the tool */
-      private static String HEADING = "";
+    public InstructionStatistics() {
+        super(InstructionStatistics.NAME + ", " + InstructionStatistics.VERSION, InstructionStatistics.HEADING);
+        this.m_totalCounter = 0;
+        this.m_counters = new int[5];
+        this.m_categoryLabels = new String[] { "ALU", "Jump", "Branch", "Memory", "Other" };
+        this.lastAddress = -1;
+    }
     
+    @Override
+    public String getName() {
+        return InstructionStatistics.NAME;
+    }
     
+    @Override
+    protected JComponent buildMainDisplayArea() {
+        final JPanel panel = new JPanel(new GridBagLayout());
+        (this.m_tfTotalCounter = new JTextField("0", 10)).setEditable(false);
+        this.m_tfCounters = new JTextField[5];
+        this.m_pbCounters = new JProgressBar[5];
+        for (int i = 0; i < 5; ++i) {
+            (this.m_tfCounters[i] = new JTextField("0", 10)).setEditable(false);
+            (this.m_pbCounters[i] = new JProgressBar(0)).setStringPainted(true);
+        }
+        final GridBagConstraints c = new GridBagConstraints();
+        c.anchor = 21;
+        final GridBagConstraints gridBagConstraints = c;
+        final GridBagConstraints gridBagConstraints2 = c;
+        final int n = 1;
+        gridBagConstraints2.gridwidth = n;
+        gridBagConstraints.gridheight = n;
+        c.gridx = 2;
+        c.gridy = 1;
+        c.insets = new Insets(0, 0, 17, 0);
+        panel.add(new JLabel("Total: "), c);
+        c.gridx = 3;
+        panel.add(this.m_tfTotalCounter, c);
+        c.insets = new Insets(3, 3, 3, 3);
+        for (int j = 0; j < 5; ++j) {
+            final GridBagConstraints gridBagConstraints3 = c;
+            ++gridBagConstraints3.gridy;
+            c.gridx = 2;
+            panel.add(new JLabel(this.m_categoryLabels[j] + ":   "), c);
+            c.gridx = 3;
+            panel.add(this.m_tfCounters[j], c);
+            c.gridx = 4;
+            panel.add(this.m_pbCounters[j], c);
+        }
+        return panel;
+    }
     
-    /** number of instruction categories used by this tool */
-      private static final int MAX_CATEGORY = 5;
+    @Override
+    protected void addAsObserver() {
+        this.addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
+    }
     
-    /** constant for ALU instructions category */
-      private static final int CATEGORY_ALU = 0;
+    protected int getInstructionCategory(final ProgramStatement stmt) {
+        final int opCode = stmt.getBinaryStatement() >>> 26;
+        final int funct = stmt.getBinaryStatement() & 0x1F;
+        if (opCode == 0) {
+            if (funct == 0) {
+                return 0;
+            }
+            if (2 <= funct && funct <= 7) {
+                return 0;
+            }
+            if (funct == 8 || funct == 9) {
+                return 1;
+            }
+            if (16 <= funct && funct <= 47) {
+                return 0;
+            }
+            return 4;
+        }
+        else if (opCode == 1) {
+            if (0 <= funct && funct <= 7) {
+                return 2;
+            }
+            if (16 <= funct && funct <= 19) {
+                return 2;
+            }
+            return 4;
+        }
+        else {
+            if (opCode == 2 || opCode == 3) {
+                return 1;
+            }
+            if (4 <= opCode && opCode <= 7) {
+                return 2;
+            }
+            if (8 <= opCode && opCode <= 15) {
+                return 0;
+            }
+            if (20 <= opCode && opCode <= 23) {
+                return 2;
+            }
+            if (32 <= opCode && opCode <= 38) {
+                return 3;
+            }
+            if (40 <= opCode && opCode <= 46) {
+                return 3;
+            }
+            return 4;
+        }
+    }
     
-    /** constant for jump instructions category */
-      private static final int CATEGORY_JUMP = 1;
-    
-    /** constant for branch instructions category */
-      private static final int CATEGORY_BRANCH = 2;
-    
-    /** constant for memory instructions category */
-      private static final int CATEGORY_MEM = 3;
-    
-    /** constant for any other instruction category */
-      private static final int CATEGORY_OTHER = 4;    
-   
-        
-    
-    
-    /** text field for visualizing the total number of instructions processed */
-      private JTextField m_tfTotalCounter;
-    
-    /** array of text field - one for each instruction category */    
-      private JTextField m_tfCounters[];
-    
-    /** array of progress pars - one for each instruction category */
-      private JProgressBar m_pbCounters[];
-    
-    
-    /** counter for the total number of instructions processed */
-      private int m_totalCounter = 0;
-   
-    /** array of counter variables - one for each instruction category */
-      private int m_counters[] = new int[MAX_CATEGORY];     
-    
-    /** names of the instruction categories as array */
-      private String m_categoryLabels[] = { "ALU", "Jump", "Branch", "Memory", "Other" };
-    
-   
-    // From Felipe Lessa's instruction counter.  Prevent double-counting of instructions 
-    // which happens because 2 read events are generated.   
-    /**
-     * The last address we saw. We ignore it because the only way for a
-     * program to execute twice the same instruction is to enter an infinite
-     * loop, which is not insteresting in the POV of counting instructions.
-     */
-      protected int lastAddress = -1;  
-    
-   	/**
-   	 * Simple constructor, likely used to run a stand-alone enhanced instruction counter.
-   	 * @param title String containing title for title bar
-   	 * @param heading String containing text for heading shown in upper part of window.
-   	 */
-       public InstructionStatistics(String title, String heading) {
-         super(title, heading);
-      }
-    
-    
-    /**
-     * Simple construction, likely used by the MARS Tools menu mechanism.
-     */
-       public InstructionStatistics() {
-         super(InstructionStatistics.NAME + ", " + InstructionStatistics.VERSION, InstructionStatistics.HEADING);        
-      }
-   
-    
-    /**
-     * returns the name of the tool
-     * 
-     * @return the tools's name
-     */
-       public String getName() {
-         return NAME;
-      }
-   
-   
-   /**
-    * creates the display area for the tool as required by the API
-    * 
-    * @return a panel that holds the GUI of the tool
-    */
-       protected JComponent buildMainDisplayArea() {
-      
-      // Create GUI elements for the tool
-         JPanel panel = new JPanel(new GridBagLayout());
-      
-         m_tfTotalCounter = new JTextField("0", 10);
-         m_tfTotalCounter.setEditable(false);
-      
-         m_tfCounters = new JTextField[MAX_CATEGORY];
-         m_pbCounters = new JProgressBar[MAX_CATEGORY];
-      
-       // for each category a text field and a progress bar is created
-         for (int i=0; i < InstructionStatistics.MAX_CATEGORY; i++) {
-            m_tfCounters[i] = new JTextField("0", 10);
-            m_tfCounters[i].setEditable(false);
-            m_pbCounters[i] = new JProgressBar(JProgressBar.HORIZONTAL);
-            m_pbCounters[i].setStringPainted(true);
-         }	    
-      
-         GridBagConstraints c = new GridBagConstraints();
-         c.anchor = GridBagConstraints.LINE_START;
-         c.gridheight = c.gridwidth = 1;
-      
-      // create the label and text field for the total instruction counter
-         c.gridx = 2;		
-         c.gridy = 1;
-         c.insets = new Insets(0, 0, 17, 0);
-         panel.add(new JLabel("Total: "), c);		
-         c.gridx = 3;			
-         panel.add(m_tfTotalCounter, c);
-      
-         c.insets = new Insets(3, 3, 3, 3);
-      
-      // create label, text field and progress bar for each category
-         for (int i=0; i < InstructionStatistics.MAX_CATEGORY; i++) {
-            c.gridy++;
-            c.gridx=2;
-            panel.add(new JLabel(m_categoryLabels[i] + ":   "), c);
-            c.gridx=3;
-            panel.add(m_tfCounters[i], c);
-            c.gridx=4;
-            panel.add(m_pbCounters[i], c);	
-         }		 		
-      
-         return panel;
-      }
-   
-   
-   /**
-    * registers the tool as observer for the text segment of the MIPS program
-    * 
-    */
-       protected void addAsObserver() { 
-         addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
-      }
-   
-   
-   /**
-    * decodes the instruction and determines the category of the instruction. 
-    * 
-    * The instruction is decoded by extracting the operation and function code of the 32-bit instruction. 
-    * Only the most relevant instructions are decoded and categorized.
-    * 
-    * @param stmt the instruction to decode
-    * @return the category of the instruction
-    * @see InstructionStatistics#CATEGORY_ALU
-    * @see InstructionStatistics#CATEGORY_JUMP
-    * @see InstructionStatistics#CATEGORY_BRANCH 
-    * @see InstructionStatistics#CATEGORY_MEM
-    * @see InstructionStatistics#CATEGORY_OTHER
-    */	
-       protected int getInstructionCategory(ProgramStatement stmt) {
-      
-         int opCode = stmt.getBinaryStatement() >>> (32-6);
-         int funct = stmt.getBinaryStatement() & 0x1F;
-      
-         if (opCode == 0x00) {			
-            if (funct == 0x00 ) 
-               return InstructionStatistics.CATEGORY_ALU; // sll
-            if (0x02 <= funct && funct <= 0x07) 
-               return InstructionStatistics.CATEGORY_ALU; // srl, sra, sllv, srlv, srav
-            if (funct == 0x08 || funct == 0x09) 
-               return InstructionStatistics.CATEGORY_JUMP; // jr, jalr
-            if (0x10 <= funct && funct <= 0x2F) 
-               return InstructionStatistics.CATEGORY_ALU; // mfhi, mthi, mflo, mtlo, mult, multu, div, divu, add, addu, sub, subu, and, or, xor, nor, slt, sltu
-            return InstructionStatistics.CATEGORY_OTHER;			
-         }
-         if (opCode == 0x01) {
-            if (0x00 <= funct && funct <= 0x07) 
-               return InstructionStatistics.CATEGORY_BRANCH; // bltz, bgez, bltzl, bgezl
-            if (0x10 <= funct && funct <= 0x13) 
-               return InstructionStatistics.CATEGORY_BRANCH; // bltzal, bgezal, bltzall, bgczall
-            return InstructionStatistics.CATEGORY_OTHER;
-         }
-         if (opCode == 0x02 || opCode == 0x03) 
-            return InstructionStatistics.CATEGORY_JUMP; // j, jal
-         if (0x04 <= opCode && opCode <= 0x07) 
-            return InstructionStatistics.CATEGORY_BRANCH; // beq, bne, blez, bgtz
-         if (0x08 <= opCode && opCode <= 0x0F) 
-            return InstructionStatistics.CATEGORY_ALU; // addi, addiu, slti, sltiu, andi, ori, xori, lui
-         if (0x14 <= opCode && opCode <= 0x17) 
-            return InstructionStatistics.CATEGORY_BRANCH; // beql, bnel, blezl, bgtzl
-         if (0x20 <= opCode && opCode <= 0x26) 
-            return InstructionStatistics.CATEGORY_MEM; // lb, lh, lwl, lw, lbu, lhu, lwr
-         if (0x28 <= opCode && opCode <= 0x2E) 
-            return InstructionStatistics.CATEGORY_MEM; // sb, sh, swl, sw, swr
-      
-         return InstructionStatistics.CATEGORY_OTHER;
-      }
-   
-   	
-   /**
-    * method that is called each time the MIPS simulator accesses the text segment.
-    * Before an instruction is executed by the simulator, the instruction is fetched from the program memory. 
-    * This memory access is observed and the corresponding instruction is decoded and categorized by the tool.
-    * According to the category the counter values are increased and the display gets updated. 
-    * 
-    * @param resource the observed resource
-    * @param notice signals the type of access (memory, register etc.)
-    */
-       protected void processMIPSUpdate(Observable resource, AccessNotice notice) {
-      		
-         if (!notice.accessIsFromMIPS()) 
-            return;			
-      
-      // check for a read access in the text segment 
-         if (notice.getAccessType() == AccessNotice.READ && notice instanceof MemoryAccessNotice) {
-         
-         // now it is safe to make a cast of the notice
-            MemoryAccessNotice memAccNotice = (MemoryAccessNotice) notice;		
-         
-         // The next three statments are from Felipe Lessa's instruction counter.  Prevents double-counting.			
-            int a = memAccNotice.getAddress();
-            if (a == lastAddress) 
-               return;
-            lastAddress = a;
-         
+    @Override
+    protected void processMIPSUpdate(final Observable resource, final AccessNotice notice) {
+        if (!notice.accessIsFromMIPS()) {
+            return;
+        }
+        if (notice.getAccessType() == 0 && notice instanceof MemoryAccessNotice) {
+            final MemoryAccessNotice memAccNotice = (MemoryAccessNotice)notice;
+            final int a = memAccNotice.getAddress();
+            if (a == this.lastAddress) {
+                return;
+            }
+            this.lastAddress = a;
             try {
-            
-            // access the statement in the text segment without notifying other tools etc.
-               ProgramStatement stmt = Memory.getInstance().getStatementNoNotify(memAccNotice.getAddress());
-            
-            // necessary to handle possible null pointers at the end of the program 
-            // (e.g., if the simulator tries to execute the next instruction after the last instruction in the text segment) 
-               if (stmt != null) {				
-                  int category = getInstructionCategory(stmt);
-               			
-                  m_totalCounter ++;
-                  m_counters[category] ++;
-                  updateDisplay();					
-               }								
-            } 
-                catch (AddressErrorException e) {			
-               // silently ignore these exceptions
-               }			
-         }			
-      }
-   
-   
-   /**
-    * performs initialization tasks of the counters before the GUI is created.
-    * 
-    */
-       protected void initializePreGUI() {
-         m_totalCounter = 0; 
-			lastAddress = -1; // from Felipe Lessa's instruction counter tool
-         for (int i=0; i < InstructionStatistics.MAX_CATEGORY; i++) 
-            m_counters[i] = 0;		
-      }
-   
-   
-   /**
-    * resets the counter values of the tool and updates the display.
-    * 
-    */
-       protected void reset() {
-         m_totalCounter = 0; 
-			lastAddress = -1; // from Felipe Lessa's instruction counter tool
-         for (int i=0; i < InstructionStatistics.MAX_CATEGORY; i++) 
-            m_counters[i] = 0;		
-         updateDisplay();
-      }
-   
-   
-   /**
-    * updates the text fields and progress bars according to the current counter values.
-    * 
-    */
-       protected void updateDisplay() {
-         m_tfTotalCounter.setText(String.valueOf(m_totalCounter));
-      
-         for (int i=0; i < InstructionStatistics.MAX_CATEGORY; i++) {
-            m_tfCounters[i].setText(String.valueOf(m_counters[i]));
-            m_pbCounters[i].setMaximum(m_totalCounter);
-            m_pbCounters[i].setValue(m_counters[i]);
-         }
-      }
-   }
+                final ProgramStatement stmt = Memory.getInstance().getStatementNoNotify(memAccNotice.getAddress());
+                if (stmt != null) {
+                    final int category = this.getInstructionCategory(stmt);
+                    ++this.m_totalCounter;
+                    final int[] counters = this.m_counters;
+                    final int n = category;
+                    ++counters[n];
+                    this.updateDisplay();
+                }
+            }
+            catch (AddressErrorException ex) {}
+        }
+    }
+    
+    @Override
+    protected void initializePreGUI() {
+        this.m_totalCounter = 0;
+        this.lastAddress = -1;
+        for (int i = 0; i < 5; ++i) {
+            this.m_counters[i] = 0;
+        }
+    }
+    
+    @Override
+    protected void reset() {
+        this.m_totalCounter = 0;
+        this.lastAddress = -1;
+        for (int i = 0; i < 5; ++i) {
+            this.m_counters[i] = 0;
+        }
+        this.updateDisplay();
+    }
+    
+    @Override
+    protected void updateDisplay() {
+        this.m_tfTotalCounter.setText(String.valueOf(this.m_totalCounter));
+        for (int i = 0; i < 5; ++i) {
+            this.m_tfCounters[i].setText(String.valueOf(this.m_counters[i]));
+            this.m_pbCounters[i].setMaximum(this.m_totalCounter);
+            this.m_pbCounters[i].setValue(this.m_counters[i]);
+        }
+    }
+    
+    static {
+        InstructionStatistics.NAME = "Instruction Statistics";
+        InstructionStatistics.VERSION = "Version 1.0 (Ingo Kofler)";
+        InstructionStatistics.HEADING = "";
+    }
+}

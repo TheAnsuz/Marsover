@@ -1,904 +1,736 @@
-   package mars.tools;
-   import javax.swing.*;
-   import javax.swing.border.*;
-   import java.awt.*;
-   import java.awt.event.*;
-   import java.util.*;
-	import mars.util.*;
-   import mars.tools.*;
-   import mars.mips.hardware.*;
 
-/*
-Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
 
-Developed by Pete Sanderson (psanderson@otterbein.edu)
-and Kenneth Vollmar (kenvollmar@missouristate.edu)
+package mars.tools;
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
-to the following conditions:
+import mars.util.Binary;
+import java.awt.BorderLayout;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.AccessNotice;
+import java.util.Observable;
+import javax.swing.BorderFactory;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import javax.swing.JLabel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.LayoutManager;
+import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.JComponent;
+import java.util.Random;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JCheckBox;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
-The above copyright notice and this permission notice shall be 
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-(MIT license, http://www.opensource.org/licenses/mit-license.html)
- */
-	
-   /**
-	 * A data cache simulator.  It can be run either as a stand-alone Java application having
-	 * access to the mars package, or through MARS as an item in its Tools menu.  It makes
-	 * maximum use of methods inherited from its abstract superclass AbstractMarsToolOrApp.
-	 * Pete Sanderson, v 1.0: 16-18 October 2006, v 1.1: 7 November 2006. v 1.2: 23 December 2010.
-	 * <p>Version 1.2 fixes a bug in the hit/miss animator under full or N-way set associative. It was
-	 * animating the block of initial access (first block of set).  Now it animates the block 
-	 * of final access (where address found or stored).  Also added log display to GUI (previously System.out).</p>
-	 */
-    public class CacheSimulator extends AbstractMarsToolAndApplication {
-      private static boolean debug = false; // controls display of debugging info
-      private static String version = "Version 1.2";
-      private static String heading =  "Simulate and illustrate data cache performance";
-   	// Major GUI components
-      private JComboBox cacheBlockSizeSelector, cacheBlockCountSelector, 
-                        cachePlacementSelector, cacheReplacementSelector,
-      						cacheSetSizeSelector;
-      private JTextField memoryAccessCountDisplay, cacheHitCountDisplay, cacheMissCountDisplay,
-                         replacementPolicyDisplay,cachableAddressesDisplay,
-      						 cacheSizeDisplay;
-      private JProgressBar cacheHitRateDisplay;
-      private Animation animations;
-   	
-      private JPanel logPanel;
-      private JScrollPane logScroll;
-      private JTextArea logText;
-      private JCheckBox logShow;
-   	
-   	// Some GUI settings
-      private EmptyBorder emptyBorder = new EmptyBorder(4,4,4,4);
-      private Font countFonts = new Font("Times", Font.BOLD,12);
-      private Color backgroundColor = Color.WHITE;
-   	
-   	// Values for Combo Boxes
-      private int[] cacheBlockSizeChoicesInt, cacheBlockCountChoicesInt;
-      private String[] cacheBlockSizeChoices  = {"1","2","4","8","16","32","64","128","256","512","1024","2048"};
-      private String[] cacheBlockCountChoices = {"1","2","4","8","16","32","64","128","256","512","1024","2048"};
-      private String[] placementPolicyChoices = {"Direct Mapping", "Fully Associative", "N-way Set Associative" };
-      private final int DIRECT = 0, FULL = 1, SET = 2; // NOTE: these have to match placementPolicyChoices order!
-      private String[] replacementPolicyChoices =  {"LRU","Random"};
-      private final int LRU = 0, RANDOM = 1; // NOTE: these have to match replacementPolicyChoices order!
-      private String[] cacheSetSizeChoices; // will change dynamically based on the other selections
-      private int defaultCacheBlockSizeIndex    = 2;
-      private int defaultCacheBlockCountIndex   = 3;
-      private int defaultPlacementPolicyIndex   = DIRECT;
-      private int defaultReplacementPolicyIndex = LRU;
-      private int defaultCacheSetSizeIndex      = 0;
-   	
-   	// Cache-related data structures
-      private AbstractCache theCache;   			
-      private int memoryAccessCount, cacheHitCount, cacheMissCount;
-      private double cacheHitRate;
-      
-   	// RNG used for random replacement policy.  For testing, set seed for reproducible stream
-      private Random randu = new Random(0);  
-   	
-   	/**
-   	 * Simple constructor, likely used to run a stand-alone cache simulator.
-   	 * @param title String containing title for title bar
-   	 * @param heading String containing text for heading shown in upper part of window.
-   	 */
-       public CacheSimulator(String title, String heading) {
-         super(title,heading);
-      }
-   	 
-   	 /**
-   	  *  Simple constructor, likely used by the MARS Tools menu mechanism
-   	  */
-       public CacheSimulator() {
-         super ("Data Cache Simulation Tool, "+version, heading);
-      }
-   		 
-   		 
-   	/**
-   	 * Main provided for pure stand-alone use.  Recommended stand-alone use is to write a 
-   	 * driver program that instantiates a CacheSimulator object then invokes its go() method.
-   	 * "stand-alone" means it is not invoked from the MARS Tools menu.  "Pure" means there
-   	 * is no driver program to invoke the Cache Simulator.
-   	 */
-       public static void main(String[] args) {
-         new CacheSimulator("Data Cache Simulator stand-alone, "+version,heading).go();
-      }
-   	
-   
-       /**
-   	  *  Required MarsTool method to return Tool name.  
-   	  *  @return  Tool name.  MARS will display this in menu item.
-   	  */
-       public String getName() {
-         return "Data Cache Simulator";
-      }
-   	
-      
-   	/**
-   	 *  Method that constructs the main cache simulator display area.  It is organized vertically
-   	 *  into three major components: the cache configuration which an be modified
-   	 *  using combo boxes, the cache performance which is updated as the
-   	 *  attached MIPS program executes, and the runtime log which is optionally used 
-		 *  to display log of each cache access.
-   	 *  @return the GUI component containing these three areas
-   	 */
-       protected JComponent buildMainDisplayArea() {
-      	// OVERALL STRUCTURE OF MAIN UI (CENTER)
-         Box results = Box.createVerticalBox();
-         results.add(buildOrganizationArea());
-         results.add(buildPerformanceArea());
-         results.add(buildLogArea());
-         return results;
-      }
-   	
-   	////////////////////////////////////////////////////////////////////////////
-       private JComponent buildLogArea() {
-         logPanel = new JPanel();
-         TitledBorder ltb =new TitledBorder("Runtime Log");
-         ltb.setTitleJustification(TitledBorder.CENTER);
-         logPanel.setBorder(ltb);
-			logShow = new JCheckBox("Enabled",debug);
-         logShow.addItemListener(
-                new ItemListener() {
-                   public void itemStateChanged(ItemEvent e) { 
-						   debug = e.getStateChange() == ItemEvent.SELECTED;
-							resetLogDisplay();
-							logText.setEnabled(debug);
-							logText.setBackground( debug ? Color.WHITE : logPanel.getBackground() );
-                  }
-               });
-			logPanel.add(logShow);
-         logText = new JTextArea(5,70);
-			logText.setEnabled(debug);
-			logText.setBackground( debug ? Color.WHITE : logPanel.getBackground() );
-			logText.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-			logText.setToolTipText("Displays cache activity log if enabled");
-         logScroll = new JScrollPane(logText,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-         logPanel.add(logScroll);
-         return logPanel;
-      }
-   
-   
-   	////////////////////////////////////////////////////////////////////////////
-       private JComponent buildOrganizationArea() {
-         JPanel organization = new JPanel(new GridLayout(3,2));
-         TitledBorder otb =new TitledBorder("Cache Organization");
-         otb.setTitleJustification(TitledBorder.CENTER);
-         organization.setBorder(otb);
-         cachePlacementSelector = new JComboBox(placementPolicyChoices);
-         cachePlacementSelector.setEditable(false);
-         cachePlacementSelector.setBackground(backgroundColor);
-         cachePlacementSelector.setSelectedIndex(defaultPlacementPolicyIndex);
-         cachePlacementSelector.addActionListener(
-                new ActionListener() {
-                   public void actionPerformed(ActionEvent e) {
-                     updateCacheSetSizeSelector();
-                     reset();
-                  }
-               });	
-      	
-         cacheReplacementSelector = new JComboBox(replacementPolicyChoices);
-         cacheReplacementSelector.setEditable(false);
-         cacheReplacementSelector.setBackground(backgroundColor);
-         cacheReplacementSelector.setSelectedIndex(defaultReplacementPolicyIndex);
-      	      						
-         cacheBlockSizeSelector = new JComboBox(cacheBlockSizeChoices);
-         cacheBlockSizeSelector.setEditable(false);
-         cacheBlockSizeSelector.setBackground(backgroundColor);
-         cacheBlockSizeSelector.setSelectedIndex(defaultCacheBlockSizeIndex);
-         cacheBlockSizeSelector.addActionListener(
-                new ActionListener() {
-                   public void actionPerformed(ActionEvent e) {
-                     updateCacheSizeDisplay();
-                     reset();
-                  }
-               });
-         cacheBlockCountSelector = new JComboBox(cacheBlockCountChoices);
-         cacheBlockCountSelector.setEditable(false);
-         cacheBlockCountSelector.setBackground(backgroundColor);
-         cacheBlockCountSelector.setSelectedIndex(defaultCacheBlockCountIndex);
-         cacheBlockCountSelector.addActionListener(
-                new ActionListener() {
-                   public void actionPerformed(ActionEvent e) {
-                     updateCacheSetSizeSelector();
-                     theCache = createNewCache();
-                     resetCounts();
-                     updateDisplay();
-                     updateCacheSizeDisplay();
-                     animations.fillAnimationBoxWithCacheBlocks();
-                  }
-               });			
-      
-         cacheSetSizeSelector = new JComboBox(cacheSetSizeChoices);
-         cacheSetSizeSelector.setEditable(false);
-         cacheSetSizeSelector.setBackground(backgroundColor);
-         cacheSetSizeSelector.setSelectedIndex(defaultCacheSetSizeIndex);
-         cacheSetSizeSelector.addActionListener(
-                new ActionListener() {
-                   public void actionPerformed(ActionEvent e) {
-                     reset();
-                  }
-               });
-      			      
-         // ALL COMPONENTS FOR "CACHE ORGANIZATION" SECTION
-         JPanel placementPolicyRow = getPanelWithBorderLayout();
-         placementPolicyRow.setBorder(emptyBorder);
-         placementPolicyRow.add(new JLabel("Placement Policy "),BorderLayout.WEST);
-         placementPolicyRow.add(cachePlacementSelector,BorderLayout.EAST);
-      
-         JPanel replacementPolicyRow = getPanelWithBorderLayout();
-         replacementPolicyRow.setBorder(emptyBorder);
-         replacementPolicyRow.add(new JLabel("Block Replacement Policy "),BorderLayout.WEST);
-      /*       replacementPolicyDisplay = new JTextField("N/A",6);
-         replacementPolicyDisplay.setEditable(false);
-         replacementPolicyDisplay.setBackground(backgroundColor);
-         replacementPolicyDisplay.setHorizontalAlignment(JTextField.RIGHT); */
-         replacementPolicyRow.add(cacheReplacementSelector, BorderLayout.EAST);
-      
-         JPanel cacheSetSizeRow = getPanelWithBorderLayout();
-         cacheSetSizeRow.setBorder(emptyBorder);
-         cacheSetSizeRow.add(new JLabel("Set size (blocks) "),BorderLayout.WEST);
-         cacheSetSizeRow.add(cacheSetSizeSelector,BorderLayout.EAST);
-      				
-      // Cachable address range "selection" removed for now...
-      /*
-         JPanel cachableAddressesRow = getPanelWithBorderLayout();
-         cachableAddressesRow.setBorder(emptyBorder);
-         cachableAddressesRow.add(new JLabel("Cachable Addresses "),BorderLayout.WEST);
-         cachableAddressesDisplay = new JTextField("all data segment");
-         cachableAddressesDisplay.setEditable(false);
-         cachableAddressesDisplay.setBackground(backgroundColor);
-         cachableAddressesDisplay.setHorizontalAlignment(JTextField.RIGHT);
-         cachableAddressesRow.add(cachableAddressesDisplay, BorderLayout.EAST);
-      */
-         JPanel cacheNumberBlocksRow = getPanelWithBorderLayout();
-         cacheNumberBlocksRow.setBorder(emptyBorder);
-         cacheNumberBlocksRow.add(new JLabel("Number of blocks "), BorderLayout.WEST);
-         cacheNumberBlocksRow.add(cacheBlockCountSelector, BorderLayout.EAST);
-      	
-         JPanel cacheBlockSizeRow = getPanelWithBorderLayout();
-         cacheBlockSizeRow.setBorder(emptyBorder);
-         cacheBlockSizeRow.add(new JLabel("Cache block size (words) "), BorderLayout.WEST);
-         cacheBlockSizeRow.add(cacheBlockSizeSelector, BorderLayout.EAST);
-      	
-         JPanel cacheTotalSizeRow = getPanelWithBorderLayout();
-         cacheTotalSizeRow.setBorder(emptyBorder);
-         cacheTotalSizeRow.add(new JLabel("Cache size (bytes) "), BorderLayout.WEST);
-         cacheSizeDisplay = new JTextField(8);
-         cacheSizeDisplay.setHorizontalAlignment(JTextField.RIGHT);
-         cacheSizeDisplay.setEditable(false);
-         cacheSizeDisplay.setBackground(backgroundColor);
-         cacheSizeDisplay.setFont(countFonts);
-         cacheTotalSizeRow.add(cacheSizeDisplay, BorderLayout.EAST);
-         updateCacheSizeDisplay();
-      	
-      	// Lay 'em out in the grid...
-         organization.add(placementPolicyRow);
-         organization.add(cacheNumberBlocksRow);
-         organization.add(replacementPolicyRow);
-         organization.add(cacheBlockSizeRow);
-         //organization.add(cachableAddressesRow);
-         organization.add(cacheSetSizeRow);	
-         organization.add(cacheTotalSizeRow);      
-         return organization;
-      }
-   	
-   	
-   	////////////////////////////////////////////////////////////////////////////
-       private JComponent buildPerformanceArea() {
-         JPanel performance = new JPanel(new GridLayout(1,2));
-         TitledBorder ptb =new TitledBorder("Cache Performance");
-         ptb.setTitleJustification(TitledBorder.CENTER);
-         performance.setBorder(ptb);
-         JPanel memoryAccessCountRow = getPanelWithBorderLayout();
-         memoryAccessCountRow.setBorder(emptyBorder);
-         memoryAccessCountRow.add(new JLabel("Memory Access Count "), BorderLayout.WEST);
-         memoryAccessCountDisplay = new JTextField(10);
-         memoryAccessCountDisplay.setHorizontalAlignment(JTextField.RIGHT);
-         memoryAccessCountDisplay.setEditable(false);
-         memoryAccessCountDisplay.setBackground(backgroundColor);
-         memoryAccessCountDisplay.setFont(countFonts);
-         memoryAccessCountRow.add(memoryAccessCountDisplay, BorderLayout.EAST);
-      
-         JPanel cacheHitCountRow = getPanelWithBorderLayout();
-         cacheHitCountRow.setBorder(emptyBorder);
-         cacheHitCountRow.add(new JLabel("Cache Hit Count "), BorderLayout.WEST);
-         cacheHitCountDisplay = new JTextField(10);
-         cacheHitCountDisplay.setHorizontalAlignment(JTextField.RIGHT);
-         cacheHitCountDisplay.setEditable(false);
-         cacheHitCountDisplay.setBackground(backgroundColor);
-         cacheHitCountDisplay.setFont(countFonts);
-         cacheHitCountRow.add(cacheHitCountDisplay, BorderLayout.EAST);
-      
-         JPanel cacheMissCountRow = getPanelWithBorderLayout();
-         cacheMissCountRow.setBorder(emptyBorder);
-         cacheMissCountRow.add(new JLabel("Cache Miss Count "), BorderLayout.WEST);
-         cacheMissCountDisplay = new JTextField(10);
-         cacheMissCountDisplay.setHorizontalAlignment(JTextField.RIGHT);
-         cacheMissCountDisplay.setEditable(false);
-         cacheMissCountDisplay.setBackground(backgroundColor);
-         cacheMissCountDisplay.setFont(countFonts);
-         cacheMissCountRow.add(cacheMissCountDisplay, BorderLayout.EAST);  	
-      
-         JPanel cacheHitRateRow = getPanelWithBorderLayout();
-         cacheHitRateRow.setBorder(emptyBorder);
-         cacheHitRateRow.add(new JLabel("Cache Hit Rate "), BorderLayout.WEST);
-         cacheHitRateDisplay = new JProgressBar(JProgressBar.HORIZONTAL, 0, 100);
-         cacheHitRateDisplay.setStringPainted(true);
-         cacheHitRateDisplay.setForeground(Color.BLUE);
-         cacheHitRateDisplay.setBackground(backgroundColor);
-         cacheHitRateDisplay.setFont(countFonts);
-         cacheHitRateRow.add(cacheHitRateDisplay, BorderLayout.EAST); 
-      
-         resetCounts();
-         updateDisplay();
-      
-         // Vertically align these 4 measures in a grid, then add to left column of main grid.
-         JPanel performanceMeasures = new JPanel(new GridLayout(4,1));
-         performanceMeasures.add(memoryAccessCountRow);
-         performanceMeasures.add(cacheHitCountRow);
-         performanceMeasures.add(cacheMissCountRow);
-         performanceMeasures.add(cacheHitRateRow);
-         performance.add(performanceMeasures);
-      	
-      	// LET'S TRY SOME ANIMATION ON THE RIGHT SIDE...
-         animations = new Animation();
-         animations.fillAnimationBoxWithCacheBlocks();
-         JPanel animationsPanel = new JPanel(new GridLayout(1,2));
-         Box animationsLabel = Box.createVerticalBox();
-         JPanel tableTitle1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-         JPanel tableTitle2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-         tableTitle1.add(new JLabel("Cache Block Table"));
-         tableTitle2.add(new JLabel("(block 0 at top)"));
-         animationsLabel.add(tableTitle1);
-         animationsLabel.add(tableTitle2);
-         Dimension colorKeyBoxSize = new Dimension(8,8);
-      	
-         JPanel emptyKey = new JPanel(new FlowLayout(FlowLayout.LEFT));
-         JPanel emptyBox = new JPanel();
-         emptyBox.setSize(colorKeyBoxSize);
-         emptyBox.setBackground(animations.defaultColor);
-         emptyBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-         emptyKey.add(emptyBox);
-         emptyKey.add(new JLabel(" = empty"));
-      	
-         JPanel missBox = new JPanel();
-         JPanel missKey = new JPanel(new FlowLayout(FlowLayout.LEFT));
-         missBox.setSize(colorKeyBoxSize);
-         missBox.setBackground(animations.missColor);
-         missBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-         missKey.add(missBox);
-         missKey.add(new JLabel(" = miss"));   
-      
-         JPanel hitKey = new JPanel(new FlowLayout(FlowLayout.LEFT));     
-         JPanel hitBox = new JPanel();     
-         hitBox.setSize(colorKeyBoxSize);
-         hitBox.setBackground(animations.hitColor);
-         hitBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));   
-         hitKey.add(hitBox);
-         hitKey.add(new JLabel(" = hit"));
-      	
-         animationsLabel.add(emptyKey);
-         animationsLabel.add(hitKey);
-         animationsLabel.add(missKey);
-         animationsLabel.add(Box.createVerticalGlue());
-         animationsPanel.add(animationsLabel);
-         animationsPanel.add(animations.getAnimationBox());
-      
-         performance.add(animationsPanel); 
-         return performance;     
-      }
-   
-   
-   
-      //////////////////////////////////////////////////////////////////////////////////////
-      //  Rest of the protected methods.  These override do-nothing methods inherited from
-   	//  the abstract superclass.
-      //////////////////////////////////////////////////////////////////////////////////////
-   	
-      /**
-   	 * Apply caching policies and update display when connected MIPS program accesses (data) memory.
-   	 * @param memory the attached memory
-   	 * @param accessNotice information provided by memory in MemoryAccessNotice object
-   	 */
-       protected void processMIPSUpdate(Observable memory, AccessNotice accessNotice) {
-         MemoryAccessNotice notice = (MemoryAccessNotice) accessNotice;
-         memoryAccessCount++;
-         CacheAccessResult cacheAccessResult = theCache.isItAHitThenReadOnMiss(notice.getAddress());
-         if (cacheAccessResult.isHit()) {
-            cacheHitCount++;
-            animations.showHit(cacheAccessResult.getBlock());
-         } 
-         else {
-            cacheMissCount++;
-            animations.showMiss(cacheAccessResult.getBlock());
-         }
-         cacheHitRate = cacheHitCount / (double)memoryAccessCount;
-      }
-   	
-   
-   	/** 
-   	 *  Initialize all JComboBox choice structures not already initialized at declaration.	
-       *  Also creates initial default cache object. Overrides inherited method that does nothing.
-   	 */
-       protected void initializePreGUI() {
-         cacheBlockSizeChoicesInt = new int[cacheBlockSizeChoices.length];
-         for (int i=0; i<cacheBlockSizeChoices.length; i++) {
+public class CacheSimulator extends AbstractMarsToolAndApplication
+{
+    private static boolean debug;
+    private static String version;
+    private static String heading;
+    private JComboBox cacheBlockSizeSelector;
+    private JComboBox cacheBlockCountSelector;
+    private JComboBox cachePlacementSelector;
+    private JComboBox cacheReplacementSelector;
+    private JComboBox cacheSetSizeSelector;
+    private JTextField memoryAccessCountDisplay;
+    private JTextField cacheHitCountDisplay;
+    private JTextField cacheMissCountDisplay;
+    private JTextField replacementPolicyDisplay;
+    private JTextField cachableAddressesDisplay;
+    private JTextField cacheSizeDisplay;
+    private JProgressBar cacheHitRateDisplay;
+    private Animation animations;
+    private JPanel logPanel;
+    private JScrollPane logScroll;
+    private JTextArea logText;
+    private JCheckBox logShow;
+    private EmptyBorder emptyBorder;
+    private Font countFonts;
+    private Color backgroundColor;
+    private int[] cacheBlockSizeChoicesInt;
+    private int[] cacheBlockCountChoicesInt;
+    private String[] cacheBlockSizeChoices;
+    private String[] cacheBlockCountChoices;
+    private String[] placementPolicyChoices;
+    private final int DIRECT = 0;
+    private final int FULL = 1;
+    private final int SET = 2;
+    private String[] replacementPolicyChoices;
+    private final int LRU = 0;
+    private final int RANDOM = 1;
+    private String[] cacheSetSizeChoices;
+    private int defaultCacheBlockSizeIndex;
+    private int defaultCacheBlockCountIndex;
+    private int defaultPlacementPolicyIndex;
+    private int defaultReplacementPolicyIndex;
+    private int defaultCacheSetSizeIndex;
+    private AbstractCache theCache;
+    private int memoryAccessCount;
+    private int cacheHitCount;
+    private int cacheMissCount;
+    private double cacheHitRate;
+    private Random randu;
+    
+    public CacheSimulator(final String title, final String heading) {
+        super(title, heading);
+        this.emptyBorder = new EmptyBorder(4, 4, 4, 4);
+        this.countFonts = new Font("Times", 1, 12);
+        this.backgroundColor = Color.WHITE;
+        this.cacheBlockSizeChoices = new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048" };
+        this.cacheBlockCountChoices = new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048" };
+        this.placementPolicyChoices = new String[] { "Direct Mapping", "Fully Associative", "N-way Set Associative" };
+        this.replacementPolicyChoices = new String[] { "LRU", "Random" };
+        this.defaultCacheBlockSizeIndex = 2;
+        this.defaultCacheBlockCountIndex = 3;
+        this.defaultPlacementPolicyIndex = 0;
+        this.defaultReplacementPolicyIndex = 0;
+        this.defaultCacheSetSizeIndex = 0;
+        this.randu = new Random(0L);
+    }
+    
+    public CacheSimulator() {
+        super("Data Cache Simulation Tool, " + CacheSimulator.version, CacheSimulator.heading);
+        this.emptyBorder = new EmptyBorder(4, 4, 4, 4);
+        this.countFonts = new Font("Times", 1, 12);
+        this.backgroundColor = Color.WHITE;
+        this.cacheBlockSizeChoices = new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048" };
+        this.cacheBlockCountChoices = new String[] { "1", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048" };
+        this.placementPolicyChoices = new String[] { "Direct Mapping", "Fully Associative", "N-way Set Associative" };
+        this.replacementPolicyChoices = new String[] { "LRU", "Random" };
+        this.defaultCacheBlockSizeIndex = 2;
+        this.defaultCacheBlockCountIndex = 3;
+        this.defaultPlacementPolicyIndex = 0;
+        this.defaultReplacementPolicyIndex = 0;
+        this.defaultCacheSetSizeIndex = 0;
+        this.randu = new Random(0L);
+    }
+    
+    public static void main(final String[] args) {
+        new CacheSimulator("Data Cache Simulator stand-alone, " + CacheSimulator.version, CacheSimulator.heading).go();
+    }
+    
+    @Override
+    public String getName() {
+        return "Data Cache Simulator";
+    }
+    
+    @Override
+    protected JComponent buildMainDisplayArea() {
+        final Box results = Box.createVerticalBox();
+        results.add(this.buildOrganizationArea());
+        results.add(this.buildPerformanceArea());
+        results.add(this.buildLogArea());
+        return results;
+    }
+    
+    private JComponent buildLogArea() {
+        this.logPanel = new JPanel();
+        final TitledBorder ltb = new TitledBorder("Runtime Log");
+        ltb.setTitleJustification(2);
+        this.logPanel.setBorder(ltb);
+        (this.logShow = new JCheckBox("Enabled", CacheSimulator.debug)).addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(final ItemEvent e) {
+                CacheSimulator.debug = (e.getStateChange() == 1);
+                CacheSimulator.this.resetLogDisplay();
+                CacheSimulator.this.logText.setEnabled(CacheSimulator.debug);
+                CacheSimulator.this.logText.setBackground(CacheSimulator.debug ? Color.WHITE : CacheSimulator.this.logPanel.getBackground());
+            }
+        });
+        this.logPanel.add(this.logShow);
+        (this.logText = new JTextArea(5, 70)).setEnabled(CacheSimulator.debug);
+        this.logText.setBackground(CacheSimulator.debug ? Color.WHITE : this.logPanel.getBackground());
+        this.logText.setFont(new Font("Monospaced", 0, 12));
+        this.logText.setToolTipText("Displays cache activity log if enabled");
+        this.logScroll = new JScrollPane(this.logText, 20, 30);
+        this.logPanel.add(this.logScroll);
+        return this.logPanel;
+    }
+    
+    private JComponent buildOrganizationArea() {
+        final JPanel organization = new JPanel(new GridLayout(3, 2));
+        final TitledBorder otb = new TitledBorder("Cache Organization");
+        otb.setTitleJustification(2);
+        organization.setBorder(otb);
+        (this.cachePlacementSelector = new JComboBox((E[])this.placementPolicyChoices)).setEditable(false);
+        this.cachePlacementSelector.setBackground(this.backgroundColor);
+        this.cachePlacementSelector.setSelectedIndex(this.defaultPlacementPolicyIndex);
+        this.cachePlacementSelector.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                CacheSimulator.this.updateCacheSetSizeSelector();
+                CacheSimulator.this.reset();
+            }
+        });
+        (this.cacheReplacementSelector = new JComboBox((E[])this.replacementPolicyChoices)).setEditable(false);
+        this.cacheReplacementSelector.setBackground(this.backgroundColor);
+        this.cacheReplacementSelector.setSelectedIndex(this.defaultReplacementPolicyIndex);
+        (this.cacheBlockSizeSelector = new JComboBox((E[])this.cacheBlockSizeChoices)).setEditable(false);
+        this.cacheBlockSizeSelector.setBackground(this.backgroundColor);
+        this.cacheBlockSizeSelector.setSelectedIndex(this.defaultCacheBlockSizeIndex);
+        this.cacheBlockSizeSelector.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                CacheSimulator.this.updateCacheSizeDisplay();
+                CacheSimulator.this.reset();
+            }
+        });
+        (this.cacheBlockCountSelector = new JComboBox((E[])this.cacheBlockCountChoices)).setEditable(false);
+        this.cacheBlockCountSelector.setBackground(this.backgroundColor);
+        this.cacheBlockCountSelector.setSelectedIndex(this.defaultCacheBlockCountIndex);
+        this.cacheBlockCountSelector.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                CacheSimulator.this.updateCacheSetSizeSelector();
+                CacheSimulator.this.theCache = CacheSimulator.this.createNewCache();
+                CacheSimulator.this.resetCounts();
+                CacheSimulator.this.updateDisplay();
+                CacheSimulator.this.updateCacheSizeDisplay();
+                CacheSimulator.this.animations.fillAnimationBoxWithCacheBlocks();
+            }
+        });
+        (this.cacheSetSizeSelector = new JComboBox((E[])this.cacheSetSizeChoices)).setEditable(false);
+        this.cacheSetSizeSelector.setBackground(this.backgroundColor);
+        this.cacheSetSizeSelector.setSelectedIndex(this.defaultCacheSetSizeIndex);
+        this.cacheSetSizeSelector.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                CacheSimulator.this.reset();
+            }
+        });
+        final JPanel placementPolicyRow = this.getPanelWithBorderLayout();
+        placementPolicyRow.setBorder(this.emptyBorder);
+        placementPolicyRow.add(new JLabel("Placement Policy "), "West");
+        placementPolicyRow.add(this.cachePlacementSelector, "East");
+        final JPanel replacementPolicyRow = this.getPanelWithBorderLayout();
+        replacementPolicyRow.setBorder(this.emptyBorder);
+        replacementPolicyRow.add(new JLabel("Block Replacement Policy "), "West");
+        replacementPolicyRow.add(this.cacheReplacementSelector, "East");
+        final JPanel cacheSetSizeRow = this.getPanelWithBorderLayout();
+        cacheSetSizeRow.setBorder(this.emptyBorder);
+        cacheSetSizeRow.add(new JLabel("Set size (blocks) "), "West");
+        cacheSetSizeRow.add(this.cacheSetSizeSelector, "East");
+        final JPanel cacheNumberBlocksRow = this.getPanelWithBorderLayout();
+        cacheNumberBlocksRow.setBorder(this.emptyBorder);
+        cacheNumberBlocksRow.add(new JLabel("Number of blocks "), "West");
+        cacheNumberBlocksRow.add(this.cacheBlockCountSelector, "East");
+        final JPanel cacheBlockSizeRow = this.getPanelWithBorderLayout();
+        cacheBlockSizeRow.setBorder(this.emptyBorder);
+        cacheBlockSizeRow.add(new JLabel("Cache block size (words) "), "West");
+        cacheBlockSizeRow.add(this.cacheBlockSizeSelector, "East");
+        final JPanel cacheTotalSizeRow = this.getPanelWithBorderLayout();
+        cacheTotalSizeRow.setBorder(this.emptyBorder);
+        cacheTotalSizeRow.add(new JLabel("Cache size (bytes) "), "West");
+        (this.cacheSizeDisplay = new JTextField(8)).setHorizontalAlignment(4);
+        this.cacheSizeDisplay.setEditable(false);
+        this.cacheSizeDisplay.setBackground(this.backgroundColor);
+        this.cacheSizeDisplay.setFont(this.countFonts);
+        cacheTotalSizeRow.add(this.cacheSizeDisplay, "East");
+        this.updateCacheSizeDisplay();
+        organization.add(placementPolicyRow);
+        organization.add(cacheNumberBlocksRow);
+        organization.add(replacementPolicyRow);
+        organization.add(cacheBlockSizeRow);
+        organization.add(cacheSetSizeRow);
+        organization.add(cacheTotalSizeRow);
+        return organization;
+    }
+    
+    private JComponent buildPerformanceArea() {
+        final JPanel performance = new JPanel(new GridLayout(1, 2));
+        final TitledBorder ptb = new TitledBorder("Cache Performance");
+        ptb.setTitleJustification(2);
+        performance.setBorder(ptb);
+        final JPanel memoryAccessCountRow = this.getPanelWithBorderLayout();
+        memoryAccessCountRow.setBorder(this.emptyBorder);
+        memoryAccessCountRow.add(new JLabel("Memory Access Count "), "West");
+        (this.memoryAccessCountDisplay = new JTextField(10)).setHorizontalAlignment(4);
+        this.memoryAccessCountDisplay.setEditable(false);
+        this.memoryAccessCountDisplay.setBackground(this.backgroundColor);
+        this.memoryAccessCountDisplay.setFont(this.countFonts);
+        memoryAccessCountRow.add(this.memoryAccessCountDisplay, "East");
+        final JPanel cacheHitCountRow = this.getPanelWithBorderLayout();
+        cacheHitCountRow.setBorder(this.emptyBorder);
+        cacheHitCountRow.add(new JLabel("Cache Hit Count "), "West");
+        (this.cacheHitCountDisplay = new JTextField(10)).setHorizontalAlignment(4);
+        this.cacheHitCountDisplay.setEditable(false);
+        this.cacheHitCountDisplay.setBackground(this.backgroundColor);
+        this.cacheHitCountDisplay.setFont(this.countFonts);
+        cacheHitCountRow.add(this.cacheHitCountDisplay, "East");
+        final JPanel cacheMissCountRow = this.getPanelWithBorderLayout();
+        cacheMissCountRow.setBorder(this.emptyBorder);
+        cacheMissCountRow.add(new JLabel("Cache Miss Count "), "West");
+        (this.cacheMissCountDisplay = new JTextField(10)).setHorizontalAlignment(4);
+        this.cacheMissCountDisplay.setEditable(false);
+        this.cacheMissCountDisplay.setBackground(this.backgroundColor);
+        this.cacheMissCountDisplay.setFont(this.countFonts);
+        cacheMissCountRow.add(this.cacheMissCountDisplay, "East");
+        final JPanel cacheHitRateRow = this.getPanelWithBorderLayout();
+        cacheHitRateRow.setBorder(this.emptyBorder);
+        cacheHitRateRow.add(new JLabel("Cache Hit Rate "), "West");
+        (this.cacheHitRateDisplay = new JProgressBar(0, 0, 100)).setStringPainted(true);
+        this.cacheHitRateDisplay.setForeground(Color.BLUE);
+        this.cacheHitRateDisplay.setBackground(this.backgroundColor);
+        this.cacheHitRateDisplay.setFont(this.countFonts);
+        cacheHitRateRow.add(this.cacheHitRateDisplay, "East");
+        this.resetCounts();
+        this.updateDisplay();
+        final JPanel performanceMeasures = new JPanel(new GridLayout(4, 1));
+        performanceMeasures.add(memoryAccessCountRow);
+        performanceMeasures.add(cacheHitCountRow);
+        performanceMeasures.add(cacheMissCountRow);
+        performanceMeasures.add(cacheHitRateRow);
+        performance.add(performanceMeasures);
+        (this.animations = new Animation()).fillAnimationBoxWithCacheBlocks();
+        final JPanel animationsPanel = new JPanel(new GridLayout(1, 2));
+        final Box animationsLabel = Box.createVerticalBox();
+        final JPanel tableTitle1 = new JPanel(new FlowLayout(0));
+        final JPanel tableTitle2 = new JPanel(new FlowLayout(0));
+        tableTitle1.add(new JLabel("Cache Block Table"));
+        tableTitle2.add(new JLabel("(block 0 at top)"));
+        animationsLabel.add(tableTitle1);
+        animationsLabel.add(tableTitle2);
+        final Dimension colorKeyBoxSize = new Dimension(8, 8);
+        final JPanel emptyKey = new JPanel(new FlowLayout(0));
+        final JPanel emptyBox = new JPanel();
+        emptyBox.setSize(colorKeyBoxSize);
+        emptyBox.setBackground(this.animations.defaultColor);
+        emptyBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        emptyKey.add(emptyBox);
+        emptyKey.add(new JLabel(" = empty"));
+        final JPanel missBox = new JPanel();
+        final JPanel missKey = new JPanel(new FlowLayout(0));
+        missBox.setSize(colorKeyBoxSize);
+        missBox.setBackground(this.animations.missColor);
+        missBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        missKey.add(missBox);
+        missKey.add(new JLabel(" = miss"));
+        final JPanel hitKey = new JPanel(new FlowLayout(0));
+        final JPanel hitBox = new JPanel();
+        hitBox.setSize(colorKeyBoxSize);
+        hitBox.setBackground(this.animations.hitColor);
+        hitBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        hitKey.add(hitBox);
+        hitKey.add(new JLabel(" = hit"));
+        animationsLabel.add(emptyKey);
+        animationsLabel.add(hitKey);
+        animationsLabel.add(missKey);
+        animationsLabel.add(Box.createVerticalGlue());
+        animationsPanel.add(animationsLabel);
+        animationsPanel.add(this.animations.getAnimationBox());
+        performance.add(animationsPanel);
+        return performance;
+    }
+    
+    @Override
+    protected void processMIPSUpdate(final Observable memory, final AccessNotice accessNotice) {
+        final MemoryAccessNotice notice = (MemoryAccessNotice)accessNotice;
+        ++this.memoryAccessCount;
+        final CacheAccessResult cacheAccessResult = this.theCache.isItAHitThenReadOnMiss(notice.getAddress());
+        if (cacheAccessResult.isHit()) {
+            ++this.cacheHitCount;
+            this.animations.showHit(cacheAccessResult.getBlock());
+        }
+        else {
+            ++this.cacheMissCount;
+            this.animations.showMiss(cacheAccessResult.getBlock());
+        }
+        this.cacheHitRate = this.cacheHitCount / (double)this.memoryAccessCount;
+    }
+    
+    @Override
+    protected void initializePreGUI() {
+        this.cacheBlockSizeChoicesInt = new int[this.cacheBlockSizeChoices.length];
+        for (int i = 0; i < this.cacheBlockSizeChoices.length; ++i) {
             try {
-               cacheBlockSizeChoicesInt[i] = Integer.parseInt(cacheBlockSizeChoices[i]);
+                this.cacheBlockSizeChoicesInt[i] = Integer.parseInt(this.cacheBlockSizeChoices[i]);
             }
-                catch (NumberFormatException nfe) {
-                  cacheBlockSizeChoicesInt[i] = 1;
-               }
-         }
-         cacheBlockCountChoicesInt = new int[cacheBlockCountChoices.length];
-         for (int i=0; i<cacheBlockCountChoices.length; i++) {
+            catch (NumberFormatException nfe) {
+                this.cacheBlockSizeChoicesInt[i] = 1;
+            }
+        }
+        this.cacheBlockCountChoicesInt = new int[this.cacheBlockCountChoices.length];
+        for (int i = 0; i < this.cacheBlockCountChoices.length; ++i) {
             try {
-               cacheBlockCountChoicesInt[i] = Integer.parseInt(cacheBlockCountChoices[i]);
+                this.cacheBlockCountChoicesInt[i] = Integer.parseInt(this.cacheBlockCountChoices[i]);
             }
-                catch (NumberFormatException nfe) {
-                  cacheBlockCountChoicesInt[i] = 1;
-               }
-         }
-         cacheSetSizeChoices = determineSetSizeChoices(defaultCacheBlockCountIndex,defaultPlacementPolicyIndex);
-      }
-   
-   
-   	/** 
-   	 *  The only post-GUI initialization is to create the initial cache object based on the default settings
-   	 *  of the various combo boxes. Overrides inherited method that does nothing.
-   	 */
-   	
-       protected void initializePostGUI() {
-         theCache = createNewCache();
-      }
-   	
-   	
-   	/**
-   	 *  Method to reset cache, counters and display when the Reset button selected.
-   	 *  Overrides inherited method that does nothing.
-   	 */
-       protected void reset() {
-         theCache = createNewCache();
-         resetCounts();
-         updateDisplay();
-         animations.reset();
-         resetLogDisplay();
-      }
-   
-   	/**
-   	 *  Updates display immediately after each update (AccessNotice) is processed, after
-   	 *  cache configuration changes as needed, and after each execution step when Mars
-   	 *  is running in timed mode.  Overrides inherited method that does nothing.
-   	 */
-       protected void updateDisplay() {
-         updateMemoryAccessCountDisplay();
-         updateCacheHitCountDisplay();
-         updateCacheMissCountDisplay();
-         updateCacheHitRateDisplay();
-      }
-   
-   	
-      //////////////////////////////////////////////////////////////////////////////////////
-      //  Private methods defined to support the above.
-      //////////////////////////////////////////////////////////////////////////////////////
-   
-   	// Will determine range of choices for "set size in blocks", which is determined both by
-   	// the number of blocks in the cache and by placement policy.
-       private String[] determineSetSizeChoices(int cacheBlockCountIndex, int placementPolicyIndex) {
-         String[] choices;
-         int firstBlockCountIndex = 0;
-         int lastBlockCountIndex  = cacheBlockCountIndex;
-         switch (placementPolicyIndex) {
-            case DIRECT :   choices = new String[1];
-               choices[0] = cacheBlockCountChoices[firstBlockCountIndex]; // set size fixed at 1
-               break;
-            case SET    :   choices = new String[lastBlockCountIndex-firstBlockCountIndex+1];
-               for (int i=0; i<choices.length; i++) {
-                  choices[i] = cacheBlockCountChoices[firstBlockCountIndex+i];
-               }
-               break;
-            case FULL   :   // 1 set total, so set size fixed at current number of blocks
-            default     :   choices = new String[1];
-               choices[0] = cacheBlockCountChoices[lastBlockCountIndex]; 
-         }		
-         return choices;
-      }
-   	
-   	// Update the Set Size combo box selection in response to other selections..
-       private void updateCacheSetSizeSelector() {
-         cacheSetSizeSelector.setModel(
-                    new DefaultComboBoxModel(determineSetSizeChoices(
-            		        cacheBlockCountSelector.getSelectedIndex(),
-            				  cachePlacementSelector.getSelectedIndex()
-            		  )));
-      }
-   	
-   	// create and return a new cache object based on current specs
-       private AbstractCache createNewCache() {
-         AbstractCache theNewCache = null;
-         int setSize = 1;
-         try {
-            setSize = Integer.parseInt((String)cacheSetSizeSelector.getSelectedItem());
-         } 
-             catch (NumberFormatException nfe) { // if this happens its my fault!
+            catch (NumberFormatException nfe) {
+                this.cacheBlockCountChoicesInt[i] = 1;
             }
-         theNewCache = new AnyCache(
-                       cacheBlockCountChoicesInt[cacheBlockCountSelector.getSelectedIndex()],
-            			  cacheBlockSizeChoicesInt[cacheBlockSizeSelector.getSelectedIndex()],
-            			  setSize);				  
-         return theNewCache;
-      }
-   	
-       private void resetCounts() {
-         memoryAccessCount = 0;
-         cacheHitCount = 0;
-         cacheMissCount = 0;
-         cacheHitRate = 0.0;
-      }
-   	
-   
-       private void  updateMemoryAccessCountDisplay() {
-         memoryAccessCountDisplay.setText(new Integer(memoryAccessCount).toString());
-      }
-   	
-       private void	updateCacheHitCountDisplay() {
-         cacheHitCountDisplay.setText(new Integer(cacheHitCount).toString());
-      }
-   	
-       private void	updateCacheMissCountDisplay() {
-         cacheMissCountDisplay.setText(new Integer(cacheMissCount).toString());
-      }
-   	
-       private void	updateCacheHitRateDisplay() {
-         cacheHitRateDisplay.setValue((int) Math.round(cacheHitRate*100));
-      }
-   	
-       private void updateCacheSizeDisplay() {
-         int cacheSize = cacheBlockSizeChoicesInt[cacheBlockSizeSelector.getSelectedIndex()] *
-                     cacheBlockCountChoicesInt[cacheBlockCountSelector.getSelectedIndex()] *
-                     Memory.WORD_LENGTH_BYTES;
-         cacheSizeDisplay.setText(Integer.toString(cacheSize));
-      }
-   	
-       private JPanel getPanelWithBorderLayout() {
-         return new JPanel(new BorderLayout(2,2));
-      }
-      
-       private void resetLogDisplay() {
-         logText.setText("");
-      }
-   	
-       private void writeLog(String text) {
-         logText.append(text);
-         logText.setCaretPosition(logText.getDocument().getLength());
-      }
-   	
-   
-      //////////////////////////////////////////////////////////////////////////////////////
-      //  Specialized inner classes for cache modeling and animation.
-      //////////////////////////////////////////////////////////////////////////////////////
-   	
-    	/////////////////////////////////////////////////////////////////////////
-   	// Represents a block in the cache.  Since we are only simulating
-   	// cache performance, there's no need to actually store memory contents.
-       private class CacheBlock {
-         private boolean valid;
-         private int tag;
-         private int sizeInWords;
-         private int mostRecentAccessTime;
-          public CacheBlock(int sizeInWords) {
+        }
+        this.cacheSetSizeChoices = this.determineSetSizeChoices(this.defaultCacheBlockCountIndex, this.defaultPlacementPolicyIndex);
+    }
+    
+    @Override
+    protected void initializePostGUI() {
+        this.theCache = this.createNewCache();
+    }
+    
+    @Override
+    protected void reset() {
+        this.theCache = this.createNewCache();
+        this.resetCounts();
+        this.updateDisplay();
+        this.animations.reset();
+        this.resetLogDisplay();
+    }
+    
+    @Override
+    protected void updateDisplay() {
+        this.updateMemoryAccessCountDisplay();
+        this.updateCacheHitCountDisplay();
+        this.updateCacheMissCountDisplay();
+        this.updateCacheHitRateDisplay();
+    }
+    
+    private String[] determineSetSizeChoices(final int cacheBlockCountIndex, final int placementPolicyIndex) {
+        final int firstBlockCountIndex = 0;
+        final int lastBlockCountIndex = cacheBlockCountIndex;
+        String[] choices = null;
+        switch (placementPolicyIndex) {
+            case 0: {
+                choices = new String[] { this.cacheBlockCountChoices[firstBlockCountIndex] };
+                break;
+            }
+            case 2: {
+                choices = new String[lastBlockCountIndex - firstBlockCountIndex + 1];
+                for (int i = 0; i < choices.length; ++i) {
+                    choices[i] = this.cacheBlockCountChoices[firstBlockCountIndex + i];
+                }
+                break;
+            }
+            default: {
+                choices = new String[] { this.cacheBlockCountChoices[lastBlockCountIndex] };
+                break;
+            }
+        }
+        return choices;
+    }
+    
+    private void updateCacheSetSizeSelector() {
+        this.cacheSetSizeSelector.setModel(new DefaultComboBoxModel<String>(this.determineSetSizeChoices(this.cacheBlockCountSelector.getSelectedIndex(), this.cachePlacementSelector.getSelectedIndex())));
+    }
+    
+    private AbstractCache createNewCache() {
+        AbstractCache theNewCache = null;
+        int setSize = 1;
+        try {
+            setSize = Integer.parseInt((String)this.cacheSetSizeSelector.getSelectedItem());
+        }
+        catch (NumberFormatException ex) {}
+        theNewCache = new AnyCache(this.cacheBlockCountChoicesInt[this.cacheBlockCountSelector.getSelectedIndex()], this.cacheBlockSizeChoicesInt[this.cacheBlockSizeSelector.getSelectedIndex()], setSize);
+        return theNewCache;
+    }
+    
+    private void resetCounts() {
+        this.memoryAccessCount = 0;
+        this.cacheHitCount = 0;
+        this.cacheMissCount = 0;
+        this.cacheHitRate = 0.0;
+    }
+    
+    private void updateMemoryAccessCountDisplay() {
+        this.memoryAccessCountDisplay.setText(new Integer(this.memoryAccessCount).toString());
+    }
+    
+    private void updateCacheHitCountDisplay() {
+        this.cacheHitCountDisplay.setText(new Integer(this.cacheHitCount).toString());
+    }
+    
+    private void updateCacheMissCountDisplay() {
+        this.cacheMissCountDisplay.setText(new Integer(this.cacheMissCount).toString());
+    }
+    
+    private void updateCacheHitRateDisplay() {
+        this.cacheHitRateDisplay.setValue((int)Math.round(this.cacheHitRate * 100.0));
+    }
+    
+    private void updateCacheSizeDisplay() {
+        final int cacheSize = this.cacheBlockSizeChoicesInt[this.cacheBlockSizeSelector.getSelectedIndex()] * this.cacheBlockCountChoicesInt[this.cacheBlockCountSelector.getSelectedIndex()] * 4;
+        this.cacheSizeDisplay.setText(Integer.toString(cacheSize));
+    }
+    
+    private JPanel getPanelWithBorderLayout() {
+        return new JPanel(new BorderLayout(2, 2));
+    }
+    
+    private void resetLogDisplay() {
+        this.logText.setText("");
+    }
+    
+    private void writeLog(final String text) {
+        this.logText.append(text);
+        this.logText.setCaretPosition(this.logText.getDocument().getLength());
+    }
+    
+    static {
+        CacheSimulator.debug = false;
+        CacheSimulator.version = "Version 1.2";
+        CacheSimulator.heading = "Simulate and illustrate data cache performance";
+    }
+    
+    private class CacheBlock
+    {
+        private boolean valid;
+        private int tag;
+        private int sizeInWords;
+        private int mostRecentAccessTime;
+        
+        public CacheBlock(final int sizeInWords) {
             this.valid = false;
             this.tag = 0;
             this.sizeInWords = sizeInWords;
             this.mostRecentAccessTime = -1;
-         }
-      }
-   
-    	/////////////////////////////////////////////////////////////////////////
-   	// Represents the outcome of a cache access.  There are two parts:
-   	// whether it was a hit or not, and in which block is the value stored.
-   	// In the case of a hit, the block associated with address.  In the case of
-   	// a miss, the block where new association is made.	DPS 23-Dec-2010
-       private class CacheAccessResult {
-         private boolean hitOrMiss;
-         private int blockNumber;
-          public CacheAccessResult(boolean hitOrMiss, int blockNumber) {
+        }
+    }
+    
+    private class CacheAccessResult
+    {
+        private boolean hitOrMiss;
+        private int blockNumber;
+        
+        public CacheAccessResult(final boolean hitOrMiss, final int blockNumber) {
             this.hitOrMiss = hitOrMiss;
             this.blockNumber = blockNumber;
-         }
-          public boolean isHit() {
-            return hitOrMiss;
-         }
-          public int getBlock() {
-            return blockNumber;
-         }
-      }
-   		
-   	//////////////////////////////////////////////////////////////////////
-   	// Abstract Cache class.  Subclasses will implement specific policies.
-       private abstract class AbstractCache {
-         private int numberOfBlocks, blockSizeInWords, setSizeInBlocks, numberOfSets;
-         protected CacheBlock[] blocks;
-      	
-          protected AbstractCache(int numberOfBlocks, int blockSizeInWords, int setSizeInBlocks) {
+        }
+        
+        public boolean isHit() {
+            return this.hitOrMiss;
+        }
+        
+        public int getBlock() {
+            return this.blockNumber;
+        }
+    }
+    
+    private abstract class AbstractCache
+    {
+        private int numberOfBlocks;
+        private int blockSizeInWords;
+        private int setSizeInBlocks;
+        private int numberOfSets;
+        protected CacheBlock[] blocks;
+        
+        protected AbstractCache(final int numberOfBlocks, final int blockSizeInWords, final int setSizeInBlocks) {
             this.numberOfBlocks = numberOfBlocks;
             this.blockSizeInWords = blockSizeInWords;
             this.setSizeInBlocks = setSizeInBlocks;
-            this.numberOfSets = numberOfBlocks/setSizeInBlocks;
+            this.numberOfSets = numberOfBlocks / setSizeInBlocks;
             this.blocks = new CacheBlock[numberOfBlocks];
             this.reset();
-         }
-      	
-          public int getNumberOfBlocks() {
+        }
+        
+        public int getNumberOfBlocks() {
             return this.numberOfBlocks;
-         }
-      	
-          public int getNumberOfSets() {
+        }
+        
+        public int getNumberOfSets() {
             return this.numberOfSets;
-         }
-      		
-          public int getSetSizeInBlocks() {
+        }
+        
+        public int getSetSizeInBlocks() {
             return this.setSizeInBlocks;
-         }
-      	
-          public int getBlockSizeInWords() {
+        }
+        
+        public int getBlockSizeInWords() {
             return this.blockSizeInWords;
-         }
-      		
-          public int getCacheSizeInWords() {
+        }
+        
+        public int getCacheSizeInWords() {
             return this.numberOfBlocks * this.blockSizeInWords;
-         }
-      		
-          public int getCacheSizeInBytes() {
-            return this.numberOfBlocks * this.blockSizeInWords * Memory.WORD_LENGTH_BYTES;
-         }
-
-      
-        // This will work regardless of placement. 
-        // For direct map, #sets==#blocks
-        // For full assoc, #sets==1 so anything % #sets == 0
-        // For n-way assoc, it extracts the set bits in address.
-          public int getSetNumber(int address) {
-            return address / Memory.WORD_LENGTH_BYTES / this.blockSizeInWords % this.numberOfSets;
-         }
-      	
-      	 // This will work regardless of placement policy (direct map, n-way or full assoc)
-          public int getTag(int address) {
-            return address / Memory.WORD_LENGTH_BYTES / this.blockSizeInWords / this.numberOfSets;
-         }
-      	
-      	 // This will work regardless of placement policy (direct map, n-way or full assoc)
-      	 // Returns absolute block offset into the cache.
-          public int getFirstBlockToSearch(int address) {
+        }
+        
+        public int getCacheSizeInBytes() {
+            return this.numberOfBlocks * this.blockSizeInWords * 4;
+        }
+        
+        public int getSetNumber(final int address) {
+            return address / 4 / this.blockSizeInWords % this.numberOfSets;
+        }
+        
+        public int getTag(final int address) {
+            return address / 4 / this.blockSizeInWords / this.numberOfSets;
+        }
+        
+        public int getFirstBlockToSearch(final int address) {
             return this.getSetNumber(address) * this.setSizeInBlocks;
-         }
-      	
-          // This will work regardless of placement policy (direct map, n-way or full assoc)
-      	 // Returns absolute block offset into the cache.
-          public int getLastBlockToSearch(int address) {
+        }
+        
+        public int getLastBlockToSearch(final int address) {
             return this.getFirstBlockToSearch(address) + this.setSizeInBlocks - 1;
-         }	
-      	
-      	/* Reset the cache contents. */
-          public void reset() {
-            for (int i=0; i<numberOfBlocks; i++) {
-               this.blocks[i] = new CacheBlock(blockSizeInWords);
+        }
+        
+        public void reset() {
+            for (int i = 0; i < this.numberOfBlocks; ++i) {
+                this.blocks[i] = new CacheBlock(this.blockSizeInWords);
             }
-            System.gc(); // scoop 'em up now
-         }
-      	
-      	// Subclass must implement this according to its policies
-          public abstract CacheAccessResult isItAHitThenReadOnMiss(int address);
-      }
-   	   	
-   	
-     	//////////////////////////////////////////////////////////////////////////////
-   	// Implements any of the well-known cache organizations.  Physical memory
-   	// address is partitioned depending on organization:
-   	//    Direct Mapping:    [ tag | block | word | byte ]
-   	//    Fully Associative: [ tag | word | byte ]
-   	//    Set Associative:   [ tag | set | word | byte ]
-   	//
-   	// Bit lengths of each part are determined as follows:
-   	// Direct Mapping:
-   	//   byte  = log2 of #bytes in a word (typically 4)
-   	//   word  = log2 of #words in a block
-   	//   block = log2 of #blocks in the cache
-   	//   tag   = #bytes in address - (byte+word+block)
-   	// Fully Associative:
-   	//   byte  = log2 of #bytes in a word (typically 4)
-   	//   word  = log2 of #words in a block
-   	//   tag   = #bytes in address - (byte+word)
-   	// Set Associative:
-   	//   byte  = log2 of #bytes in a word (typically 4)
-   	//   word  = log2 of #words in a block
-   	//   set   = log2 of #sets in the cache
-   	//   tag   = #bytes in address - (byte+word+set)
-   	//
-   	// Direct Mapping (1 way set associative):
-   	// The block value for a given address identifies its block index into the cache.
-   	// That's why its called "direct mapped."  This is the only cache block it can
-   	// occupy.  If that cache block is empty or if it is occupied by a different tag,
-   	// this is a MISS.  If that cache block is occupied by the same tag, this is a HIT.
-   	// There is no replacement policy: upon a cache miss of an occupied block, the old
-   	// block is written out (unless write-through) and the new one read in.
-   	// Those actions are not simulated here.
-   	//
-   	// Fully Associative:
-   	// There is one set, and very tag has to be searched before determining hit or miss.
-   	// If tag is matched, it is a hit.  If tag is not matched and there is at least one
-   	// empty block, it is a miss and the new tag will occupy it.  If tag is not matched
-   	// and every block is occupied, it is a miss and one of the occupied blocks will be
-   	// selected for removal and the new tag will replace it.
-   	//
-   	// n-way Set Associative:
-   	// Each set consists of n blocks, and the number of sets in the cache is total number
-   	// of blocks divided by n.  The set bits in the address will identify which set to
-   	// search, and every tag in that set has to be searched before determining hit or miss.
-   	// If tag is matched, it is a hit.  If tag is not matched and there is at least one
-   	// empty block, it is a miss and the new tag will occupy it.  If tag is not matched
-   	// and every block is occupied, it is a miss and one of the occupied blocks will be
-   	// selected for removal and the new tag will replace it.
-   	//
-       private class AnyCache extends AbstractCache {
-          public AnyCache(int numberOfBlocks, int blockSizeInWords, int setSizeInBlocks) {
+            System.gc();
+        }
+        
+        public abstract CacheAccessResult isItAHitThenReadOnMiss(final int p0);
+    }
+    
+    private class AnyCache extends AbstractCache
+    {
+        private final int SET_FULL = 0;
+        private final int HIT = 1;
+        private final int MISS = 2;
+        
+        public AnyCache(final int numberOfBlocks, final int blockSizeInWords, final int setSizeInBlocks) {
             super(numberOfBlocks, blockSizeInWords, setSizeInBlocks);
-         }
-      	
-         private final int SET_FULL=0, HIT=1, MISS=2;
-      	
-      	// This method works for any of the placement policies: 
-      	// direct mapped, full associative or n-way set associative.
-          public CacheAccessResult isItAHitThenReadOnMiss(int address) {
-            int result = SET_FULL;
-            int firstBlock = getFirstBlockToSearch(address);
-            int lastBlock  = getLastBlockToSearch(address);
-            if (debug) //System.out.print
-               writeLog("("+memoryAccessCount+") address: "+Binary.intToHexString(address)+" (tag "+Binary.intToHexString(getTag(address))+") "+" block range: "+firstBlock+"-"+lastBlock+"\n");
+        }
+        
+        @Override
+        public CacheAccessResult isItAHitThenReadOnMiss(final int address) {
+            int result = 0;
+            final int firstBlock = this.getFirstBlockToSearch(address);
+            final int lastBlock = this.getLastBlockToSearch(address);
+            if (CacheSimulator.debug) {
+                CacheSimulator.this.writeLog("(" + CacheSimulator.this.memoryAccessCount + ") address: " + Binary.intToHexString(address) + " (tag " + Binary.intToHexString(this.getTag(address)) + ")  block range: " + firstBlock + "-" + lastBlock + "\n");
+            }
+            int blockNumber;
             CacheBlock block;
-            int blockNumber = 0;
-         	// Will do a sequential instead of associative search!
-            for (blockNumber = firstBlock; blockNumber <= lastBlock; blockNumber++) {
-               block = blocks[blockNumber];
-               if (debug) //System.out.print
-                  writeLog("   trying block "+blockNumber+ ((block.valid)? " tag "+Binary.intToHexString(block.tag) : " empty"));
-               if (block.valid && block.tag==getTag(address)) {//  it's a hit!
-                  if (debug) //System.out.print
-                     writeLog(" -- HIT\n");
-                  result = HIT;
-                  block.mostRecentAccessTime = memoryAccessCount;
-                  break;
-               }
-               if (!block.valid) {// it's a miss but I got it now because it is empty!
-                  if (debug) //System.out.print
-                     writeLog(" -- MISS\n");
-                  result = MISS;
-                  block.valid = true;
-                  block.tag = getTag(address);
-                  block.mostRecentAccessTime = memoryAccessCount;
-                  break;
-               }
-               if (debug) //System.out.print
-                  writeLog(" -- OCCUPIED\n");
+            for (blockNumber = 0, blockNumber = firstBlock; blockNumber <= lastBlock; ++blockNumber) {
+                block = this.blocks[blockNumber];
+                if (CacheSimulator.debug) {
+                    CacheSimulator.this.writeLog("   trying block " + blockNumber + (block.valid ? (" tag " + Binary.intToHexString(block.tag)) : " empty"));
+                }
+                if (block.valid && block.tag == this.getTag(address)) {
+                    if (CacheSimulator.debug) {
+                        CacheSimulator.this.writeLog(" -- HIT\n");
+                    }
+                    result = 1;
+                    block.mostRecentAccessTime = CacheSimulator.this.memoryAccessCount;
+                    break;
+                }
+                if (!block.valid) {
+                    if (CacheSimulator.debug) {
+                        CacheSimulator.this.writeLog(" -- MISS\n");
+                    }
+                    result = 2;
+                    block.valid = true;
+                    block.tag = this.getTag(address);
+                    block.mostRecentAccessTime = CacheSimulator.this.memoryAccessCount;
+                    break;
+                }
+                if (CacheSimulator.debug) {
+                    CacheSimulator.this.writeLog(" -- OCCUPIED\n");
+                }
             }
-            if (result == SET_FULL) {
-              //select one to replace and replace it...
-               if (debug) //System.out.print
-                  writeLog("   MISS due to FULL SET");
-               int blockToReplace = selectBlockToReplace(firstBlock,lastBlock);
-               block = blocks[blockToReplace];
-               block.tag = getTag(address);
-               block.mostRecentAccessTime = memoryAccessCount;
-               blockNumber = blockToReplace;
+            if (result == 0) {
+                if (CacheSimulator.debug) {
+                    CacheSimulator.this.writeLog("   MISS due to FULL SET");
+                }
+                final int blockToReplace = this.selectBlockToReplace(firstBlock, lastBlock);
+                block = this.blocks[blockToReplace];
+                block.tag = this.getTag(address);
+                block.mostRecentAccessTime = CacheSimulator.this.memoryAccessCount;
+                blockNumber = blockToReplace;
             }
-            return new CacheAccessResult(result==HIT, blockNumber);
-         }      
-      	
-      	 // call this if all blocks in the set are full.  If the set contains more than one block,
-      	 // It will pick on to replace based on selected replacement policy.
-          private int selectBlockToReplace(int first, int last) {
+            return new CacheAccessResult(result == 1, blockNumber);
+        }
+        
+        private int selectBlockToReplace(final int first, final int last) {
             int replaceBlock = first;
-            if (first!=last) { 
-               switch (cacheReplacementSelector.getSelectedIndex()) {
-                  case RANDOM : 
-                     replaceBlock = first + randu.nextInt(last-first+1);
-                     if (debug) //System.out.print
-                        writeLog(" -- Random replace block "+replaceBlock+"\n");
-                     break;
-                  case LRU :
-                  default :
-                     int leastRecentAccessTime = memoryAccessCount; // all of them have to be less than this
-                     for (int block = first; block <= last; block++) {
-                        if (blocks[block].mostRecentAccessTime < leastRecentAccessTime) {
-                           leastRecentAccessTime = blocks[block].mostRecentAccessTime;
-                           replaceBlock = block;
+            if (first != last) {
+                switch (CacheSimulator.this.cacheReplacementSelector.getSelectedIndex()) {
+                    case 1: {
+                        replaceBlock = first + CacheSimulator.this.randu.nextInt(last - first + 1);
+                        if (CacheSimulator.debug) {
+                            CacheSimulator.this.writeLog(" -- Random replace block " + replaceBlock + "\n");
+                            break;
                         }
-                     }
-                     if (debug) //System.out.print
-                        writeLog(" -- LRU replace block "+replaceBlock+"; unused since ("+leastRecentAccessTime+")\n");
-                     break;
-               }
+                        break;
+                    }
+                    default: {
+                        int leastRecentAccessTime = CacheSimulator.this.memoryAccessCount;
+                        for (int block = first; block <= last; ++block) {
+                            if (this.blocks[block].mostRecentAccessTime < leastRecentAccessTime) {
+                                leastRecentAccessTime = this.blocks[block].mostRecentAccessTime;
+                                replaceBlock = block;
+                            }
+                        }
+                        if (CacheSimulator.debug) {
+                            CacheSimulator.this.writeLog(" -- LRU replace block " + replaceBlock + "; unused since (" + leastRecentAccessTime + ")\n");
+                            break;
+                        }
+                        break;
+                    }
+                }
             }
             return replaceBlock;
-         }
-      }
-   	
-   	//////////////////////////////////////////////////////////////
-   	//  Class to display animated cache
-   	//
-       private class Animation {
-       
-         private Box animation;
-         private JTextField[] blocks;
-         public final Color hitColor = Color.GREEN;
-         public final Color missColor = Color.RED;
-         public final Color defaultColor = Color.WHITE;
-       
-          public Animation() {
-            animation = Box.createVerticalBox();
-         }
-       
-          private Box getAnimationBox() {
-            return animation;
-         }
-      	
-          public int getNumberOfBlocks() {
-            return (blocks==null)? 0 : blocks.length;
-         }
-      	 
-          public void showHit(int blockNum) {
-            blocks[blockNum].setBackground(hitColor);
-         }
-      	
-          public void showMiss(int blockNum) {
-            blocks[blockNum].setBackground(missColor);
-         }
-      	
-          public void reset() {
-            for (int i=0; i<blocks.length; i++){
-               blocks[i].setBackground(defaultColor);
+        }
+    }
+    
+    private class Animation
+    {
+        private Box animation;
+        private JTextField[] blocks;
+        public final Color hitColor;
+        public final Color missColor;
+        public final Color defaultColor;
+        
+        public Animation() {
+            this.hitColor = Color.GREEN;
+            this.missColor = Color.RED;
+            this.defaultColor = Color.WHITE;
+            this.animation = Box.createVerticalBox();
+        }
+        
+        private Box getAnimationBox() {
+            return this.animation;
+        }
+        
+        public int getNumberOfBlocks() {
+            return (this.blocks == null) ? 0 : this.blocks.length;
+        }
+        
+        public void showHit(final int blockNum) {
+            this.blocks[blockNum].setBackground(this.hitColor);
+        }
+        
+        public void showMiss(final int blockNum) {
+            this.blocks[blockNum].setBackground(this.missColor);
+        }
+        
+        public void reset() {
+            for (int i = 0; i < this.blocks.length; ++i) {
+                this.blocks[i].setBackground(this.defaultColor);
             }
-         }
-      	  
-      		// initialize animation of cache blocks
-          private void fillAnimationBoxWithCacheBlocks() {
-            animation.setVisible(false);
-            animation.removeAll();
-            int numberOfBlocks = cacheBlockCountChoicesInt[cacheBlockCountSelector.getSelectedIndex()];
-            int totalVerticalPixels = 128;
-            int blockPixelHeight = (numberOfBlocks>totalVerticalPixels)? 1 : totalVerticalPixels/numberOfBlocks;
-            int blockPixelWidth = 40;
-            Dimension blockDimension = new Dimension(blockPixelWidth, blockPixelHeight);
-            blocks = new JTextField[numberOfBlocks];
-            for (int i=0; i<numberOfBlocks; i++){
-               blocks[i] = new JTextField();
-               blocks[i].setEditable(false);
-               blocks[i].setBackground(defaultColor);
-               blocks[i].setSize(blockDimension);
-               blocks[i].setPreferredSize(blockDimension);
-               animation.add(blocks[i]);
+        }
+        
+        private void fillAnimationBoxWithCacheBlocks() {
+            this.animation.setVisible(false);
+            this.animation.removeAll();
+            final int numberOfBlocks = CacheSimulator.this.cacheBlockCountChoicesInt[CacheSimulator.this.cacheBlockCountSelector.getSelectedIndex()];
+            final int totalVerticalPixels = 128;
+            final int blockPixelHeight = (numberOfBlocks > totalVerticalPixels) ? 1 : (totalVerticalPixels / numberOfBlocks);
+            final int blockPixelWidth = 40;
+            final Dimension blockDimension = new Dimension(blockPixelWidth, blockPixelHeight);
+            this.blocks = new JTextField[numberOfBlocks];
+            for (int i = 0; i < numberOfBlocks; ++i) {
+                (this.blocks[i] = new JTextField()).setEditable(false);
+                this.blocks[i].setBackground(this.defaultColor);
+                this.blocks[i].setSize(blockDimension);
+                this.blocks[i].setPreferredSize(blockDimension);
+                this.animation.add(this.blocks[i]);
             }
-            animation.repaint();
-            animation.setVisible(true);
-         }
-      
-      }
-   	
-   
-   }
+            this.animation.repaint();
+            this.animation.setVisible(true);
+        }
+    }
+}

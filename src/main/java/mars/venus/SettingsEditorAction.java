@@ -1,608 +1,558 @@
-   package mars.venus;
-   import mars.simulator.*;
-   import mars.*;
-   import mars.util.*;
-   import mars.venus.editors.jeditsyntax.*;
-   import mars.venus.editors.jeditsyntax.tokenmarker.*;
-   import java.util.*;
-   import java.awt.*;
-   import java.awt.event.*;
-   import javax.swing.*;
-   import javax.swing.text.*;
-   import javax.swing.border.*;
-   import javax.swing.event.*;
-   import java.io.*;
-	
-	/*
-Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
 
-Developed by Pete Sanderson (psanderson@otterbein.edu)
-and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
-to the following conditions:
+package mars.venus;
 
-The above copyright notice and this permission notice shall be 
-included in all copies or substantial portions of the Software.
+import javax.swing.JColorChooser;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
+import mars.venus.editors.jeditsyntax.SyntaxUtilities;
+import javax.swing.AbstractButton;
+import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ActionListener;
+import javax.swing.Box;
+import java.awt.Component;
+import javax.swing.BorderFactory;
+import java.awt.LayoutManager;
+import java.awt.BorderLayout;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
+import javax.swing.text.Caret;
+import javax.swing.JSpinner;
+import javax.swing.JPanel;
+import java.awt.Font;
+import mars.venus.editors.jeditsyntax.SyntaxStyle;
+import javax.swing.JCheckBox;
+import javax.swing.JToggleButton;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.border.LineBorder;
+import javax.swing.border.BevelBorder;
+import java.awt.Color;
+import java.awt.Frame;
+import mars.Globals;
+import java.awt.event.ActionEvent;
+import javax.swing.KeyStroke;
+import javax.swing.Icon;
+import javax.swing.border.Border;
+import javax.swing.JTextField;
+import javax.swing.JSlider;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-(MIT license, http://www.opensource.org/licenses/mit-license.html)
- */
-	
-   /**
-    * Action class for the Settings menu item for text editor settings.
-    */
-    public class SettingsEditorAction extends GuiAction  {
+public class SettingsEditorAction extends GuiAction
+{
+    JDialog editorDialog;
+    JComboBox fontFamilySelector;
+    JComboBox fontStyleSelector;
+    JSlider tabSizeSelector;
+    JTextField fontSizeDisplay;
+    String initialFontFamily;
+    String initialFontStyle;
+    String initialFontSize;
+    private static final int gridVGap = 2;
+    private static final int gridHGap = 2;
+    private static final Border ColorSelectButtonEnabledBorder;
+    private static final Border ColorSelectButtonDisabledBorder;
+    private static final String GENERIC_TOOL_TIP_TEXT = "Use generic editor (original MARS editor, similar to Notepad) instead of language-aware styled editor";
+    private static final String SAMPLE_TOOL_TIP_TEXT = "Current setting; modify using buttons to the right";
+    private static final String FOREGROUND_TOOL_TIP_TEXT = "Click, to select text color";
+    private static final String BOLD_TOOL_TIP_TEXT = "Toggle text bold style";
+    private static final String ITALIC_TOOL_TIP_TEXT = "Toggle text italic style";
+    private static final String DEFAULT_TOOL_TIP_TEXT = "Check, to select defaults (disables buttons)";
+    private static final String BOLD_BUTTON_TOOL_TIP_TEXT = "B";
+    private static final String ITALIC_BUTTON_TOOL_TIP_TEXT = "I";
+    private static final String TAB_SIZE_TOOL_TIP_TEXT = "Current tab size in characters";
+    private static final String BLINK_SPINNER_TOOL_TIP_TEXT = "Current blinking rate in milliseconds";
+    private static final String BLINK_SAMPLE_TOOL_TIP_TEXT = "Displays current blinking rate";
+    private static final String CURRENT_LINE_HIGHLIGHT_TOOL_TIP_TEXT = "Check, to highlight line currently being edited";
+    private static final String AUTO_INDENT_TOOL_TIP_TEXT = "Check, to enable auto-indent to previous line when Enter key is pressed";
+    private static final String[] POPUP_GUIDANCE_TOOL_TIP_TEXT;
     
-      JDialog editorDialog;
-      JComboBox fontFamilySelector, fontStyleSelector;
-      JSlider tabSizeSelector;
-      JTextField fontSizeDisplay;
-   	
-   	// Used to determine upon OK, whether or not anything has changed.
-      String initialFontFamily, initialFontStyle, initialFontSize; 
-   	  
-   	  /**
-   	   *  Create a new SettingsEditorAction.  Has all the GuiAction parameters.
-   		*/
-       public SettingsEditorAction(String name, Icon icon, String descrip,
-                             Integer mnemonic, KeyStroke accel, VenusUI gui) {
-         super(name, icon, descrip, mnemonic, accel, gui);
-      }
-   	 
-   	 /**
-   	  *  When this action is triggered, launch a dialog to view and modify
-   	  *  editor settings.
-   	  */
-       public void actionPerformed(ActionEvent e) {
-         editorDialog = new EditorFontDialog(Globals.getGui(), "Text Editor Settings", true, Globals.getSettings().getEditorFont() );
-         editorDialog.setVisible(true);
-      
-      }
-   	
-      private static final int gridVGap = 2;
-      private static final int gridHGap = 2;
-      private static final Border ColorSelectButtonEnabledBorder = new BevelBorder(BevelBorder.RAISED, Color.WHITE, Color.GRAY);
-      private static final Border ColorSelectButtonDisabledBorder = new LineBorder(Color.GRAY, 2); 
-   
-      private static final String GENERIC_TOOL_TIP_TEXT = "Use generic editor (original MARS editor, similar to Notepad) instead of language-aware styled editor";
-   
-      private static final String SAMPLE_TOOL_TIP_TEXT = "Current setting; modify using buttons to the right";
-      private static final String FOREGROUND_TOOL_TIP_TEXT = "Click, to select text color";
-      private static final String BOLD_TOOL_TIP_TEXT = "Toggle text bold style";
-      private static final String ITALIC_TOOL_TIP_TEXT = "Toggle text italic style";
-      private static final String DEFAULT_TOOL_TIP_TEXT = "Check, to select defaults (disables buttons)";
-      private static final String BOLD_BUTTON_TOOL_TIP_TEXT = "B";
-      private static final String ITALIC_BUTTON_TOOL_TIP_TEXT = "I";
-   	
-      private static final String TAB_SIZE_TOOL_TIP_TEXT = "Current tab size in characters";
-      private static final String BLINK_SPINNER_TOOL_TIP_TEXT = "Current blinking rate in milliseconds";
-      private static final String BLINK_SAMPLE_TOOL_TIP_TEXT = "Displays current blinking rate";
-      private static final String CURRENT_LINE_HIGHLIGHT_TOOL_TIP_TEXT = "Check, to highlight line currently being edited";
-      private static final String AUTO_INDENT_TOOL_TIP_TEXT = "Check, to enable auto-indent to previous line when Enter key is pressed";
-      private static final String[] POPUP_GUIDANCE_TOOL_TIP_TEXT = { "Turns off instruction and directive guide popup while typing",
-                                                                     "Generates instruction guide popup after first letter of potential instruction is typed",
-         																				"Generates instruction guide popup after second letter of potential instruction is typed"
-         																				};
-   	
-   	// Concrete font chooser class. 
-       private class EditorFontDialog extends AbstractFontSettingDialog {
-       
-         private JButton[] foregroundButtons;
-         private JLabel[] samples;
-         private JToggleButton[] bold, italic;
-         private JCheckBox[] useDefault;
-      	
-         private int[] syntaxStyleIndex;
-         private SyntaxStyle[] defaultStyles,initialStyles, currentStyles;
-         private Font previewFont;
-      	
-         private JPanel dialogPanel,syntaxStylePanel,otherSettingsPanel; /////4 Aug 2010
-      	
-         private JSlider tabSizeSelector;
-         private JSpinner tabSizeSpinSelector, blinkRateSpinSelector, popupPrefixLengthSpinSelector;
-         private JCheckBox lineHighlightCheck, genericEditorCheck, autoIndentCheck;
-         private Caret blinkCaret;
-         private JTextField blinkSample;
-         private ButtonGroup popupGuidanceButtons;
-         private JRadioButton[] popupGuidanceOptions;
-      	// Flag to indicate whether any syntax style buttons have been clicked
-      	// since dialog created or most recent "apply".
-         private boolean syntaxStylesAction = false; 
-         
-         private int initialEditorTabSize, initialCaretBlinkRate, initialPopupGuidance;
-         private boolean initialLineHighlighting, initialGenericTextEditor, initialAutoIndent;
-      	  
-          public EditorFontDialog(Frame owner, String title, boolean modality, Font font) {
+    public SettingsEditorAction(final String name, final Icon icon, final String descrip, final Integer mnemonic, final KeyStroke accel, final VenusUI gui) {
+        super(name, icon, descrip, mnemonic, accel, gui);
+    }
+    
+    @Override
+    public void actionPerformed(final ActionEvent e) {
+        (this.editorDialog = new EditorFontDialog(Globals.getGui(), "Text Editor Settings", true, Globals.getSettings().getEditorFont())).setVisible(true);
+    }
+    
+    static {
+        ColorSelectButtonEnabledBorder = new BevelBorder(0, Color.WHITE, Color.GRAY);
+        ColorSelectButtonDisabledBorder = new LineBorder(Color.GRAY, 2);
+        POPUP_GUIDANCE_TOOL_TIP_TEXT = new String[] { "Turns off instruction and directive guide popup while typing", "Generates instruction guide popup after first letter of potential instruction is typed", "Generates instruction guide popup after second letter of potential instruction is typed" };
+    }
+    
+    private class EditorFontDialog extends AbstractFontSettingDialog
+    {
+        private JButton[] foregroundButtons;
+        private JLabel[] samples;
+        private JToggleButton[] bold;
+        private JToggleButton[] italic;
+        private JCheckBox[] useDefault;
+        private int[] syntaxStyleIndex;
+        private SyntaxStyle[] defaultStyles;
+        private SyntaxStyle[] initialStyles;
+        private SyntaxStyle[] currentStyles;
+        private Font previewFont;
+        private JPanel dialogPanel;
+        private JPanel syntaxStylePanel;
+        private JPanel otherSettingsPanel;
+        private JSlider tabSizeSelector;
+        private JSpinner tabSizeSpinSelector;
+        private JSpinner blinkRateSpinSelector;
+        private JSpinner popupPrefixLengthSpinSelector;
+        private JCheckBox lineHighlightCheck;
+        private JCheckBox genericEditorCheck;
+        private JCheckBox autoIndentCheck;
+        private Caret blinkCaret;
+        private JTextField blinkSample;
+        private ButtonGroup popupGuidanceButtons;
+        private JRadioButton[] popupGuidanceOptions;
+        private boolean syntaxStylesAction;
+        private int initialEditorTabSize;
+        private int initialCaretBlinkRate;
+        private int initialPopupGuidance;
+        private boolean initialLineHighlighting;
+        private boolean initialGenericTextEditor;
+        private boolean initialAutoIndent;
+        
+        public EditorFontDialog(final Frame owner, final String title, final boolean modality, final Font font) {
             super(owner, title, modality, font);
-            if (Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR)) {
-               syntaxStylePanel.setVisible(false);
-               otherSettingsPanel.setVisible(false); 
+            this.syntaxStylesAction = false;
+            if (Globals.getSettings().getBooleanSetting(18)) {
+                this.syntaxStylePanel.setVisible(false);
+                this.otherSettingsPanel.setVisible(false);
             }
-         }
-         
-      	 // build the dialog here
-          protected JPanel buildDialogPanel() {
-            JPanel dialog = new JPanel(new BorderLayout());
-            JPanel fontDialogPanel = super.buildDialogPanel();
-            JPanel syntaxStylePanel = buildSyntaxStylePanel();
-            JPanel otherSettingsPanel = buildOtherSettingsPanel();
+        }
+        
+        @Override
+        protected JPanel buildDialogPanel() {
+            final JPanel dialog = new JPanel(new BorderLayout());
+            final JPanel fontDialogPanel = super.buildDialogPanel();
+            final JPanel syntaxStylePanel = this.buildSyntaxStylePanel();
+            final JPanel otherSettingsPanel = this.buildOtherSettingsPanel();
             fontDialogPanel.setBorder(BorderFactory.createTitledBorder("Editor Font"));
             syntaxStylePanel.setBorder(BorderFactory.createTitledBorder("Syntax Styling"));
             otherSettingsPanel.setBorder(BorderFactory.createTitledBorder("Other Editor Settings"));
-            dialog.add(fontDialogPanel, BorderLayout.WEST);
-            dialog.add(syntaxStylePanel, BorderLayout.CENTER);
-            dialog.add(otherSettingsPanel, BorderLayout.SOUTH);
-            this.dialogPanel = dialog; /////4 Aug 2010
-            this.syntaxStylePanel = syntaxStylePanel; /////4 Aug 2010
-            this.otherSettingsPanel = otherSettingsPanel; /////4 Aug 2010
+            dialog.add(fontDialogPanel, "West");
+            dialog.add(syntaxStylePanel, "Center");
+            dialog.add(otherSettingsPanel, "South");
+            this.dialogPanel = dialog;
+            this.syntaxStylePanel = syntaxStylePanel;
+            this.otherSettingsPanel = otherSettingsPanel;
             return dialog;
-         }
-      
-          // Row of control buttons to be placed along the button of the dialog
-          protected Component buildControlPanel() {
-            Box controlPanel = Box.createHorizontalBox();
-            JButton okButton = new JButton("Apply and Close");
-            okButton.setToolTipText(SettingsHighlightingAction.CLOSE_TOOL_TIP_TEXT);
-            okButton.addActionListener(
-                   new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                        performApply();
-                        closeDialog();
-                     }
-                  });
-            JButton applyButton = new JButton("Apply");
-            applyButton.setToolTipText(SettingsHighlightingAction.APPLY_TOOL_TIP_TEXT);
-            applyButton.addActionListener(
-                   new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                        performApply();
-                     }
-                  });
-            JButton cancelButton = new JButton("Cancel");
-            cancelButton.setToolTipText(SettingsHighlightingAction.CANCEL_TOOL_TIP_TEXT);
-            cancelButton.addActionListener(
-                   new ActionListener() {
-                      public void actionPerformed(ActionEvent e) { 
-                        closeDialog();
-                     }
-                  });	
-            JButton resetButton = new JButton("Reset");
-            resetButton.setToolTipText(SettingsHighlightingAction.RESET_TOOL_TIP_TEXT);
-            resetButton.addActionListener(
-                   new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                        reset();
-                     }
-                  });
-            initialGenericTextEditor = Globals.getSettings().getBooleanSetting(Settings.GENERIC_TEXT_EDITOR);
-            genericEditorCheck = new JCheckBox("Use Generic Editor", initialGenericTextEditor);
-            genericEditorCheck.setToolTipText(GENERIC_TOOL_TIP_TEXT);
-            genericEditorCheck.addItemListener(
-                   new ItemListener() {
-                      public void itemStateChanged(ItemEvent e) { 
-                        if (e.getStateChange()==ItemEvent.SELECTED) {
-                           syntaxStylePanel.setVisible(false);
-                           otherSettingsPanel.setVisible(false);
-                        } 
-                        else {
-                           syntaxStylePanel.setVisible(true);
-                           otherSettingsPanel.setVisible(true);		
-                        }
-                     }
-                  });
-         	
+        }
+        
+        @Override
+        protected Component buildControlPanel() {
+            final Box controlPanel = Box.createHorizontalBox();
+            final JButton okButton = new JButton("Apply and Close");
+            okButton.setToolTipText("Apply current settings and close dialog");
+            okButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    EditorFontDialog.this.performApply();
+                    EditorFontDialog.this.closeDialog();
+                }
+            });
+            final JButton applyButton = new JButton("Apply");
+            applyButton.setToolTipText("Apply current settings now and leave dialog open");
+            applyButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    EditorFontDialog.this.performApply();
+                }
+            });
+            final JButton cancelButton = new JButton("Cancel");
+            cancelButton.setToolTipText("Close dialog without applying current settings");
+            cancelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    EditorFontDialog.this.closeDialog();
+                }
+            });
+            final JButton resetButton = new JButton("Reset");
+            resetButton.setToolTipText("Reset to initial settings without applying");
+            resetButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    EditorFontDialog.this.reset();
+                }
+            });
+            this.initialGenericTextEditor = Globals.getSettings().getBooleanSetting(18);
+            (this.genericEditorCheck = new JCheckBox("Use Generic Editor", this.initialGenericTextEditor)).setToolTipText("Use generic editor (original MARS editor, similar to Notepad) instead of language-aware styled editor");
+            this.genericEditorCheck.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == 1) {
+                        EditorFontDialog.this.syntaxStylePanel.setVisible(false);
+                        EditorFontDialog.this.otherSettingsPanel.setVisible(false);
+                    }
+                    else {
+                        EditorFontDialog.this.syntaxStylePanel.setVisible(true);
+                        EditorFontDialog.this.otherSettingsPanel.setVisible(true);
+                    }
+                }
+            });
             controlPanel.add(Box.createHorizontalGlue());
             controlPanel.add(okButton);
             controlPanel.add(Box.createHorizontalGlue());
             controlPanel.add(applyButton);
             controlPanel.add(Box.createHorizontalGlue());
             controlPanel.add(cancelButton);
-            controlPanel.add(Box.createHorizontalGlue());		 
+            controlPanel.add(Box.createHorizontalGlue());
             controlPanel.add(resetButton);
             controlPanel.add(Box.createHorizontalGlue());
-            controlPanel.add(genericEditorCheck);
+            controlPanel.add(this.genericEditorCheck);
             controlPanel.add(Box.createHorizontalGlue());
             return controlPanel;
-         }
-      
-      // User has clicked "Apply" or "Apply and Close" button.  Required method, is 
-      // abstract in superclass.
-          protected void apply(Font font) {
-            Globals.getSettings().setBooleanSetting(Settings.GENERIC_TEXT_EDITOR, genericEditorCheck.isSelected());
-            Globals.getSettings().setBooleanSetting(Settings.EDITOR_CURRENT_LINE_HIGHLIGHTING, lineHighlightCheck.isSelected());
-            Globals.getSettings().setBooleanSetting(Settings.AUTO_INDENT, autoIndentCheck.isSelected());
-            Globals.getSettings().setCaretBlinkRate(((Integer)blinkRateSpinSelector.getValue()).intValue());
-            Globals.getSettings().setEditorTabSize(tabSizeSelector.getValue());
-            if (syntaxStylesAction) { 
-               for (int i=0; i<syntaxStyleIndex.length; i++) {
-                  Globals.getSettings().setEditorSyntaxStyleByPosition( syntaxStyleIndex[i], 
-                     new SyntaxStyle(samples[i].getForeground(),
-                        italic[i].isSelected(), bold[i].isSelected()) );
-               }
-               syntaxStylesAction = false; // reset
+        }
+        
+        @Override
+        protected void apply(final Font font) {
+            Globals.getSettings().setBooleanSetting(18, this.genericEditorCheck.isSelected());
+            Globals.getSettings().setBooleanSetting(15, this.lineHighlightCheck.isSelected());
+            Globals.getSettings().setBooleanSetting(19, this.autoIndentCheck.isSelected());
+            Globals.getSettings().setCaretBlinkRate((int)this.blinkRateSpinSelector.getValue());
+            Globals.getSettings().setEditorTabSize(this.tabSizeSelector.getValue());
+            if (this.syntaxStylesAction) {
+                for (int i = 0; i < this.syntaxStyleIndex.length; ++i) {
+                    Globals.getSettings().setEditorSyntaxStyleByPosition(this.syntaxStyleIndex[i], new SyntaxStyle(this.samples[i].getForeground(), this.italic[i].isSelected(), this.bold[i].isSelected()));
+                }
+                this.syntaxStylesAction = false;
             }
             Globals.getSettings().setEditorFont(font);
-            for (int i=0; i<popupGuidanceOptions.length; i++) {
-               if (popupGuidanceOptions[i].isSelected()) {
-                  if (i==0) {
-                     Globals.getSettings().setBooleanSetting(Settings.POPUP_INSTRUCTION_GUIDANCE, false);
-                  } 
-                  else {
-                     Globals.getSettings().setBooleanSetting(Settings.POPUP_INSTRUCTION_GUIDANCE, true);
-                     Globals.getSettings().setEditorPopupPrefixLength(i);
-                  }
-                  break;
-               }
+            int i = 0;
+            while (i < this.popupGuidanceOptions.length) {
+                if (this.popupGuidanceOptions[i].isSelected()) {
+                    if (i == 0) {
+                        Globals.getSettings().setBooleanSetting(16, false);
+                        break;
+                    }
+                    Globals.getSettings().setBooleanSetting(16, true);
+                    Globals.getSettings().setEditorPopupPrefixLength(i);
+                    break;
+                }
+                else {
+                    ++i;
+                }
             }
-         }
-         
-      	// User has clicked "Reset" button.  Put everything back to initial state.
-          protected void reset() {
+        }
+        
+        @Override
+        protected void reset() {
             super.reset();
-            initializeSyntaxStyleChangeables();
-            resetOtherSettings();
-            syntaxStylesAction = true;
-            genericEditorCheck.setSelected(initialGenericTextEditor);
-         }
-      	
-      	
-      	// Perform reset on miscellaneous editor settings
-          private void resetOtherSettings() {
-            tabSizeSelector.setValue(initialEditorTabSize);
-            tabSizeSpinSelector.setValue(new Integer(initialEditorTabSize));
-            lineHighlightCheck.setSelected(initialLineHighlighting);
-				autoIndentCheck.setSelected(initialAutoIndent); 
-            blinkRateSpinSelector.setValue(new Integer(initialCaretBlinkRate));
-            blinkCaret.setBlinkRate(initialCaretBlinkRate);
-            popupGuidanceOptions[initialPopupGuidance].setSelected(true);				
-         }
-      
-      // Miscellaneous editor settings (cursor blinking, line highlighting, tab size, etc)
-          private JPanel buildOtherSettingsPanel() {
-            JPanel otherSettingsPanel = new JPanel();
-         	
-            // Tab size selector
-            initialEditorTabSize = Globals.getSettings().getEditorTabSize();
-            tabSizeSelector = new JSlider(Editor.MIN_TAB_SIZE, Editor.MAX_TAB_SIZE, initialEditorTabSize);
-            tabSizeSelector.setToolTipText("Use slider to select tab size from "+Editor.MIN_TAB_SIZE+" to "+Editor.MAX_TAB_SIZE+".");
-            tabSizeSelector.addChangeListener(
-                   new ChangeListener() {
-                      public void stateChanged(ChangeEvent e) {
-                        Integer value = new Integer(((JSlider)e.getSource()).getValue());
-                        tabSizeSpinSelector.setValue(value);
-                     }
-                  });  
-            SpinnerNumberModel tabSizeSpinnerModel = new SpinnerNumberModel(initialEditorTabSize, Editor.MIN_TAB_SIZE, Editor.MAX_TAB_SIZE, 1); 
-            tabSizeSpinSelector = new JSpinner(tabSizeSpinnerModel);
-            tabSizeSpinSelector.setToolTipText(TAB_SIZE_TOOL_TIP_TEXT);
-            tabSizeSpinSelector.addChangeListener(
-                   new ChangeListener() {
-                      public void stateChanged(ChangeEvent e) {
-                        Object value = ((JSpinner)e.getSource()).getValue();
-                        tabSizeSelector.setValue(((Integer)value).intValue());
-                     }
-                  });  				
-         	
-         	// highlighting of current line
-            initialLineHighlighting = Globals.getSettings().getBooleanSetting(Settings.EDITOR_CURRENT_LINE_HIGHLIGHTING);
-            lineHighlightCheck = new JCheckBox("Highlight the line currently being edited");
-            lineHighlightCheck.setSelected(initialLineHighlighting); 
-            lineHighlightCheck.setToolTipText(CURRENT_LINE_HIGHLIGHT_TOOL_TIP_TEXT);
-
-         	// auto-indent 
-            initialAutoIndent = Globals.getSettings().getBooleanSetting(Settings.AUTO_INDENT);
-            autoIndentCheck = new JCheckBox("Auto-Indent");
-            autoIndentCheck.setSelected(initialAutoIndent); 
-            autoIndentCheck.setToolTipText(AUTO_INDENT_TOOL_TIP_TEXT);
-                 
-            // cursor blink rate selector
-            initialCaretBlinkRate = Globals.getSettings().getCaretBlinkRate();
-            blinkSample = new JTextField("     ");
-            blinkSample.setCaretPosition(2);
-            blinkSample.setToolTipText(BLINK_SAMPLE_TOOL_TIP_TEXT);
-            blinkSample.setEnabled(false);
-            blinkCaret = blinkSample.getCaret();
-            blinkCaret.setBlinkRate(initialCaretBlinkRate);
-            blinkCaret.setVisible(true);
-            SpinnerNumberModel blinkRateSpinnerModel = new SpinnerNumberModel(initialCaretBlinkRate, Editor.MIN_BLINK_RATE, Editor.MAX_BLINK_RATE, 100); 
-            blinkRateSpinSelector = new JSpinner(blinkRateSpinnerModel);
-            blinkRateSpinSelector.setToolTipText(BLINK_SPINNER_TOOL_TIP_TEXT);
-            blinkRateSpinSelector.addChangeListener(
-                   new ChangeListener() {
-                      public void stateChanged(ChangeEvent e) {
-                        Object value = ((JSpinner)e.getSource()).getValue();
-                        blinkCaret.setBlinkRate(((Integer)value).intValue());
-                        blinkSample.requestFocus();
-                        blinkCaret.setVisible(true);
-                     }
-                  });  	
-         	
-            JPanel tabPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            this.initializeSyntaxStyleChangeables();
+            this.resetOtherSettings();
+            this.syntaxStylesAction = true;
+            this.genericEditorCheck.setSelected(this.initialGenericTextEditor);
+        }
+        
+        private void resetOtherSettings() {
+            this.tabSizeSelector.setValue(this.initialEditorTabSize);
+            this.tabSizeSpinSelector.setValue(new Integer(this.initialEditorTabSize));
+            this.lineHighlightCheck.setSelected(this.initialLineHighlighting);
+            this.autoIndentCheck.setSelected(this.initialAutoIndent);
+            this.blinkRateSpinSelector.setValue(new Integer(this.initialCaretBlinkRate));
+            this.blinkCaret.setBlinkRate(this.initialCaretBlinkRate);
+            this.popupGuidanceOptions[this.initialPopupGuidance].setSelected(true);
+        }
+        
+        private JPanel buildOtherSettingsPanel() {
+            final JPanel otherSettingsPanel = new JPanel();
+            this.initialEditorTabSize = Globals.getSettings().getEditorTabSize();
+            (this.tabSizeSelector = new JSlider(1, 32, this.initialEditorTabSize)).setToolTipText("Use slider to select tab size from 1 to 32.");
+            this.tabSizeSelector.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    final Integer value = new Integer(((JSlider)e.getSource()).getValue());
+                    EditorFontDialog.this.tabSizeSpinSelector.setValue(value);
+                }
+            });
+            final SpinnerNumberModel tabSizeSpinnerModel = new SpinnerNumberModel(this.initialEditorTabSize, 1, 32, 1);
+            (this.tabSizeSpinSelector = new JSpinner(tabSizeSpinnerModel)).setToolTipText("Current tab size in characters");
+            this.tabSizeSpinSelector.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    final Object value = ((JSpinner)e.getSource()).getValue();
+                    EditorFontDialog.this.tabSizeSelector.setValue((int)value);
+                }
+            });
+            this.initialLineHighlighting = Globals.getSettings().getBooleanSetting(15);
+            (this.lineHighlightCheck = new JCheckBox("Highlight the line currently being edited")).setSelected(this.initialLineHighlighting);
+            this.lineHighlightCheck.setToolTipText("Check, to highlight line currently being edited");
+            this.initialAutoIndent = Globals.getSettings().getBooleanSetting(19);
+            (this.autoIndentCheck = new JCheckBox("Auto-Indent")).setSelected(this.initialAutoIndent);
+            this.autoIndentCheck.setToolTipText("Check, to enable auto-indent to previous line when Enter key is pressed");
+            this.initialCaretBlinkRate = Globals.getSettings().getCaretBlinkRate();
+            (this.blinkSample = new JTextField("     ")).setCaretPosition(2);
+            this.blinkSample.setToolTipText("Displays current blinking rate");
+            this.blinkSample.setEnabled(false);
+            (this.blinkCaret = this.blinkSample.getCaret()).setBlinkRate(this.initialCaretBlinkRate);
+            this.blinkCaret.setVisible(true);
+            final SpinnerNumberModel blinkRateSpinnerModel = new SpinnerNumberModel(this.initialCaretBlinkRate, 0, 1000, 100);
+            (this.blinkRateSpinSelector = new JSpinner(blinkRateSpinnerModel)).setToolTipText("Current blinking rate in milliseconds");
+            this.blinkRateSpinSelector.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(final ChangeEvent e) {
+                    final Object value = ((JSpinner)e.getSource()).getValue();
+                    EditorFontDialog.this.blinkCaret.setBlinkRate((int)value);
+                    EditorFontDialog.this.blinkSample.requestFocus();
+                    EditorFontDialog.this.blinkCaret.setVisible(true);
+                }
+            });
+            final JPanel tabPanel = new JPanel(new FlowLayout(0));
             tabPanel.add(new JLabel("Tab Size"));
-            tabPanel.add(tabSizeSelector);
-            tabPanel.add(tabSizeSpinSelector);
-         	
-            JPanel blinkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            tabPanel.add(this.tabSizeSelector);
+            tabPanel.add(this.tabSizeSpinSelector);
+            final JPanel blinkPanel = new JPanel(new FlowLayout(0));
             blinkPanel.add(new JLabel("Cursor Blinking Rate in ms (0=no blink)"));
-            blinkPanel.add(blinkRateSpinSelector);
-            blinkPanel.add(blinkSample);
-         	
-            otherSettingsPanel.setLayout(new GridLayout(1,2));
-            JPanel leftColumnSettingsPanel = new JPanel(new GridLayout(4,1));				
+            blinkPanel.add(this.blinkRateSpinSelector);
+            blinkPanel.add(this.blinkSample);
+            otherSettingsPanel.setLayout(new GridLayout(1, 2));
+            final JPanel leftColumnSettingsPanel = new JPanel(new GridLayout(4, 1));
             leftColumnSettingsPanel.add(tabPanel);
             leftColumnSettingsPanel.add(blinkPanel);
-            leftColumnSettingsPanel.add(lineHighlightCheck);
-				leftColumnSettingsPanel.add(autoIndentCheck);
-         	
-         	// Combine instruction guide off/on and instruction prefix length into radio buttons
-            JPanel rightColumnSettingsPanel = new JPanel(new GridLayout(4,1));				
-            popupGuidanceButtons = new ButtonGroup();
-            popupGuidanceOptions = new JRadioButton[3];
-            popupGuidanceOptions[0] = new JRadioButton("No popup instruction or directive guide");
-            popupGuidanceOptions[1] = new JRadioButton("Display instruction guide after 1 letter typed");
-            popupGuidanceOptions[2] = new JRadioButton("Display instruction guide after 2 letters typed");
-            for (int i=0; i<popupGuidanceOptions.length; i++) {
-               popupGuidanceOptions[i].setSelected(false);
-               popupGuidanceOptions[i].setToolTipText(POPUP_GUIDANCE_TOOL_TIP_TEXT[i]);
-               popupGuidanceButtons.add(popupGuidanceOptions[i]);
-            }				
-            initialPopupGuidance = Globals.getSettings().getBooleanSetting(Settings.POPUP_INSTRUCTION_GUIDANCE) 
-                  ? Globals.getSettings().getEditorPopupPrefixLength()
-               	: 0 ;
-            popupGuidanceOptions[initialPopupGuidance].setSelected(true);
-            JPanel popupPanel = new JPanel(new GridLayout(3,1));
+            leftColumnSettingsPanel.add(this.lineHighlightCheck);
+            leftColumnSettingsPanel.add(this.autoIndentCheck);
+            final JPanel rightColumnSettingsPanel = new JPanel(new GridLayout(4, 1));
+            this.popupGuidanceButtons = new ButtonGroup();
+            (this.popupGuidanceOptions = new JRadioButton[3])[0] = new JRadioButton("No popup instruction or directive guide");
+            this.popupGuidanceOptions[1] = new JRadioButton("Display instruction guide after 1 letter typed");
+            this.popupGuidanceOptions[2] = new JRadioButton("Display instruction guide after 2 letters typed");
+            for (int i = 0; i < this.popupGuidanceOptions.length; ++i) {
+                this.popupGuidanceOptions[i].setSelected(false);
+                this.popupGuidanceOptions[i].setToolTipText(SettingsEditorAction.POPUP_GUIDANCE_TOOL_TIP_TEXT[i]);
+                this.popupGuidanceButtons.add(this.popupGuidanceOptions[i]);
+            }
+            this.initialPopupGuidance = (Globals.getSettings().getBooleanSetting(16) ? Globals.getSettings().getEditorPopupPrefixLength() : 0);
+            this.popupGuidanceOptions[this.initialPopupGuidance].setSelected(true);
+            final JPanel popupPanel = new JPanel(new GridLayout(3, 1));
             rightColumnSettingsPanel.setBorder(BorderFactory.createTitledBorder("Popup Instruction Guide"));
-            rightColumnSettingsPanel.add(popupGuidanceOptions[0]);
-            rightColumnSettingsPanel.add(popupGuidanceOptions[1]);
-            rightColumnSettingsPanel.add(popupGuidanceOptions[2]);
-         	
+            rightColumnSettingsPanel.add(this.popupGuidanceOptions[0]);
+            rightColumnSettingsPanel.add(this.popupGuidanceOptions[1]);
+            rightColumnSettingsPanel.add(this.popupGuidanceOptions[2]);
             otherSettingsPanel.add(leftColumnSettingsPanel);
             otherSettingsPanel.add(rightColumnSettingsPanel);
             return otherSettingsPanel;
-         }
-      
-         
-      	 // control style (color, plain/italic/bold) for syntax highlighting
-          private JPanel buildSyntaxStylePanel() {
-            JPanel syntaxStylePanel = new JPanel();
-            defaultStyles = SyntaxUtilities.getDefaultSyntaxStyles();
-            initialStyles = SyntaxUtilities.getCurrentSyntaxStyles();
-            String[] labels = MIPSTokenMarker.getMIPSTokenLabels();
-            String[] sampleText = MIPSTokenMarker.getMIPSTokenExamples();
-            syntaxStylesAction = false;
+        }
+        
+        private JPanel buildSyntaxStylePanel() {
+            final JPanel syntaxStylePanel = new JPanel();
+            this.defaultStyles = SyntaxUtilities.getDefaultSyntaxStyles();
+            this.initialStyles = SyntaxUtilities.getCurrentSyntaxStyles();
+            final String[] labels = MIPSTokenMarker.getMIPSTokenLabels();
+            final String[] sampleText = MIPSTokenMarker.getMIPSTokenExamples();
+            this.syntaxStylesAction = false;
             int count = 0;
-         	// Count the number of actual styles specified
-            for (int i=0; i<labels.length; i++) {
-               if (labels[i] != null) {
-                  count++;
-               }
+            for (int i = 0; i < labels.length; ++i) {
+                if (labels[i] != null) {
+                    ++count;
+                }
             }
-         	// create new arrays (no gaps) for grid display, refer to original index
-            syntaxStyleIndex = new int[count];
-            currentStyles = new SyntaxStyle[count];
-            String[] label = new String[count];
-            samples = new JLabel[count];
-            foregroundButtons = new JButton[count];
-            bold = new JToggleButton[count];
-            italic = new JToggleButton[count];
-            useDefault = new JCheckBox[count];
-            Font genericFont = new JLabel().getFont();
-            previewFont = new Font(Font.MONOSPACED, Font.PLAIN, genericFont.getSize());// no bold on button text
-            Font boldFont = new Font(Font.SERIF, Font.BOLD, genericFont.getSize());
-            Font italicFont = new Font(Font.SERIF, Font.ITALIC, genericFont.getSize());
+            this.syntaxStyleIndex = new int[count];
+            this.currentStyles = new SyntaxStyle[count];
+            final String[] label = new String[count];
+            this.samples = new JLabel[count];
+            this.foregroundButtons = new JButton[count];
+            this.bold = new JToggleButton[count];
+            this.italic = new JToggleButton[count];
+            this.useDefault = new JCheckBox[count];
+            final Font genericFont = new JLabel().getFont();
+            this.previewFont = new Font("Monospaced", 0, genericFont.getSize());
+            final Font boldFont = new Font("Serif", 1, genericFont.getSize());
+            final Font italicFont = new Font("Serif", 2, genericFont.getSize());
             count = 0;
-         	// Set all the fixed features.  Changeable features set/reset in initializeSyntaxStyleChangeables
-            for (int i=0; i<labels.length; i++) {
-               if (labels[i] != null) {
-                  syntaxStyleIndex[count] = i;
-                  samples[count] = new JLabel();
-                  samples[count].setOpaque(true);
-                  samples[count].setHorizontalAlignment(SwingConstants.CENTER);
-                  samples[count].setBorder(BorderFactory.createLineBorder(Color.black)); 
-                  samples[count].setText(sampleText[i]);
-                  samples[count].setBackground(Color.WHITE);
-                  samples[count].setToolTipText(SAMPLE_TOOL_TIP_TEXT);
-                  foregroundButtons[count] = new ColorSelectButton(); // defined in SettingsHighlightingAction
-                  foregroundButtons[count].addActionListener(new ForegroundChanger(count));
-                  foregroundButtons[count].setToolTipText(FOREGROUND_TOOL_TIP_TEXT);
-                  BoldItalicChanger boldItalicChanger = new BoldItalicChanger(count);
-                  bold[count] = new JToggleButton(BOLD_BUTTON_TOOL_TIP_TEXT, false);
-                  bold[count].setFont(boldFont);
-                  bold[count].addActionListener(boldItalicChanger);
-                  bold[count].setToolTipText(BOLD_TOOL_TIP_TEXT);
-                  italic[count]= new JToggleButton(ITALIC_BUTTON_TOOL_TIP_TEXT, false);
-                  italic[count].setFont(italicFont);
-                  italic[count].addActionListener(boldItalicChanger);
-                  italic[count].setToolTipText(ITALIC_TOOL_TIP_TEXT);
-                  label[count] = labels[i];
-                  useDefault[count] = new JCheckBox();
-                  useDefault[count].addItemListener(new DefaultChanger(count));
-                  useDefault[count].setToolTipText(DEFAULT_TOOL_TIP_TEXT);
-                  count++;
-               }
-            }	
-            initializeSyntaxStyleChangeables();
-         	// build a grid
-            syntaxStylePanel.setLayout(new BorderLayout());
-            JPanel labelPreviewPanel = new JPanel(new GridLayout(syntaxStyleIndex.length, 2, gridVGap, gridHGap));
-            JPanel buttonsPanel = new JPanel(new GridLayout(syntaxStyleIndex.length, 4, gridVGap, gridHGap));
-         	// column 1: label,  column 2: preview, column 3: foreground chooser, column 4/5: bold/italic, column 6: default
-            for (int i=0; i<syntaxStyleIndex.length; i++) {
-               labelPreviewPanel.add(new JLabel(label[i], SwingConstants.RIGHT));		
-               labelPreviewPanel.add(samples[i]);
-               buttonsPanel.add(foregroundButtons[i]);
-               buttonsPanel.add(bold[i]);
-               buttonsPanel.add(italic[i]);
-               buttonsPanel.add(useDefault[i]);
+            for (int j = 0; j < labels.length; ++j) {
+                if (labels[j] != null) {
+                    this.syntaxStyleIndex[count] = j;
+                    (this.samples[count] = new JLabel()).setOpaque(true);
+                    this.samples[count].setHorizontalAlignment(0);
+                    this.samples[count].setBorder(BorderFactory.createLineBorder(Color.black));
+                    this.samples[count].setText(sampleText[j]);
+                    this.samples[count].setBackground(Color.WHITE);
+                    this.samples[count].setToolTipText("Current setting; modify using buttons to the right");
+                    (this.foregroundButtons[count] = new ColorSelectButton()).addActionListener(new ForegroundChanger(count));
+                    this.foregroundButtons[count].setToolTipText("Click, to select text color");
+                    final BoldItalicChanger boldItalicChanger = new BoldItalicChanger(count);
+                    (this.bold[count] = new JToggleButton("B", false)).setFont(boldFont);
+                    this.bold[count].addActionListener(boldItalicChanger);
+                    this.bold[count].setToolTipText("Toggle text bold style");
+                    (this.italic[count] = new JToggleButton("I", false)).setFont(italicFont);
+                    this.italic[count].addActionListener(boldItalicChanger);
+                    this.italic[count].setToolTipText("Toggle text italic style");
+                    label[count] = labels[j];
+                    (this.useDefault[count] = new JCheckBox()).addItemListener(new DefaultChanger(count));
+                    this.useDefault[count].setToolTipText("Check, to select defaults (disables buttons)");
+                    ++count;
+                }
             }
-            JPanel instructions = new JPanel(new FlowLayout(FlowLayout.CENTER));
-         // create deaf, dumb and blind checkbox, for illustration
-            JCheckBox illustrate = 
-                new JCheckBox() { 
-                   protected void processMouseEvent(MouseEvent e) {  } 
-                   protected void processKeyEvent(KeyEvent e) {  }
-               };
+            this.initializeSyntaxStyleChangeables();
+            syntaxStylePanel.setLayout(new BorderLayout());
+            final JPanel labelPreviewPanel = new JPanel(new GridLayout(this.syntaxStyleIndex.length, 2, 2, 2));
+            final JPanel buttonsPanel = new JPanel(new GridLayout(this.syntaxStyleIndex.length, 4, 2, 2));
+            for (int k = 0; k < this.syntaxStyleIndex.length; ++k) {
+                labelPreviewPanel.add(new JLabel(label[k], 4));
+                labelPreviewPanel.add(this.samples[k]);
+                buttonsPanel.add(this.foregroundButtons[k]);
+                buttonsPanel.add(this.bold[k]);
+                buttonsPanel.add(this.italic[k]);
+                buttonsPanel.add(this.useDefault[k]);
+            }
+            final JPanel instructions = new JPanel(new FlowLayout(1));
+            final JCheckBox illustrate = new JCheckBox() {
+                @Override
+                protected void processMouseEvent(final MouseEvent e) {
+                }
+                
+                @Override
+                protected void processKeyEvent(final KeyEvent e) {
+                }
+            };
             illustrate.setSelected(true);
             instructions.add(illustrate);
             instructions.add(new JLabel("= use defaults (disables buttons)"));
-            labelPreviewPanel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-            buttonsPanel.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-            syntaxStylePanel.add(instructions, BorderLayout.NORTH);
-            syntaxStylePanel.add(labelPreviewPanel, BorderLayout.WEST);
-            syntaxStylePanel.add(buttonsPanel, BorderLayout.CENTER);
+            labelPreviewPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+            buttonsPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+            syntaxStylePanel.add(instructions, "North");
+            syntaxStylePanel.add(labelPreviewPanel, "West");
+            syntaxStylePanel.add(buttonsPanel, "Center");
             return syntaxStylePanel;
-         }
-      
-      
-          // Set or reset the changeable features of component for syntax style 
-          private void initializeSyntaxStyleChangeables() {
-            for (int count=0; count<samples.length; count++) {
-               int i = syntaxStyleIndex[count];
-               samples[count].setFont(previewFont);
-               samples[count].setForeground(initialStyles[i].getColor());
-               foregroundButtons[count].setBackground(initialStyles[i].getColor());
-               foregroundButtons[count].setEnabled(true);
-               currentStyles[count] = initialStyles[i];
-               bold[count].setSelected(initialStyles[i].isBold()); 
-               if (bold[count].isSelected()) {	
-                  Font f = samples[count].getFont();
-                  samples[count].setFont(f.deriveFont(f.getStyle() ^ Font.BOLD));
-               }
-               italic[count].setSelected(initialStyles[i].isItalic());
-               if (italic[count].isSelected()) {	
-                  Font f = samples[count].getFont(); 
-                  samples[count].setFont(f.deriveFont(f.getStyle() ^ Font.ITALIC)); 
-               }
-               useDefault[count].setSelected(initialStyles[i].toString().equals(defaultStyles[i].toString()));
-               if (useDefault[count].isSelected()) {
-                  foregroundButtons[count].setEnabled(false);
-                  bold[count].setEnabled(false);
-                  italic[count].setEnabled(false);
-               }            
+        }
+        
+        private void initializeSyntaxStyleChangeables() {
+            for (int count = 0; count < this.samples.length; ++count) {
+                final int i = this.syntaxStyleIndex[count];
+                this.samples[count].setFont(this.previewFont);
+                this.samples[count].setForeground(this.initialStyles[i].getColor());
+                this.foregroundButtons[count].setBackground(this.initialStyles[i].getColor());
+                this.foregroundButtons[count].setEnabled(true);
+                this.currentStyles[count] = this.initialStyles[i];
+                this.bold[count].setSelected(this.initialStyles[i].isBold());
+                if (this.bold[count].isSelected()) {
+                    final Font f = this.samples[count].getFont();
+                    this.samples[count].setFont(f.deriveFont(f.getStyle() ^ 0x1));
+                }
+                this.italic[count].setSelected(this.initialStyles[i].isItalic());
+                if (this.italic[count].isSelected()) {
+                    final Font f = this.samples[count].getFont();
+                    this.samples[count].setFont(f.deriveFont(f.getStyle() ^ 0x2));
+                }
+                this.useDefault[count].setSelected(this.initialStyles[i].toString().equals(this.defaultStyles[i].toString()));
+                if (this.useDefault[count].isSelected()) {
+                    this.foregroundButtons[count].setEnabled(false);
+                    this.bold[count].setEnabled(false);
+                    this.italic[count].setEnabled(false);
+                }
             }
-         }
-      	
-      	
-      	// set the foreground color, bold and italic of sample (a JLabel)
-          private void setSampleStyles(JLabel sample, SyntaxStyle style) {
-            Font f = previewFont;
-            if (style.isBold()) {	
-               f = f.deriveFont(f.getStyle() ^ Font.BOLD);
+        }
+        
+        private void setSampleStyles(final JLabel sample, final SyntaxStyle style) {
+            Font f = this.previewFont;
+            if (style.isBold()) {
+                f = f.deriveFont(f.getStyle() ^ 0x1);
             }
-            if (style.isItalic()) {	
-               f = f.deriveFont(f.getStyle() ^ Font.ITALIC); 
+            if (style.isItalic()) {
+                f = f.deriveFont(f.getStyle() ^ 0x2);
             }
             sample.setFont(f);
             sample.setForeground(style.getColor());
-         }
-      
-      
-      ///////////////////////////////////////////////////////////////////////////
-      // Toggle bold or italic style on preview button when B or I button clicked	
-          private class BoldItalicChanger implements ActionListener {
+        }
+        
+        private class BoldItalicChanger implements ActionListener
+        {
             private int row;
-             public BoldItalicChanger(int row) {
-               this.row = row;
-            }
-             public void actionPerformed(ActionEvent e) {
-               Font f = samples[row].getFont();
-               if (e.getActionCommand()==BOLD_BUTTON_TOOL_TIP_TEXT) {
-                  if (bold[row].isSelected()) {
-                     samples[row].setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-                  } 
-                  else {
-                     samples[row].setFont(f.deriveFont(f.getStyle() ^ Font.BOLD)); 
-                  }
-               } 
-               else {
-                  if (italic[row].isSelected()) {
-                     samples[row].setFont(f.deriveFont(f.getStyle() | Font.ITALIC));
-                  } 
-                  else {
-                     samples[row].setFont(f.deriveFont(f.getStyle() ^ Font.ITALIC)); 
-                  }					
-               }
-               currentStyles[row] = new SyntaxStyle(foregroundButtons[row].getBackground(), 
-                                        italic[row].isSelected(), bold[row].isSelected());
-               syntaxStylesAction = true;
             
+            public BoldItalicChanger(final int row) {
+                this.row = row;
             }
-         }
-         
-      	       /////////////////////////////////////////////////////////////////
-       //
-       //  Class that handles click on the foreground selection button
-       //   		
-          private class ForegroundChanger implements ActionListener {
-            private int row;
-             public ForegroundChanger(int pos) {
-               row = pos;
-            }
-             public void actionPerformed(ActionEvent e) {
-               JButton button = (JButton) e.getSource();
-               Color newColor = JColorChooser.showDialog(null, "Set Text Color", button.getBackground());
-               if (newColor != null) {
-                  button.setBackground(newColor);
-                  samples[row].setForeground(newColor);
-               }
-               currentStyles[row] = new SyntaxStyle(button.getBackground(), 
-                                        italic[row].isSelected(), bold[row].isSelected());					   
-               syntaxStylesAction = true;
-            }
-         }
-         
-       /////////////////////////////////////////////////////////////////
-       //
-       // Class that handles action (check, uncheck) on the Default checkbox.
-       //   	
-          private class DefaultChanger implements ItemListener {
-            private int row;
-             public DefaultChanger(int pos) {
-               row = pos;
-            }
-             public void itemStateChanged(ItemEvent e) {
             
-            // If selected: disable buttons, save current settings, set to defaults
-            // If deselected:restore current settings, enable buttons
-               Color newBackground = null;
-               Font newFont = null;
-               if (e.getStateChange() == ItemEvent.SELECTED) {
-                  foregroundButtons[row].setEnabled(false);
-                  bold[row].setEnabled(false);
-                  italic[row].setEnabled(false);
-                  currentStyles[row] = new SyntaxStyle(foregroundButtons[row].getBackground(), 
-                                           italic[row].isSelected(), bold[row].isSelected());
-                  SyntaxStyle defaultStyle = defaultStyles[syntaxStyleIndex[row]];
-                  setSampleStyles(samples[row], defaultStyle);
-                  foregroundButtons[row].setBackground(defaultStyle.getColor());
-                  bold[row].setSelected(defaultStyle.isBold());
-                  italic[row].setSelected(defaultStyle.isItalic());
-               } 
-               else {
-                  setSampleStyles(samples[row], currentStyles[row]);
-                  foregroundButtons[row].setBackground(currentStyles[row].getColor());
-                  bold[row].setSelected(currentStyles[row].isBold());
-                  italic[row].setSelected(currentStyles[row].isItalic());
-                  foregroundButtons[row].setEnabled(true);
-                  bold[row].setEnabled(true);
-                  italic[row].setEnabled(true);
-               }
-               syntaxStylesAction = true;
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final Font f = EditorFontDialog.this.samples[this.row].getFont();
+                if (e.getActionCommand() == "B") {
+                    if (EditorFontDialog.this.bold[this.row].isSelected()) {
+                        EditorFontDialog.this.samples[this.row].setFont(f.deriveFont(f.getStyle() | 0x1));
+                    }
+                    else {
+                        EditorFontDialog.this.samples[this.row].setFont(f.deriveFont(f.getStyle() ^ 0x1));
+                    }
+                }
+                else if (EditorFontDialog.this.italic[this.row].isSelected()) {
+                    EditorFontDialog.this.samples[this.row].setFont(f.deriveFont(f.getStyle() | 0x2));
+                }
+                else {
+                    EditorFontDialog.this.samples[this.row].setFont(f.deriveFont(f.getStyle() ^ 0x2));
+                }
+                EditorFontDialog.this.currentStyles[this.row] = new SyntaxStyle(EditorFontDialog.this.foregroundButtons[this.row].getBackground(), EditorFontDialog.this.italic[this.row].isSelected(), EditorFontDialog.this.bold[this.row].isSelected());
+                EditorFontDialog.this.syntaxStylesAction = true;
             }
-         } 
-      }
-      	
-   }
+        }
+        
+        private class ForegroundChanger implements ActionListener
+        {
+            private int row;
+            
+            public ForegroundChanger(final int pos) {
+                this.row = pos;
+            }
+            
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final JButton button = (JButton)e.getSource();
+                final Color newColor = JColorChooser.showDialog(null, "Set Text Color", button.getBackground());
+                if (newColor != null) {
+                    button.setBackground(newColor);
+                    EditorFontDialog.this.samples[this.row].setForeground(newColor);
+                }
+                EditorFontDialog.this.currentStyles[this.row] = new SyntaxStyle(button.getBackground(), EditorFontDialog.this.italic[this.row].isSelected(), EditorFontDialog.this.bold[this.row].isSelected());
+                EditorFontDialog.this.syntaxStylesAction = true;
+            }
+        }
+        
+        private class DefaultChanger implements ItemListener
+        {
+            private int row;
+            
+            public DefaultChanger(final int pos) {
+                this.row = pos;
+            }
+            
+            @Override
+            public void itemStateChanged(final ItemEvent e) {
+                final Color newBackground = null;
+                final Font newFont = null;
+                if (e.getStateChange() == 1) {
+                    EditorFontDialog.this.foregroundButtons[this.row].setEnabled(false);
+                    EditorFontDialog.this.bold[this.row].setEnabled(false);
+                    EditorFontDialog.this.italic[this.row].setEnabled(false);
+                    EditorFontDialog.this.currentStyles[this.row] = new SyntaxStyle(EditorFontDialog.this.foregroundButtons[this.row].getBackground(), EditorFontDialog.this.italic[this.row].isSelected(), EditorFontDialog.this.bold[this.row].isSelected());
+                    final SyntaxStyle defaultStyle = EditorFontDialog.this.defaultStyles[EditorFontDialog.this.syntaxStyleIndex[this.row]];
+                    EditorFontDialog.this.setSampleStyles(EditorFontDialog.this.samples[this.row], defaultStyle);
+                    EditorFontDialog.this.foregroundButtons[this.row].setBackground(defaultStyle.getColor());
+                    EditorFontDialog.this.bold[this.row].setSelected(defaultStyle.isBold());
+                    EditorFontDialog.this.italic[this.row].setSelected(defaultStyle.isItalic());
+                }
+                else {
+                    EditorFontDialog.this.setSampleStyles(EditorFontDialog.this.samples[this.row], EditorFontDialog.this.currentStyles[this.row]);
+                    EditorFontDialog.this.foregroundButtons[this.row].setBackground(EditorFontDialog.this.currentStyles[this.row].getColor());
+                    EditorFontDialog.this.bold[this.row].setSelected(EditorFontDialog.this.currentStyles[this.row].isBold());
+                    EditorFontDialog.this.italic[this.row].setSelected(EditorFontDialog.this.currentStyles[this.row].isItalic());
+                    EditorFontDialog.this.foregroundButtons[this.row].setEnabled(true);
+                    EditorFontDialog.this.bold[this.row].setEnabled(true);
+                    EditorFontDialog.this.italic[this.row].setEnabled(true);
+                }
+                EditorFontDialog.this.syntaxStylesAction = true;
+            }
+        }
+    }
+}

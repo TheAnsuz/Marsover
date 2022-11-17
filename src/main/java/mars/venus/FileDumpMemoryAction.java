@@ -1,292 +1,230 @@
-   package mars.venus;
-   import mars.*;
-   import mars.util.*;
-   import mars.mips.dump.*;
-   import mars.mips.hardware.*;
-   import java.awt.*;
-   import java.awt.event.*;
-   import javax.swing.*;
-   import javax.swing.border.*;
-   import java.io.*;
-   import java.util.*;
-   import javax.swing.plaf.basic.*;
-	
-	/*
-Copyright (c) 2003-2008,  Pete Sanderson and Kenneth Vollmar
 
-Developed by Pete Sanderson (psanderson@otterbein.edu)
-and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
-to the following conditions:
+package mars.venus;
 
-The above copyright notice and this permission notice shall be 
-included in all copies or substantial portions of the Software.
+import javax.swing.JList;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import java.util.ArrayList;
+import mars.mips.dump.DumpFormat;
+import javax.swing.Box;
+import javax.swing.ListCellRenderer;
+import mars.mips.dump.DumpFormatLoader;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import java.awt.Label;
+import mars.util.Binary;
+import mars.mips.hardware.AddressErrorException;
+import mars.util.MemoryDump;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.awt.LayoutManager;
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.Container;
+import java.awt.Frame;
+import java.awt.Component;
+import mars.Globals;
+import java.awt.event.ActionEvent;
+import javax.swing.KeyStroke;
+import javax.swing.Icon;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-(MIT license, http://www.opensource.org/licenses/mit-license.html)
- */
-	
-    /**
-    * Action  for the File -> Save For Dump Memory menu item
-    */   			
-    public class FileDumpMemoryAction extends GuiAction {
+public class FileDumpMemoryAction extends GuiAction
+{
+    private JDialog dumpDialog;
+    private static final String title = "Dump Memory To File";
+    private String[] segmentArray;
+    private int[] baseAddressArray;
+    private int[] limitAddressArray;
+    private int[] highAddressArray;
+    private String[] segmentListArray;
+    private int[] segmentListBaseArray;
+    private int[] segmentListHighArray;
+    private JComboBox segmentListSelector;
+    private JComboBox formatListSelector;
     
-      private JDialog dumpDialog;
-      private static final String title = "Dump Memory To File";
-   
-      // A series of parallel arrays representing the memory segments that can be dumped.
-      private String[] segmentArray;         
-      private int[] baseAddressArray;      
-      private int[] limitAddressArray;
-      private int[] highAddressArray;
-   	// These three are allocated and filled by buildDialogPanel() and used by action listeners.
-      private String[] segmentListArray;  
-      private int[] segmentListBaseArray; 
-      private int[] segmentListHighArray;
-   	 
-      private JComboBox segmentListSelector;
-      private JComboBox formatListSelector;
-       public FileDumpMemoryAction(String name, Icon icon, String descrip,
-                             Integer mnemonic, KeyStroke accel, VenusUI gui) {
-         super(name, icon, descrip, mnemonic, accel, gui);
-      
-      }
-   
-   
-       public void actionPerformed(ActionEvent e){
-         dumpMemory();        
-      }
-   	
-     	/* Save the memory segment in a supported format.
-   	 */
-       private boolean dumpMemory() {
-         dumpDialog = createDumpDialog();
-         dumpDialog.pack();
-         dumpDialog.setLocationRelativeTo(Globals.getGui());
-         dumpDialog.setVisible(true);	
-         return true;
-      	/////////////////////////////////////////////////////////////////////
-      }
-   	
-   	
-   	 // The dump dialog that appears when menu item is selected.
-       private JDialog createDumpDialog() {
-         JDialog dumpDialog = new JDialog(Globals.getGui(), title, true);
-         dumpDialog.setContentPane(buildDialogPanel());
-         dumpDialog.setDefaultCloseOperation(
-                        JDialog.DO_NOTHING_ON_CLOSE);
-         dumpDialog.addWindowListener(
-                new WindowAdapter() {
-                   public void windowClosing(WindowEvent we) {
-                     closeDialog();
-                  }
-               });
-         return dumpDialog;
-      }
-   	
-   	 // Set contents of dump dialog.
-       private JPanel buildDialogPanel() {
-         JPanel contents = new JPanel(new BorderLayout(20,20));
-         contents.setBorder(new EmptyBorder(10,10,10,10));
-      
-         segmentArray = MemoryDump.getSegmentNames();
-         baseAddressArray = MemoryDump.getBaseAddresses(segmentArray);
-         limitAddressArray = MemoryDump.getLimitAddresses(segmentArray);
-         highAddressArray = new int[segmentArray.length];
-      
-      
-      
-         segmentListArray = new String[segmentArray.length];
-         segmentListBaseArray = new int[segmentArray.length];
-         segmentListHighArray = new int[segmentArray.length];
-        
-         // Calculate the actual highest address to be dumped.  For text segment, this depends on the
-      	// program length (number of machine code instructions).  For data segment, this depends on
-      	// how many MARS 4K word blocks have been referenced during assembly and/or execution.
-      	// Then generate label from concatentation of segmentArray[i], baseAddressArray[i]
-      	// and highAddressArray[i].  This lets user know exactly what range will be dumped.  Initially not
-      	// editable but maybe add this later.
-      	// If there is nothing to dump (e.g. address of first null == base address), then
-      	// the segment will not be listed.
-         int segmentCount = 0;
-      	
-         for (int i=0; i<segmentArray.length; i++) {
-            try {
-               highAddressArray[i] = Globals.memory.getAddressOfFirstNull(baseAddressArray[i],limitAddressArray[i]) - Memory.WORD_LENGTH_BYTES;
-            
-            }  // Exception will not happen since the Memory base and limit addresses are on word boundaries!
-                catch (AddressErrorException aee) {
-                  highAddressArray[i] = baseAddressArray[i] - Memory.WORD_LENGTH_BYTES;
-               }
-            if (highAddressArray[i] >= baseAddressArray[i]) {
-               segmentListBaseArray[segmentCount] = baseAddressArray[i];
-               segmentListHighArray[segmentCount] = highAddressArray[i];
-               segmentListArray[segmentCount] = 
-                       segmentArray[i] + " (" + Binary.intToHexString(baseAddressArray[i]) + 
-                       " - " + Binary.intToHexString(highAddressArray[i]) + ")";
-               segmentCount++;
+    public FileDumpMemoryAction(final String name, final Icon icon, final String descrip, final Integer mnemonic, final KeyStroke accel, final VenusUI gui) {
+        super(name, icon, descrip, mnemonic, accel, gui);
+    }
+    
+    @Override
+    public void actionPerformed(final ActionEvent e) {
+        this.dumpMemory();
+    }
+    
+    private boolean dumpMemory() {
+        (this.dumpDialog = this.createDumpDialog()).pack();
+        this.dumpDialog.setLocationRelativeTo(Globals.getGui());
+        this.dumpDialog.setVisible(true);
+        return true;
+    }
+    
+    private JDialog createDumpDialog() {
+        final JDialog dumpDialog = new JDialog(Globals.getGui(), "Dump Memory To File", true);
+        dumpDialog.setContentPane(this.buildDialogPanel());
+        dumpDialog.setDefaultCloseOperation(0);
+        dumpDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent we) {
+                FileDumpMemoryAction.this.closeDialog();
             }
-         }
-      	
-      	// It is highly unlikely that no segments remain after the null check, since 
-      	// there will always be at least one instruction (.text segment has one non-null).
-      	// But just in case...
-         if (segmentCount == 0) {
-            contents.add(new Label("There is nothing to dump!"), BorderLayout.NORTH);
-            JButton OKButton = new JButton("OK");
-            OKButton.addActionListener(
-                   new ActionListener() {
-                      public void actionPerformed(ActionEvent e) {
-                        closeDialog();
-                     }
-                  });
-            contents.add(OKButton, BorderLayout.SOUTH);
+        });
+        return dumpDialog;
+    }
+    
+    private JPanel buildDialogPanel() {
+        final JPanel contents = new JPanel(new BorderLayout(20, 20));
+        contents.setBorder(new EmptyBorder(10, 10, 10, 10));
+        this.segmentArray = MemoryDump.getSegmentNames();
+        this.baseAddressArray = MemoryDump.getBaseAddresses(this.segmentArray);
+        this.limitAddressArray = MemoryDump.getLimitAddresses(this.segmentArray);
+        this.highAddressArray = new int[this.segmentArray.length];
+        this.segmentListArray = new String[this.segmentArray.length];
+        this.segmentListBaseArray = new int[this.segmentArray.length];
+        this.segmentListHighArray = new int[this.segmentArray.length];
+        int segmentCount = 0;
+        for (int i = 0; i < this.segmentArray.length; ++i) {
+            try {
+                this.highAddressArray[i] = Globals.memory.getAddressOfFirstNull(this.baseAddressArray[i], this.limitAddressArray[i]) - 4;
+            }
+            catch (AddressErrorException aee) {
+                this.highAddressArray[i] = this.baseAddressArray[i] - 4;
+            }
+            if (this.highAddressArray[i] >= this.baseAddressArray[i]) {
+                this.segmentListBaseArray[segmentCount] = this.baseAddressArray[i];
+                this.segmentListHighArray[segmentCount] = this.highAddressArray[i];
+                this.segmentListArray[segmentCount] = this.segmentArray[i] + " (" + Binary.intToHexString(this.baseAddressArray[i]) + " - " + Binary.intToHexString(this.highAddressArray[i]) + ")";
+                ++segmentCount;
+            }
+        }
+        if (segmentCount == 0) {
+            contents.add(new Label("There is nothing to dump!"), "North");
+            final JButton OKButton = new JButton("OK");
+            OKButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    FileDumpMemoryAction.this.closeDialog();
+                }
+            });
+            contents.add(OKButton, "South");
             return contents;
-         }
-      	  
-      	// This is needed to assure no null array elements in ComboBox list.
-         if (segmentCount < segmentListArray.length) {
-            String[] tempArray = new String[segmentCount];
-            System.arraycopy(segmentListArray, 0, tempArray, 0, segmentCount);
-            segmentListArray = tempArray;
-         }
-      	
-      	// Create segment selector.  First element selected by default.
-         segmentListSelector = new JComboBox(segmentListArray);
-         segmentListSelector.setSelectedIndex(0);  
-         JPanel segmentPanel = new JPanel(new BorderLayout());
-         segmentPanel.add(new Label("Memory Segment"), BorderLayout.NORTH);
-         segmentPanel.add(segmentListSelector);
-         contents.add(segmentPanel, BorderLayout.WEST);
-      	
-         // Next, create list of all available dump formats.
-         ArrayList dumpFormats = (new DumpFormatLoader()).loadDumpFormats();
-         formatListSelector = new JComboBox(dumpFormats.toArray());
-         formatListSelector.setRenderer(new DumpFormatComboBoxRenderer(formatListSelector));
-         formatListSelector.setSelectedIndex(0);  
-         JPanel formatPanel = new JPanel(new BorderLayout());
-         formatPanel.add(new Label("Dump Format"), BorderLayout.NORTH);
-         formatPanel.add(formatListSelector);
-         contents.add(formatPanel, BorderLayout.EAST);
-      
-      	// Bottom row - the control buttons for Dump and Cancel
-         Box controlPanel = Box.createHorizontalBox();
-         JButton dumpButton = new JButton("Dump To File...");
-         dumpButton.addActionListener(
-                new ActionListener() {
-                   public void actionPerformed(ActionEvent e) {
-                     if (performDump(segmentListBaseArray[segmentListSelector.getSelectedIndex()], 
-                                 segmentListHighArray[segmentListSelector.getSelectedIndex()], 
-                        			(DumpFormat)formatListSelector.getSelectedItem())) {
-                        closeDialog();
-                     }
-                  }
-               });
-         JButton cancelButton = new JButton("Cancel");
-         cancelButton.addActionListener(
-                new ActionListener() {
-                   public void actionPerformed(ActionEvent e) {
-                     closeDialog();
-                  }
-               });	
-         controlPanel.add(Box.createHorizontalGlue());
-         controlPanel.add(dumpButton);
-         controlPanel.add(Box.createHorizontalGlue());
-         controlPanel.add(cancelButton);
-         controlPanel.add(Box.createHorizontalGlue());
-         contents.add(controlPanel,BorderLayout.SOUTH);
-         return contents;
-      }  
-   	
-   	// User has clicked "Dump" button, so launch a file chooser then get
-   	// segment (memory range) and format selections and save to the file.
-       private boolean performDump(int firstAddress, int lastAddress, DumpFormat format) {	
-         File theFile = null;
-         JFileChooser saveDialog = null;
-         boolean operationOK = false;
-      
-         saveDialog = new JFileChooser(mainUI.getEditor().getCurrentSaveDirectory());
-         saveDialog.setDialogTitle(title);
-         while (!operationOK) {
-            int decision = saveDialog.showSaveDialog(mainUI);
-            if (decision != JFileChooser.APPROVE_OPTION) {
-               return false;
+        }
+        if (segmentCount < this.segmentListArray.length) {
+            final String[] tempArray = new String[segmentCount];
+            System.arraycopy(this.segmentListArray, 0, tempArray, 0, segmentCount);
+            this.segmentListArray = tempArray;
+        }
+        (this.segmentListSelector = new JComboBox((E[])this.segmentListArray)).setSelectedIndex(0);
+        final JPanel segmentPanel = new JPanel(new BorderLayout());
+        segmentPanel.add(new Label("Memory Segment"), "North");
+        segmentPanel.add(this.segmentListSelector);
+        contents.add(segmentPanel, "West");
+        final ArrayList dumpFormats = new DumpFormatLoader().loadDumpFormats();
+        (this.formatListSelector = new JComboBox((E[])dumpFormats.toArray())).setRenderer(new DumpFormatComboBoxRenderer(this.formatListSelector));
+        this.formatListSelector.setSelectedIndex(0);
+        final JPanel formatPanel = new JPanel(new BorderLayout());
+        formatPanel.add(new Label("Dump Format"), "North");
+        formatPanel.add(this.formatListSelector);
+        contents.add(formatPanel, "East");
+        final Box controlPanel = Box.createHorizontalBox();
+        final JButton dumpButton = new JButton("Dump To File...");
+        dumpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (FileDumpMemoryAction.this.performDump(FileDumpMemoryAction.this.segmentListBaseArray[FileDumpMemoryAction.this.segmentListSelector.getSelectedIndex()], FileDumpMemoryAction.this.segmentListHighArray[FileDumpMemoryAction.this.segmentListSelector.getSelectedIndex()], (DumpFormat)FileDumpMemoryAction.this.formatListSelector.getSelectedItem())) {
+                    FileDumpMemoryAction.this.closeDialog();
+                }
+            }
+        });
+        final JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                FileDumpMemoryAction.this.closeDialog();
+            }
+        });
+        controlPanel.add(Box.createHorizontalGlue());
+        controlPanel.add(dumpButton);
+        controlPanel.add(Box.createHorizontalGlue());
+        controlPanel.add(cancelButton);
+        controlPanel.add(Box.createHorizontalGlue());
+        contents.add(controlPanel, "South");
+        return contents;
+    }
+    
+    private boolean performDump(final int firstAddress, final int lastAddress, final DumpFormat format) {
+        File theFile = null;
+        JFileChooser saveDialog = null;
+        boolean operationOK = false;
+        saveDialog = new JFileChooser(this.mainUI.getEditor().getCurrentSaveDirectory());
+        saveDialog.setDialogTitle("Dump Memory To File");
+        while (!operationOK) {
+            final int decision = saveDialog.showSaveDialog(this.mainUI);
+            if (decision != 0) {
+                return false;
             }
             theFile = saveDialog.getSelectedFile();
             operationOK = true;
             if (theFile.exists()) {
-               int overwrite = JOptionPane.showConfirmDialog(mainUI,
-                     "File "+theFile.getName()+" already exists.  Do you wish to overwrite it?",
-                     "Overwrite existing file?",
-                     JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-               switch (overwrite) {
-                  case JOptionPane.YES_OPTION :
-                     operationOK = true;
-                     break;
-                  case JOptionPane.NO_OPTION :
-                     operationOK = false;
-                     break;
-                  case JOptionPane.CANCEL_OPTION :
-                     return false;
-                  default : // should never occur
-                     return false;
-               }
+                final int overwrite = JOptionPane.showConfirmDialog(this.mainUI, "File " + theFile.getName() + " already exists.  Do you wish to overwrite it?", "Overwrite existing file?", 1, 2);
+                switch (overwrite) {
+                    case 0: {
+                        operationOK = true;
+                        break;
+                    }
+                    case 1: {
+                        operationOK = false;
+                        break;
+                    }
+                    case 2: {
+                        return false;
+                    }
+                    default: {
+                        return false;
+                    }
+                }
             }
-            if (operationOK) {
-               try {
-                  format.dumpMemoryRange(theFile, firstAddress, lastAddress);
-               } 
-                   catch (AddressErrorException aee) {
-                  
-                  } 
-                   catch (IOException ioe) {
-                  }
+            if (!operationOK) {
+                continue;
             }
-         }
-         return true;
-      }
-   	
-   	// We're finished with this modal dialog.
-       private void closeDialog() {
-         dumpDialog.setVisible(false);
-         dumpDialog.dispose();
-      }
-   	
-   	
-   	// Display tool tip for dump format list items.  Got the technique from
-   	// http://forum.java.sun.com/thread.jspa?threadID=488762&messageID=2292482
-   	
-       private class DumpFormatComboBoxRenderer extends BasicComboBoxRenderer {
-         private JComboBox myMaster;
-      	 
-          public DumpFormatComboBoxRenderer(JComboBox myMaster) {
-            super();
+            try {
+                format.dumpMemoryRange(theFile, firstAddress, lastAddress);
+            }
+            catch (AddressErrorException ex) {}
+            catch (IOException ex2) {}
+        }
+        return true;
+    }
+    
+    private void closeDialog() {
+        this.dumpDialog.setVisible(false);
+        this.dumpDialog.dispose();
+    }
+    
+    private class DumpFormatComboBoxRenderer extends BasicComboBoxRenderer
+    {
+        private JComboBox myMaster;
+        
+        public DumpFormatComboBoxRenderer(final JComboBox myMaster) {
             this.myMaster = myMaster;
-         }
-      	 
-          public Component getListCellRendererComponent( JList list, Object value, int index, 
-                                                      boolean isSelected, boolean cellHasFocus) { 
-            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus); 
-            setToolTipText(value.toString());
-            if (index >=0 && ((DumpFormat)(myMaster.getItemAt(index))).getDescription() != null) {
-               setToolTipText(((DumpFormat)(myMaster.getItemAt(index))).getDescription());
+        }
+        
+        @Override
+        public Component getListCellRendererComponent(final JList list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            this.setToolTipText(value.toString());
+            if (index >= 0 && this.myMaster.getItemAt(index).getDescription() != null) {
+                this.setToolTipText(this.myMaster.getItemAt(index).getDescription());
             }
             return this;
-         } 
-      }
-   
-   
-   }
+        }
+    }
+}
