@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dev.amrv</groupId>
     <artifactId>marsover</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>UNDER-DEVELOPMENT</version>
     <packaging>jar</packaging>
     <inceptionYear>2022</inceptionYear>
-    <name>Marsover-maven</name>
+    <name>Marsover</name>
     <description>
         Marsover is a fork on MARS (Mips Assembler and Runtime Simulator)
         that aims to renew its look and feel and also supply it with more
@@ -47,7 +47,7 @@
     </dependencies>
     <build>
         <directory>${basedir}/dist</directory>
-        <finalName>${name}-${version}</finalName>
+        <finalName>${name} ${version}</finalName>
         <resources>
             <resource>
                 <directory>${basedir}/res</directory>
