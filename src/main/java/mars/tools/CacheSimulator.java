@@ -166,7 +166,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
         final TitledBorder otb = new TitledBorder("Cache Organization");
         otb.setTitleJustification(2);
         organization.setBorder(otb);
-        (this.cachePlacementSelector = new JComboBox((E[])this.placementPolicyChoices)).setEditable(false);
+        (this.cachePlacementSelector = new JComboBox((String[])this.placementPolicyChoices)).setEditable(false);
         this.cachePlacementSelector.setBackground(this.backgroundColor);
         this.cachePlacementSelector.setSelectedIndex(this.defaultPlacementPolicyIndex);
         this.cachePlacementSelector.addActionListener(new ActionListener() {
@@ -176,10 +176,10 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
                 CacheSimulator.this.reset();
             }
         });
-        (this.cacheReplacementSelector = new JComboBox((E[])this.replacementPolicyChoices)).setEditable(false);
+        (this.cacheReplacementSelector = new JComboBox((String[])this.replacementPolicyChoices)).setEditable(false);
         this.cacheReplacementSelector.setBackground(this.backgroundColor);
         this.cacheReplacementSelector.setSelectedIndex(this.defaultReplacementPolicyIndex);
-        (this.cacheBlockSizeSelector = new JComboBox((E[])this.cacheBlockSizeChoices)).setEditable(false);
+        (this.cacheBlockSizeSelector = new JComboBox((String[])this.cacheBlockSizeChoices)).setEditable(false);
         this.cacheBlockSizeSelector.setBackground(this.backgroundColor);
         this.cacheBlockSizeSelector.setSelectedIndex(this.defaultCacheBlockSizeIndex);
         this.cacheBlockSizeSelector.addActionListener(new ActionListener() {
@@ -189,7 +189,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
                 CacheSimulator.this.reset();
             }
         });
-        (this.cacheBlockCountSelector = new JComboBox((E[])this.cacheBlockCountChoices)).setEditable(false);
+        (this.cacheBlockCountSelector = new JComboBox((String[])this.cacheBlockCountChoices)).setEditable(false);
         this.cacheBlockCountSelector.setBackground(this.backgroundColor);
         this.cacheBlockCountSelector.setSelectedIndex(this.defaultCacheBlockCountIndex);
         this.cacheBlockCountSelector.addActionListener(new ActionListener() {
@@ -203,7 +203,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
                 CacheSimulator.this.animations.fillAnimationBoxWithCacheBlocks();
             }
         });
-        (this.cacheSetSizeSelector = new JComboBox((E[])this.cacheSetSizeChoices)).setEditable(false);
+        (this.cacheSetSizeSelector = new JComboBox((String[])this.cacheSetSizeChoices)).setEditable(false);
         this.cacheSetSizeSelector.setBackground(this.backgroundColor);
         this.cacheSetSizeSelector.setSelectedIndex(this.defaultCacheSetSizeIndex);
         this.cacheSetSizeSelector.addActionListener(new ActionListener() {

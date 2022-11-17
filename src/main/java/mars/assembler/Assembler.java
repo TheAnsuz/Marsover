@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class Assembler
 {
-    private ArrayList machineList;
+    private ArrayList<ProgramStatement> machineList;
     private ErrorList errors;
     private boolean inDataSegment;
     private boolean inMacroSegment;
@@ -53,11 +53,11 @@ public class Assembler
         return this.errors;
     }
     
-    public ArrayList assemble(final ArrayList tokenizedProgramFiles, final boolean extendedAssemblerEnabled) throws ProcessingException {
+    public ArrayList<ProgramStatement> assemble(final ArrayList<MIPSprogram> tokenizedProgramFiles, final boolean extendedAssemblerEnabled) throws ProcessingException {
         return this.assemble(tokenizedProgramFiles, extendedAssemblerEnabled, false);
     }
     
-    public ArrayList assemble(final ArrayList tokenizedProgramFiles, final boolean extendedAssemblerEnabled, final boolean warningsAreErrors) throws ProcessingException {
+    public ArrayList<ProgramStatement> assemble(final ArrayList<MIPSprogram> tokenizedProgramFiles, final boolean extendedAssemblerEnabled, final boolean warningsAreErrors) throws ProcessingException {
         if (tokenizedProgramFiles == null || tokenizedProgramFiles.size() == 0) {
             return null;
         }
@@ -83,7 +83,7 @@ public class Assembler
             this.fileCurrentlyBeingAssembled.getLocalSymbolTable().clear();
             this.currentFileDataSegmentForwardReferences.clear();
             final ArrayList<SourceLine> sourceLineList = this.fileCurrentlyBeingAssembled.getSourceLineList();
-            final ArrayList tokenList = this.fileCurrentlyBeingAssembled.getTokenList();
+            final ArrayList<TokenList> tokenList = this.fileCurrentlyBeingAssembled.getTokenList();
             final ArrayList parsedList = this.fileCurrentlyBeingAssembled.createParsedList();
             final MacroPool macroPool = this.fileCurrentlyBeingAssembled.createMacroPool();
             for (int i = 0; i < tokenList.size() && !this.errors.errorLimitExceeded(); ++i) {
@@ -114,7 +114,7 @@ public class Assembler
         }
         for (int fileIndex = 0; fileIndex < tokenizedProgramFiles.size() && !this.errors.errorLimitExceeded(); ++fileIndex) {
             this.fileCurrentlyBeingAssembled = tokenizedProgramFiles.get(fileIndex);
-            final ArrayList parsedList2 = this.fileCurrentlyBeingAssembled.getParsedList();
+            final ArrayList<ProgramStatement> parsedList2 = this.fileCurrentlyBeingAssembled.getParsedList();
             for (int j = 0; j < parsedList2.size(); ++j) {
                 final ProgramStatement statement = parsedList2.get(j);
                 statement.buildBasicStatementFromBasicInstruction(this.errors);
@@ -129,7 +129,7 @@ public class Assembler
                     final String basicAssembly = statement.getBasicAssemblyStatement();
                     final int sourceLine = statement.getSourceLine();
                     final TokenList theTokenList = new Tokenizer().tokenizeLine(sourceLine, basicAssembly, this.errors, false);
-                    ArrayList templateList;
+                    ArrayList<String> templateList;
                     if (this.compactTranslationCanBeApplied(statement)) {
                         templateList = inst.getCompactBasicIntructionTemplateList();
                     }
@@ -175,7 +175,7 @@ public class Assembler
             }
         }
         SystemIO.resetFiles();
-        Collections.sort((List<Object>)this.machineList, new ProgramStatementComparator());
+        Collections.sort(this.machineList, new ProgramStatementComparator());
         this.catchDuplicateAddresses(this.machineList, this.errors);
         if (this.errors.errorsOccurred() || (this.errors.warningsOccurred() && warningsAreErrors)) {
             throw new ProcessingException(this.errors);
@@ -183,7 +183,7 @@ public class Assembler
         return this.machineList;
     }
     
-    private void catchDuplicateAddresses(final ArrayList instructions, final ErrorList errors) {
+    private void catchDuplicateAddresses(final ArrayList<ProgramStatement> instructions, final ErrorList errors) {
         for (int i = 0; i < instructions.size() - 1; ++i) {
             final ProgramStatement ps1 = instructions.get(i);
             final ProgramStatement ps2 = instructions.get(i + 1);
@@ -831,7 +831,7 @@ public class Assembler
     
     private class DataSegmentForwardReferences
     {
-        private ArrayList forwardReferenceList;
+        private ArrayList<DataSegmentForwardReference> forwardReferenceList;
         
         private DataSegmentForwardReferences() {
             this.forwardReferenceList = new ArrayList();

@@ -33,7 +33,7 @@ public class Memory extends Observable
     public static final boolean BIG_ENDIAN = false;
     private static boolean byteOrder;
     public static int heapAddress;
-    Collection observables;
+    Collection<MemoryObservable> observables;
     private static final int BLOCK_LENGTH_WORDS = 1024;
     private static final int BLOCK_TABLE_LENGTH = 1024;
     private int[][] dataBlockTable;
@@ -503,7 +503,7 @@ public class Memory extends Observable
     
     @Override
     public void deleteObserver(final Observer obs) {
-        final Iterator it = this.observables.iterator();
+        final Iterator<MemoryObservable> it = this.observables.iterator();
         while (it.hasNext()) {
             it.next().deleteObserver(obs);
         }

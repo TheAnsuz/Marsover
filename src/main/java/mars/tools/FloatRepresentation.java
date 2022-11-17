@@ -247,7 +247,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
         for (int i = 0; i < this.fpRegisters.length; ++i) {
             registerList[i + 1] = this.fpRegisters[i].getName();
         }
-        final JComboBox registerSelect = new JComboBox((E[])registerList);
+        final JComboBox registerSelect = new JComboBox((String[])registerList);
         registerSelect.setSelectedIndex(0);
         registerSelect.setToolTipText("Attach to selected FP register");
         registerSelect.addActionListener(new ActionListener() {

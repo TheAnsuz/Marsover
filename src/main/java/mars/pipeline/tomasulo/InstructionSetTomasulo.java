@@ -19,8 +19,8 @@ import java.util.ArrayList;
 public class InstructionSetTomasulo
 {
     private static InstructionSetTomasulo instructionSet;
-    private ArrayList instructionList;
-    private ArrayList opcodeMatchMaps;
+    private ArrayList<Instruction> instructionList;
+    private ArrayList<MatchMap> opcodeMatchMaps;
     private static int op1;
     private static int op2;
     private static int result;
@@ -364,15 +364,15 @@ public class InstructionSetTomasulo
             final Instruction inst = this.instructionList.get(i);
             inst.createExampleTokenList();
         }
-        final HashMap maskMap = new HashMap();
+        final HashMap<Integer,HashMap<Integer,BasicInstruction>> maskMap = new HashMap();
         final ArrayList matchMaps = new ArrayList();
         for (int j = 0; j < this.instructionList.size(); ++j) {
-            final Object rawInstr = this.instructionList.get(j);
+            final Instruction rawInstr = this.instructionList.get(j);
             if (rawInstr instanceof BasicInstruction) {
                 final BasicInstruction basic = (BasicInstruction)rawInstr;
                 final Integer mask = basic.getOpcodeMask();
                 final Integer match = basic.getOpcodeMatch();
-                HashMap matchMap = maskMap.get(mask);
+                HashMap<Integer,BasicInstruction> matchMap = maskMap.get(mask);
                 if (matchMap == null) {
                     matchMap = new HashMap();
                     maskMap.put(mask, matchMap);
@@ -386,9 +386,8 @@ public class InstructionSetTomasulo
     }
     
     public BasicInstruction findByBinaryCode(final int binaryInstr) {
-        final ArrayList matchMaps = this.opcodeMatchMaps;
-        for (int i = 0; i < matchMaps.size(); ++i) {
-            final MatchMap map = matchMaps.get(i);
+        for (int i = 0; i < this.opcodeMatchMaps.size(); ++i) {
+            final MatchMap map = this.opcodeMatchMaps.get(i);
             final BasicInstruction ret = map.find(binaryInstr);
             if (ret != null) {
                 return ret;
@@ -453,7 +452,7 @@ public class InstructionSetTomasulo
     {
         private int mask;
         private int maskLength;
-        private HashMap matchMap;
+        private HashMap<Integer,BasicInstruction> matchMap;
         
         public MatchMap(final int mask, final HashMap matchMap) {
             this.mask = mask;

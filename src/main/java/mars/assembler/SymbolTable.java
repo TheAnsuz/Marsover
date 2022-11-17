@@ -12,7 +12,7 @@ public class SymbolTable
 {
     private static String startLabel;
     private String filename;
-    private ArrayList table;
+    private ArrayList<Symbol> table;
     public static final int NOT_FOUND = -1;
     
     public SymbolTable(final String filename) {

@@ -352,7 +352,7 @@ public class KeyboardAndDisplaySimulator extends AbstractMarsToolAndApplication
         (this.displayScrollPane = new JScrollPane(this.display)).setPreferredSize(KeyboardAndDisplaySimulator.preferredTextAreaDimension);
         this.displayPanel.add(this.displayScrollPane);
         this.displayOptions = new JPanel();
-        (this.delayTechniqueChooser = new JComboBox((E[])this.delayTechniques)).setToolTipText("Technique for determining simulated transmitter device processing delay");
+        (this.delayTechniqueChooser = new JComboBox((TransmitterDelayTechnique[])this.delayTechniques)).setToolTipText("Technique for determining simulated transmitter device processing delay");
         this.delayTechniqueChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -647,7 +647,7 @@ public class KeyboardAndDisplaySimulator extends AbstractMarsToolAndApplication
             resetButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    AbstractFontSettingDialog.this.reset();
+                    reset();
                 }
             });
             controlPanel.add(Box.createHorizontalGlue());

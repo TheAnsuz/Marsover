@@ -100,7 +100,7 @@ public class SettingsMemoryConfigurationAction extends GuiAction
         private Component buildConfigChooser() {
             final JPanel chooserPanel = new JPanel(new GridLayout(4, 1));
             final ButtonGroup choices = new ButtonGroup();
-            final Iterator configurationsIterator = MemoryConfigurations.getConfigurationsIterator();
+            final Iterator<MemoryConfiguration> configurationsIterator = MemoryConfigurations.getConfigurationsIterator();
             while (configurationsIterator.hasNext()) {
                 final MemoryConfiguration config = configurationsIterator.next();
                 final ConfigurationButton button = new ConfigurationButton(config);
@@ -230,10 +230,10 @@ public class SettingsMemoryConfigurationAction extends GuiAction
             for (int i = 0; i < configurationItemValues.length; ++i) {
                 treeSortedByAddress.put(Binary.intToHexString(configurationItemValues[i]) + configurationItemNames[i], configurationItemNames[i]);
             }
-            final Iterator setSortedByAddress = treeSortedByAddress.entrySet().iterator();
+            final Iterator<Map.Entry<String,String>> setSortedByAddress = treeSortedByAddress.entrySet().iterator();
             final int addressStringLength = Binary.intToHexString(configurationItemValues[0]).length();
             for (int j = 0; j < configurationItemValues.length; ++j) {
-                final Map.Entry pair = setSortedByAddress.next();
+                final Map.Entry<String,String> pair = setSortedByAddress.next();
                 this.nameDisplay[j].setText(pair.getValue());
                 this.addressDisplay[j].setText(pair.getKey().substring(0, addressStringLength));
             }

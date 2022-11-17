@@ -64,7 +64,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     private JScrollPane tableScroller;
     private Object[][] data;
     private int[] intAddresses;
-    private Hashtable addressRows;
+    private Hashtable<Integer,Integer> addressRows;
     private Hashtable<Integer, ModifiedCode> executeMods;
     private Container contentPane;
     private TextTableModel tableModel;
@@ -100,7 +100,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
         final int addressBase = Globals.getGui().getMainPane().getExecutePane().getAddressDisplayBase();
         this.codeHighlighting = true;
         this.breakpointsEnabled = true;
-        final ArrayList sourceStatementList = Globals.program.getMachineList();
+        final ArrayList<ProgramStatement> sourceStatementList = Globals.program.getMachineList();
         this.data = new Object[sourceStatementList.size()][TextSegmentWindow.columnNames.length];
         this.intAddresses = new int[this.data.length];
         this.addressRows = new Hashtable(this.data.length);
@@ -214,7 +214,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
         if (this.contentPane.getComponentCount() == 0) {
             return;
         }
-        final ArrayList sourceStatementList = Globals.program.getMachineList();
+        final ArrayList<ProgramStatement> sourceStatementList = Globals.program.getMachineList();
         for (int i = 0; i < sourceStatementList.size(); ++i) {
             if (this.executeMods.get(i) == null) {
                 final ProgramStatement statement = sourceStatementList.get(i);
@@ -313,7 +313,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     public int getBreakpointCount() {
         int breakpointCount = 0;
         for (int i = 0; i < this.data.length; ++i) {
-            if (this.data[i][0]) {
+            if ((Boolean)this.data[i][0]) {
                 ++breakpointCount;
             }
         }
@@ -328,7 +328,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
         final int[] breakpoints = new int[breakpointCount];
         breakpointCount = 0;
         for (int i = 0; i < this.data.length; ++i) {
-            if (this.data[i][0]) {
+            if ((Boolean)this.data[i][0]) {
                 breakpoints[breakpointCount++] = this.intAddresses[i];
             }
         }
@@ -338,7 +338,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     
     public void clearAllBreakpoints() {
         for (int i = 0; i < this.tableModel.getRowCount(); ++i) {
-            if (this.data[i][0]) {
+            if ((Boolean)this.data[i][0]) {
                 this.tableModel.setValueAt(Boolean.FALSE, i, 0);
             }
         }

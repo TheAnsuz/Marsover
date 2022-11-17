@@ -9,7 +9,7 @@ import javax.swing.AbstractAction;
 
 public class ToolAction extends AbstractAction
 {
-    private Class toolClass;
+    private Class<? extends MarsTool> toolClass;
     
     public ToolAction(final Class toolClass, final String toolName) {
         super(toolName, null);

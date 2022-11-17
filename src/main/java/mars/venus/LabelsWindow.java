@@ -44,7 +44,7 @@ public class LabelsWindow extends JInternalFrame
     private JPanel labelPanel;
     private JCheckBox dataLabels;
     private JCheckBox textLabels;
-    private ArrayList listOfLabelsForSymbolTable;
+    private ArrayList<LabelsForSymbolTable> listOfLabelsForSymbolTable;
     private LabelsWindow labelsWindow;
     private static final int MAX_DISPLAYED_CHARS = 24;
     private static final int PREFERRED_NAME_COLUMN_WIDTH = 60;
@@ -100,12 +100,12 @@ public class LabelsWindow extends JInternalFrame
     
     private JScrollPane generateLabelScrollPane() {
         (this.listOfLabelsForSymbolTable = new ArrayList()).add(new LabelsForSymbolTable(null));
-        final ArrayList MIPSprogramsAssembled = RunAssembleAction.getMIPSprogramsToAssemble();
+        final ArrayList<MIPSprogram> MIPSprogramsAssembled = RunAssembleAction.getMIPSprogramsToAssemble();
         final Box allSymtabTables = Box.createVerticalBox();
         for (int i = 0; i < MIPSprogramsAssembled.size(); ++i) {
             this.listOfLabelsForSymbolTable.add(new LabelsForSymbolTable(MIPSprogramsAssembled.get(i)));
         }
-        final ArrayList tableNames = new ArrayList();
+        final ArrayList<JComponent> tableNames = new ArrayList();
         JTableHeader tableHeader = null;
         for (int j = 0; j < this.listOfLabelsForSymbolTable.size(); ++j) {
             final LabelsForSymbolTable symtab = this.listOfLabelsForSymbolTable.get(j);
@@ -193,7 +193,7 @@ public class LabelsWindow extends JInternalFrame
         private MIPSprogram myMIPSprogram;
         private Object[][] labelData;
         private JTable labelTable;
-        private ArrayList symbols;
+        private ArrayList<Symbol> symbols;
         private SymbolTable symbolTable;
         private String tableName;
         
@@ -226,7 +226,7 @@ public class LabelsWindow extends JInternalFrame
             else {
                 this.symbols = new ArrayList();
             }
-            Collections.sort((List<Object>)this.symbols, LabelsWindow.this.tableSortComparator);
+            Collections.sort(this.symbols, LabelsWindow.this.tableSortComparator);
             this.labelData = new Object[this.symbols.size()][2];
             for (int i = 0; i < this.symbols.size(); ++i) {
                 final Symbol s = this.symbols.get(i);

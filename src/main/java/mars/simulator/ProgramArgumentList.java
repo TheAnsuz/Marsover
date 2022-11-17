@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ProgramArgumentList
 {
-    ArrayList programArgumentList;
+    ArrayList<String> programArgumentList;
     
     public ProgramArgumentList(final String args) {
         final StringTokenizer st = new StringTokenizer(args);
@@ -37,7 +37,7 @@ public class ProgramArgumentList
         this(list, 0);
     }
     
-    public ProgramArgumentList(final ArrayList list, final int startPosition) {
+    public ProgramArgumentList(final ArrayList<String> list, final int startPosition) {
         if (list == null || list.size() < startPosition) {
             this.programArgumentList = new ArrayList(0);
         }

@@ -18,7 +18,7 @@ public class OperandFormat
         return numOperandsCheck(candidateList, inst, errors) && operandTypeCheck(candidateList, inst, errors);
     }
     
-    static Instruction bestOperandMatch(final TokenList tokenList, final ArrayList instrMatches) {
+    static Instruction bestOperandMatch(final TokenList tokenList, final ArrayList<Instruction> instrMatches) {
         if (instrMatches == null) {
             return null;
         }

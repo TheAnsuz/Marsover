@@ -1038,7 +1038,7 @@ public class JEditTextArea extends JComponent
     public String getSyntaxSensitiveToolTipText(final int x, final int y) {
         String result = null;
         final int line = this.yToLine(y);
-        final ArrayList matches = this.getSyntaxSensitiveHelpAtLineOffset(line, this.xToOffset(line, x), true);
+        final ArrayList<PopupHelpItem> matches = this.getSyntaxSensitiveHelpAtLineOffset(line, this.xToOffset(line, x), true);
         if (matches == null) {
             return null;
         }
@@ -1116,7 +1116,7 @@ public class JEditTextArea extends JComponent
         final int line = this.getCaretLine();
         final int lineStart = this.getLineStartOffset(line);
         final int offset = Math.max(1, Math.min(this.getLineLength(line), this.getCaretPosition() - lineStart));
-        final ArrayList helpItems = this.getSyntaxSensitiveHelpAtLineOffset(line, offset, false);
+        final ArrayList<PopupHelpItem> helpItems = this.getSyntaxSensitiveHelpAtLineOffset(line, offset, false);
         if (helpItems == null && this.popupMenu != null) {
             this.popupMenu.setVisible(false);
             this.popupMenu = null;
@@ -1333,7 +1333,7 @@ public class JEditTextArea extends JComponent
             final int centerHeight = size.height - bottomHeight - itop - ibottom;
             this.center.setBounds(ileft, itop, centerWidth, centerHeight);
             this.right.setBounds(ileft + centerWidth, itop, rightWidth, centerHeight);
-            final Enumeration status = this.leftOfScrollBar.elements();
+            final Enumeration<Component> status = this.leftOfScrollBar.elements();
             while (status.hasMoreElements()) {
                 final Component comp = status.nextElement();
                 final Dimension dim = comp.getPreferredSize();

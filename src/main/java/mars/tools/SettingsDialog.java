@@ -145,7 +145,7 @@ class SettingsDialog extends JDialog
         scribblerSettings.setBorder(new TitledBorder("Scribbler"));
         final Box scribblerSettingsBox = Box.createHorizontalBox();
         scribblerSettings.add(scribblerSettingsBox);
-        (this.lineWidthSetting = new JComboBox((E[])this.scribblerLineWidthSettings)).setToolTipText("Scribbler line thickness in pixels.");
+        (this.lineWidthSetting = new JComboBox((Integer[])this.scribblerLineWidthSettings)).setToolTipText("Scribbler line thickness in pixels.");
         this.lineWidthSetting.setSelectedIndex(((Magnifier)this.getOwner()).scribblerSettings.getLineWidth() - 1);
         (this.lineColorSetting = new JButton("   ")).setToolTipText("Click here to change Scribbler line color.");
         this.lineColorSetting.setBackground(((Magnifier)this.getOwner()).scribblerSettings.getLineColor());

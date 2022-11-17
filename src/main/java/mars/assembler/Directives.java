@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public final class Directives
 {
-    private static ArrayList directiveList;
+    private static ArrayList<Directives> directiveList;
     public static final Directives DATA;
     public static final Directives TEXT;
     public static final Directives WORD;
@@ -52,7 +52,7 @@ public final class Directives
         return null;
     }
     
-    public static ArrayList prefixMatchDirectives(final String str) {
+    public static ArrayList<Directives> prefixMatchDirectives(final String str) {
         ArrayList matches = null;
         for (int i = 0; i < Directives.directiveList.size(); ++i) {
             if (Directives.directiveList.get(i).descriptor.toLowerCase().startsWith(str.toLowerCase())) {
@@ -78,7 +78,7 @@ public final class Directives
         return this.description;
     }
     
-    public static ArrayList getDirectiveList() {
+    public static ArrayList<Directives> getDirectiveList() {
         return Directives.directiveList;
     }
     

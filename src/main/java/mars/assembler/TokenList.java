@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TokenList implements Cloneable
 {
-    private ArrayList tokenList;
+    private ArrayList<Token> tokenList;
     private String processedLine;
     
     public TokenList() {

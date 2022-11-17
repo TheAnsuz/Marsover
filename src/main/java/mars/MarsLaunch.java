@@ -59,13 +59,13 @@ public class MarsLaunch
     private static final int ASCII = 2;
     private ArrayList registerDisplayList;
     private ArrayList memoryDisplayList;
-    private ArrayList filenameList;
+    private ArrayList<String> filenameList;
     private MIPSprogram code;
     private int maxSteps;
     private int instructionCount;
     private int instructionCount_orig;
     private PrintStream out;
-    private ArrayList dumpTriples;
+    private ArrayList<String[]> dumpTriples;
     private ArrayList programArgumentList;
     private int assembleErrorExitCode;
     private int simulateErrorExitCode;
@@ -770,7 +770,7 @@ public class MarsLaunch
                 segments += ", ";
             }
         }
-        final ArrayList dumpFormats = new DumpFormatLoader().loadDumpFormats();
+        final ArrayList<DumpFormat> dumpFormats = new DumpFormatLoader().loadDumpFormats();
         String formats = "";
         for (int j = 0; j < dumpFormats.size(); ++j) {
             formats += dumpFormats.get(j).getCommandDescriptor();

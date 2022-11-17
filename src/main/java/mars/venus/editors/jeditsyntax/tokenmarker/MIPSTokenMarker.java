@@ -149,7 +149,6 @@ public class MIPSTokenMarker extends TokenMarker
                                 continue;
                             }
                         }
-                        break;
                     }
                     case 3: {
                         if (backslash) {
@@ -214,7 +213,7 @@ public class MIPSTokenMarker extends TokenMarker
     public ArrayList getTokenExactMatchHelp(final Token token, final String tokenText) {
         ArrayList matches = null;
         if (token != null && token.id == 6) {
-            final ArrayList instrMatches = Globals.instructionSet.matchOperator(tokenText);
+            final ArrayList<Instruction> instrMatches = Globals.instructionSet.matchOperator(tokenText);
             if (instrMatches.size() > 0) {
                 int realMatches = 0;
                 matches = new ArrayList();
@@ -307,9 +306,9 @@ public class MIPSTokenMarker extends TokenMarker
     
     private ArrayList getTextFromDirectiveMatch(final String tokenText, final boolean exact) {
         ArrayList matches = null;
-        ArrayList directiveMatches = null;
+        ArrayList<Directives> directiveMatches = null;
         if (exact) {
-            final Object dir = Directives.matchDirective(tokenText);
+            final Directives dir = Directives.matchDirective(tokenText);
             if (dir != null) {
                 directiveMatches = new ArrayList();
                 directiveMatches.add(dir);
@@ -330,7 +329,7 @@ public class MIPSTokenMarker extends TokenMarker
     
     private ArrayList getTextFromInstructionMatch(final String tokenText, final boolean exact) {
         final String text = null;
-        ArrayList matches = null;
+        ArrayList<Instruction> matches = null;
         final ArrayList results = new ArrayList();
         if (exact) {
             matches = Globals.instructionSet.matchOperator(tokenText);
@@ -342,8 +341,8 @@ public class MIPSTokenMarker extends TokenMarker
             return null;
         }
         int realMatches = 0;
-        final HashMap insts = new HashMap();
-        final TreeSet mnemonics = new TreeSet();
+        final HashMap<String,String> insts = new HashMap();
+        final TreeSet<String> mnemonics = new TreeSet();
         for (int i = 0; i < matches.size(); ++i) {
             final Instruction inst = matches.get(i);
             if (Globals.getSettings().getExtendedAssemblerEnabled() || inst instanceof BasicInstruction) {
@@ -378,11 +377,11 @@ public class MIPSTokenMarker extends TokenMarker
     public static KeywordMap getKeywords() {
         if (MIPSTokenMarker.cKeywords == null) {
             MIPSTokenMarker.cKeywords = new KeywordMap(false);
-            final ArrayList instructionSet = Globals.instructionSet.getInstructionList();
+            final ArrayList<Instruction> instructionSet = Globals.instructionSet.getInstructionList();
             for (int i = 0; i < instructionSet.size(); ++i) {
                 MIPSTokenMarker.cKeywords.add(instructionSet.get(i).getName(), (byte)6);
             }
-            final ArrayList directiveSet = Directives.getDirectiveList();
+            final ArrayList<Directives> directiveSet = Directives.getDirectiveList();
             for (int j = 0; j < directiveSet.size(); ++j) {
                 MIPSTokenMarker.cKeywords.add(directiveSet.get(j).getName(), (byte)7);
             }

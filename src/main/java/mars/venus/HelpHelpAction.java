@@ -212,7 +212,7 @@ public class HelpHelpAction extends GuiAction
     private JScrollPane createMipsInstructionHelpPane(final String instructionClassName) {
         final ArrayList instructionList = Globals.instructionSet.getInstructionList();
         final Vector exampleList = new Vector(instructionList.size());
-        final Iterator it = instructionList.iterator();
+        final Iterator<Instruction> it = instructionList.iterator();
         final String blanks = "                        ";
         while (it.hasNext()) {
             final Instruction instr = it.next();

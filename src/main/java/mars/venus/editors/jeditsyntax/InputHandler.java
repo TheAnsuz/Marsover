@@ -54,7 +54,7 @@ public abstract class InputHandler extends KeyAdapter
     public static final ActionListener CLIP_PASTE;
     public static final ActionListener CLIP_CUT;
     public static final ActionListener INSERT_CHAR;
-    private static Hashtable actions;
+    private static Hashtable<String,ActionListener> actions;
     protected ActionListener grabAction;
     protected boolean repeat;
     protected int repeatCount;
@@ -65,7 +65,7 @@ public abstract class InputHandler extends KeyAdapter
     }
     
     public static String getActionName(final ActionListener listener) {
-        final Enumeration enumeration = getActions();
+        final Enumeration<String> enumeration = getActions();
         while (enumeration.hasMoreElements()) {
             final String name = enumeration.nextElement();
             final ActionListener _listener = getAction(name);

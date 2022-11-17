@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class BHTableModel extends AbstractTableModel
 {
-    private Vector m_entries;
+    private Vector<BHTEntry> m_entries;
     private int m_entryCnt;
     private int m_historySize;
     private String[] m_columnNames;

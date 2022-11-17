@@ -14,10 +14,10 @@ public class DumpFormatLoader
     private static final String CLASS_EXTENSION = "class";
     private static ArrayList formatList;
     
-    public ArrayList loadDumpFormats() {
+    public ArrayList<DumpFormat> loadDumpFormats() {
         if (DumpFormatLoader.formatList == null) {
             DumpFormatLoader.formatList = new ArrayList();
-            final ArrayList candidates = FilenameFinder.getFilenameList(this.getClass().getClassLoader(), "mars/mips/dump", "class");
+            final ArrayList<String> candidates = FilenameFinder.getFilenameList(this.getClass().getClassLoader(), "mars/mips/dump", "class");
             for (int i = 0; i < candidates.size(); ++i) {
                 final String file = candidates.get(i);
                 try {
@@ -35,7 +35,7 @@ public class DumpFormatLoader
         return DumpFormatLoader.formatList;
     }
     
-    public static DumpFormat findDumpFormatGivenCommandDescriptor(final ArrayList formatList, final String formatCommandDescriptor) {
+    public static DumpFormat findDumpFormatGivenCommandDescriptor(final ArrayList<DumpFormat> formatList, final String formatCommandDescriptor) {
         DumpFormat match = null;
         for (int i = 0; i < formatList.size(); ++i) {
             if (formatList.get(i).getCommandDescriptor().equals(formatCommandDescriptor)) {

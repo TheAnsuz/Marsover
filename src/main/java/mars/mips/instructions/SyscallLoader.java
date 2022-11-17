@@ -16,11 +16,11 @@ class SyscallLoader
     private static final String SYSCALL_INTERFACE = "Syscall.class";
     private static final String SYSCALL_ABSTRACT = "AbstractSyscall.class";
     private static final String CLASS_EXTENSION = "class";
-    private ArrayList syscallList;
+    private ArrayList<Syscall> syscallList;
     
     void loadSyscalls() {
         this.syscallList = new ArrayList();
-        final ArrayList candidates = FilenameFinder.getFilenameList(this.getClass().getClassLoader(), "mars/mips/instructions/syscalls", "class");
+        final ArrayList<String> candidates = FilenameFinder.getFilenameList(this.getClass().getClassLoader(), "mars/mips/instructions/syscalls", "class");
         final HashMap syscalls = new HashMap();
         for (int i = 0; i < candidates.size(); ++i) {
             final String file = candidates.get(i);
@@ -31,7 +31,7 @@ class SyscallLoader
                         final String syscallClassName = "mars.mips.instructions.syscalls." + file.substring(0, file.indexOf("class") - 1);
                         final Class clas = Class.forName(syscallClassName);
                         if (Syscall.class.isAssignableFrom(clas)) {
-                            final Syscall syscall = clas.newInstance();
+                            final Syscall syscall = (Syscall)clas.newInstance();
                             if (this.findSyscall(syscall.getNumber()) != null) {
                                 throw new Exception("Duplicate service number: " + syscall.getNumber() + " already registered to " + this.findSyscall(syscall.getNumber()).getName());
                             }
@@ -48,8 +48,8 @@ class SyscallLoader
         this.syscallList = this.processSyscallNumberOverrides(this.syscallList);
     }
     
-    private ArrayList processSyscallNumberOverrides(final ArrayList syscallList) {
-        final ArrayList overrides = new Globals().getSyscallOverrides();
+    private ArrayList processSyscallNumberOverrides(final ArrayList<Syscall> syscallList) {
+        final ArrayList<SyscallNumberOverride> overrides = new Globals().getSyscallOverrides();
         for (int index = 0; index < overrides.size(); ++index) {
             final SyscallNumberOverride override = overrides.get(index);
             boolean match = false;

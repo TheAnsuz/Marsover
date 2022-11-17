@@ -321,11 +321,11 @@ public class ExtendedInstruction extends Instruction
         return modified;
     }
     
-    private ArrayList buildTranslationList(final String translation) {
+    private ArrayList<String> buildTranslationList(final String translation) {
         if (translation == null || translation.length() == 0) {
             return null;
         }
-        final ArrayList translationList = new ArrayList();
+        final ArrayList<String> translationList = new ArrayList();
         final StringTokenizer st = new StringTokenizer(translation, "\n");
         while (st.hasMoreTokens()) {
             translationList.add(st.nextToken());
@@ -333,7 +333,7 @@ public class ExtendedInstruction extends Instruction
         return translationList;
     }
     
-    private int getInstructionLength(final ArrayList translationList) {
+    private int getInstructionLength(final ArrayList<String> translationList) {
         if (translationList == null || translationList.size() == 0) {
             return 0;
         }

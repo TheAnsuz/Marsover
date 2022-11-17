@@ -83,7 +83,7 @@ public abstract class AbstractFontSettingDialog extends JDialog
         this.fontFamilySelector.setMaximumRowCount(commonFontFamilies.length);
         this.fontFamilySelector.setToolTipText("Short list of common font families followed by complete list.");
         final String[] fontStyles = EditorFont.getFontStyleStrings();
-        (this.fontStyleSelector = new JComboBox((E[])fontStyles)).setSelectedItem(EditorFont.styleIntToStyleString(this.currentFont.getStyle()));
+        (this.fontStyleSelector = new JComboBox((String[])fontStyles)).setSelectedItem(EditorFont.styleIntToStyleString(this.currentFont.getStyle()));
         this.fontStyleSelector.setEditable(false);
         this.fontStyleSelector.setToolTipText("List of available font styles.");
         (this.fontSizeSelector = new JSlider(6, 72, this.currentFont.getSize())).setToolTipText("Use slider to select font size from 6 to 72.");

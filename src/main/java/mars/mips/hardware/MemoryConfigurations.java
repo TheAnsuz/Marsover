@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class MemoryConfigurations
 {
-    private static ArrayList configurations;
+    private static ArrayList<MemoryConfiguration> configurations;
     private static MemoryConfiguration defaultConfiguration;
     private static MemoryConfiguration currentConfiguration;
     private static final String[] configurationItemNames;
@@ -35,7 +35,7 @@ public class MemoryConfigurations
     }
     
     public static MemoryConfiguration getConfigurationByName(final String name) {
-        final Iterator configurationsIterator = getConfigurationsIterator();
+        final Iterator<MemoryConfiguration> configurationsIterator = getConfigurationsIterator();
         while (configurationsIterator.hasNext()) {
             final MemoryConfiguration config = configurationsIterator.next();
             if (name.equals(config.getConfigurationIdentifier())) {

@@ -61,7 +61,7 @@ public class FilenameFinder
         }
     }
     
-    public static ArrayList getFilenameList(final ClassLoader classLoader, final String directoryPath, final ArrayList fileExtensions) {
+    public static ArrayList getFilenameList(final ClassLoader classLoader, final String directoryPath, final ArrayList<String> fileExtensions) {
         ArrayList filenameList = new ArrayList();
         if (fileExtensions == null || fileExtensions.size() == 0) {
             filenameList = getFilenameList(classLoader, directoryPath, "");
@@ -91,7 +91,7 @@ public class FilenameFinder
         return filenameList;
     }
     
-    public static ArrayList getFilenameList(final String directoryPath, final ArrayList fileExtensions) {
+    public static ArrayList getFilenameList(final String directoryPath, final ArrayList<String> fileExtensions) {
         ArrayList filenameList = new ArrayList();
         if (fileExtensions == null || fileExtensions.size() == 0) {
             filenameList = getFilenameList(directoryPath, "");
@@ -105,7 +105,7 @@ public class FilenameFinder
         return filenameList;
     }
     
-    public static ArrayList getFilenameList(final ArrayList nameList, String fileExtension) {
+    public static ArrayList getFilenameList(final ArrayList<String> nameList, String fileExtension) {
         fileExtension = checkFileExtension(fileExtension);
         final ArrayList filenameList = new ArrayList();
         final FileFilter filter = getFileFilter(fileExtension, "", false);
@@ -118,7 +118,7 @@ public class FilenameFinder
         return filenameList;
     }
     
-    public static ArrayList getFilenameList(final ArrayList nameList, final ArrayList fileExtensions) {
+    public static ArrayList getFilenameList(final ArrayList nameList, final ArrayList<String> fileExtensions) {
         ArrayList filenameList = new ArrayList();
         if (fileExtensions == null || fileExtensions.size() == 0) {
             filenameList = getFilenameList(nameList, "");
@@ -174,7 +174,7 @@ public class FilenameFinder
         }
         try {
             final ZipFile zf = new ZipFile(new File(jarName));
-            final Enumeration list = zf.entries();
+            final Enumeration<? extends ZipEntry> list = zf.entries();
             while (list.hasMoreElements()) {
                 final ZipEntry ze = list.nextElement();
                 if (ze.getName().startsWith(directoryPath + "/") && fileExtensionMatch(ze.getName(), fileExtension)) {
@@ -207,7 +207,7 @@ public class FilenameFinder
     
     private static class MarsFileFilter extends FileFilter
     {
-        private ArrayList extensions;
+        private ArrayList<String> extensions;
         private String fullDescription;
         private boolean acceptDirectories;
         
@@ -217,7 +217,7 @@ public class FilenameFinder
             this.acceptDirectories = acceptDirectories;
         }
         
-        private String buildFullDescription(final String description, final ArrayList extensions) {
+        private String buildFullDescription(final String description, final ArrayList<String> extensions) {
             String result = (description == null) ? "" : description;
             if (extensions.size() > 0) {
                 result += "  (";

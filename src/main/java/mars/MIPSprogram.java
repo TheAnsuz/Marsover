@@ -16,14 +16,15 @@ import mars.assembler.MacroPool;
 import mars.assembler.SymbolTable;
 import mars.simulator.BackStepper;
 import java.util.ArrayList;
+import mars.assembler.TokenList;
 
 public class MIPSprogram
 {
     private boolean steppedExecution;
     private String filename;
-    private ArrayList sourceList;
-    private ArrayList tokenList;
-    private ArrayList parsedList;
+    private ArrayList<String> sourceList;
+    private ArrayList<TokenList> tokenList;
+    private ArrayList<ProgramStatement> parsedList;
     private ArrayList machineList;
     private BackStepper backStepper;
     private SymbolTable localSymbolTable;
@@ -35,7 +36,7 @@ public class MIPSprogram
         this.steppedExecution = false;
     }
     
-    public ArrayList getSourceList() {
+    public ArrayList<String> getSourceList() {
         return this.sourceList;
     }
     
@@ -55,7 +56,7 @@ public class MIPSprogram
         return this.filename;
     }
     
-    public ArrayList getTokenList() {
+    public ArrayList<TokenList> getTokenList() {
         return this.tokenList;
     }
     
@@ -67,7 +68,7 @@ public class MIPSprogram
         return this.parsedList = new ArrayList();
     }
     
-    public ArrayList getParsedList() {
+    public ArrayList<ProgramStatement> getParsedList() {
         return this.parsedList;
     }
     
@@ -118,7 +119,7 @@ public class MIPSprogram
         this.localSymbolTable = new SymbolTable(this.filename);
     }
     
-    public ArrayList prepareFilesForAssembly(final ArrayList filenames, final String leadFilename, final String exceptionHandler) throws ProcessingException {
+    public ArrayList prepareFilesForAssembly(final ArrayList<String> filenames, final String leadFilename, final String exceptionHandler) throws ProcessingException {
         final ArrayList MIPSprogramsToAssemble = new ArrayList();
         int leadFilePosition = 0;
         if (exceptionHandler != null && exceptionHandler.length() > 0) {

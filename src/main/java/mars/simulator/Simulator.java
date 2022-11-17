@@ -263,7 +263,6 @@ public class Simulator extends Observable
                     Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
                     return new Boolean(this.done);
                 }
-                break;
             }
             if (DelayedBranch.isTriggered() || DelayedBranch.isRegistered()) {
                 DelayedBranch.clear();

@@ -51,7 +51,7 @@ public class Tokenizer
     }
     
     private ArrayList<SourceLine> processIncludes(final MIPSprogram program, final Map<String, String> inclFiles) throws ProcessingException {
-        final ArrayList source = program.getSourceList();
+        final ArrayList<String> source = program.getSourceList();
         final ArrayList<SourceLine> result = new ArrayList<SourceLine>(source.size());
         for (int i = 0; i < source.size(); ++i) {
             final String line = source.get(i);

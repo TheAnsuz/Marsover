@@ -102,7 +102,7 @@ public class RunAssembleAction extends GuiAction
                 final String errorReport = pe.errors().generateErrorAndWarningReport();
                 this.mainUI.messagesPane.postMarsMessage(errorReport);
                 this.mainUI.messagesPane.postMarsMessage(name + ": operation completed with errors.\n\n");
-                final ArrayList errorMessages = pe.errors().getErrorMessages();
+                final ArrayList<ErrorMessage> errorMessages = pe.errors().getErrorMessages();
                 for (int i = 0; i < errorMessages.size(); ++i) {
                     final ErrorMessage em = errorMessages.get(i);
                     if (em.getLine() != 0 || em.getPosition() != 0) {
@@ -122,7 +122,7 @@ public class RunAssembleAction extends GuiAction
         }
     }
     
-    private String buildFileNameList(final String preamble, final ArrayList programList) {
+    private String buildFileNameList(final String preamble, final ArrayList<MIPSprogram> programList) {
         String result = preamble;
         int lineLength = result.length();
         for (int i = 0; i < programList.size(); ++i) {

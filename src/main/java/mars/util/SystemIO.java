@@ -143,11 +143,11 @@ public class SystemIO
             Globals.getGui().getMessagesPane().postRunMessage(data);
             return data.length();
         }
-        if (!fdInUse(fd, 1)) {
+        if (!FileIOData.fdInUse(fd, 1)) {
             SystemIO.fileErrorString = new String("File descriptor " + fd + " is not open for writing");
             return -1;
         }
-        final OutputStream outputStream = (OutputStream)getStreamInUse(fd);
+        final OutputStream outputStream = (OutputStream)FileIOData.getStreamInUse(fd);
         try {
             for (int ii = 0; ii < lengthRequested; ++ii) {
                 outputStream.write(myBuffer[ii]);
@@ -175,11 +175,11 @@ public class SystemIO
             }
             return Math.min(myBuffer.length, bytesRead.length);
         }
-        if (!fdInUse(fd, 0)) {
+        if (!FileIOData.fdInUse(fd, 0)) {
             SystemIO.fileErrorString = new String("File descriptor " + fd + " is not open for reading");
             return -1;
         }
-        final InputStream InputStream = (InputStream)getStreamInUse(fd);
+        final InputStream InputStream = (InputStream)FileIOData.getStreamInUse(fd);
         try {
             retValue = InputStream.read(myBuffer, 0, lengthRequested);
             if (retValue == -1) {
@@ -200,14 +200,14 @@ public class SystemIO
     public static int openFile(final String filename, final int flags) {
         int retValue = -1;
         final char[] ch = { ' ' };
-        final int fdToUse = retValue = nowOpening(filename, flags);
+        final int fdToUse = retValue = FileIOData.nowOpening(filename, flags);
         if (fdToUse < 0) {
             return -1;
         }
         if (flags == 0) {
             try {
                 final FileInputStream inputStream = new FileInputStream(filename);
-                setStreamInUse(fdToUse, inputStream);
+                FileIOData.setStreamInUse(fdToUse, inputStream);
             }
             catch (FileNotFoundException e) {
                 SystemIO.fileErrorString = new String("File " + filename + " not found, open for input.");
@@ -217,7 +217,7 @@ public class SystemIO
         else if ((flags & 0x1) != 0x0) {
             try {
                 final FileOutputStream outputStream = new FileOutputStream(filename, (flags & 0x8) != 0x0);
-                setStreamInUse(fdToUse, outputStream);
+                FileIOData.setStreamInUse(fdToUse, outputStream);
             }
             catch (FileNotFoundException e) {
                 SystemIO.fileErrorString = new String("File " + filename + " not found, open for output.");
@@ -228,7 +228,7 @@ public class SystemIO
     }
     
     public static void closeFile(final int fd) {
-        close(fd);
+        FileIOData.close(fd);
     }
     
     public static void resetFiles() {

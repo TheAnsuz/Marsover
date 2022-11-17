@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 public class InstructionSet
 {
-    private ArrayList instructionList;
+    private ArrayList<Instruction> instructionList;
     private ArrayList opcodeMatchMaps;
     private SyscallLoader syscallLoader;
     
@@ -1787,10 +1787,11 @@ public class InstructionSet
             final Instruction inst = this.instructionList.get(i);
             inst.createExampleTokenList();
         }
-        final HashMap maskMap = new HashMap();
-        final ArrayList matchMaps = new ArrayList();
+        // Who did this?
+        final HashMap<Integer,HashMap> maskMap = new HashMap();
+        final ArrayList<MatchMap> matchMaps = new ArrayList();
         for (int j = 0; j < this.instructionList.size(); ++j) {
-            final Object rawInstr = this.instructionList.get(j);
+            final Instruction rawInstr = this.instructionList.get(j);
             if (rawInstr instanceof BasicInstruction) {
                 final BasicInstruction basic = (BasicInstruction)rawInstr;
                 final Integer mask = basic.getOpcodeMask();
@@ -1804,12 +1805,12 @@ public class InstructionSet
                 matchMap.put(match, basic);
             }
         }
-        Collections.sort((List<Comparable>)matchMaps);
+        Collections.sort(matchMaps);
         this.opcodeMatchMaps = matchMaps;
     }
     
     public BasicInstruction findByBinaryCode(final int binaryInstr) {
-        final ArrayList matchMaps = this.opcodeMatchMaps;
+        final ArrayList<MatchMap> matchMaps = this.opcodeMatchMaps;
         for (int i = 0; i < matchMaps.size(); ++i) {
             final MatchMap map = matchMaps.get(i);
             final BasicInstruction ret = map.find(binaryInstr);
@@ -1874,7 +1875,7 @@ public class InstructionSet
         }
     }
     
-    public ArrayList matchOperator(final String name) {
+    public ArrayList<Instruction> matchOperator(final String name) {
         ArrayList matchingInstructions = null;
         for (int i = 0; i < this.instructionList.size(); ++i) {
             if (this.instructionList.get(i).getName().equalsIgnoreCase(name)) {
@@ -1937,7 +1938,7 @@ public class InstructionSet
     {
         private int mask;
         private int maskLength;
-        private HashMap matchMap;
+        private HashMap<Integer,BasicInstruction> matchMap;
         
         public MatchMap(final int mask, final HashMap matchMap) {
             this.mask = mask;

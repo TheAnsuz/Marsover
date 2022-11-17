@@ -158,7 +158,7 @@ public class Globals
         final Properties properties = PropertiesFile.loadPropertiesFromFile(Globals.syscallPropertiesFile);
         final Enumeration keys = properties.keys();
         while (keys.hasMoreElements()) {
-            final String key = keys.nextElement();
+            final String key = keys.nextElement().toString();
             overrides.add(new SyscallNumberOverride(key, properties.getProperty(key)));
         }
         return overrides;

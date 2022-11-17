@@ -122,13 +122,13 @@ public class FileDumpMemoryAction extends GuiAction
             System.arraycopy(this.segmentListArray, 0, tempArray, 0, segmentCount);
             this.segmentListArray = tempArray;
         }
-        (this.segmentListSelector = new JComboBox((E[])this.segmentListArray)).setSelectedIndex(0);
+        (this.segmentListSelector = new JComboBox((String[])this.segmentListArray)).setSelectedIndex(0);
         final JPanel segmentPanel = new JPanel(new BorderLayout());
         segmentPanel.add(new Label("Memory Segment"), "North");
         segmentPanel.add(this.segmentListSelector);
         contents.add(segmentPanel, "West");
         final ArrayList dumpFormats = new DumpFormatLoader().loadDumpFormats();
-        (this.formatListSelector = new JComboBox((E[])dumpFormats.toArray())).setRenderer(new DumpFormatComboBoxRenderer(this.formatListSelector));
+        (this.formatListSelector = new JComboBox((String[])dumpFormats.toArray())).setRenderer(new DumpFormatComboBoxRenderer(this.formatListSelector));
         this.formatListSelector.setSelectedIndex(0);
         final JPanel formatPanel = new JPanel(new BorderLayout());
         formatPanel.add(new Label("Dump Format"), "North");
@@ -211,7 +211,7 @@ public class FileDumpMemoryAction extends GuiAction
     
     private class DumpFormatComboBoxRenderer extends BasicComboBoxRenderer
     {
-        private JComboBox myMaster;
+        private JComboBox<DumpFormat> myMaster;
         
         public DumpFormatComboBoxRenderer(final JComboBox myMaster) {
             this.myMaster = myMaster;

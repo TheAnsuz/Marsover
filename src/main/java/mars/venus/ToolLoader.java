@@ -20,7 +20,7 @@ public class ToolLoader
     
     public JMenu buildToolsMenu() {
         JMenu menu = null;
-        final ArrayList marsToolList = this.loadMarsTools();
+        final ArrayList<MarsToolClassAndInstance> marsToolList = this.loadMarsTools();
         if (!marsToolList.isEmpty()) {
             menu = new JMenu("Tools");
             menu.setMnemonic(84);
@@ -32,9 +32,9 @@ public class ToolLoader
         return menu;
     }
     
-    private ArrayList loadMarsTools() {
-        final ArrayList toolList = new ArrayList();
-        final ArrayList candidates = FilenameFinder.getFilenameList(this.getClass().getClassLoader(), "mars/tools", "class");
+    private ArrayList<MarsToolClassAndInstance> loadMarsTools() {
+        final ArrayList<MarsToolClassAndInstance> toolList = new ArrayList();
+        final ArrayList<String> candidates = FilenameFinder.getFilenameList(this.getClass().getClassLoader(), "mars/tools", "class");
         final HashMap tools = new HashMap();
         for (int i = 0; i < candidates.size(); ++i) {
             final String file = candidates.get(i);
@@ -45,7 +45,7 @@ public class ToolLoader
                         final String toolClassName = "mars.tools." + file.substring(0, file.indexOf("class") - 1);
                         final Class clas = Class.forName(toolClassName);
                         if (MarsTool.class.isAssignableFrom(clas) && !Modifier.isAbstract(clas.getModifiers()) && !Modifier.isInterface(clas.getModifiers())) {
-                            toolList.add(new MarsToolClassAndInstance(clas, clas.newInstance()));
+                            toolList.add(new MarsToolClassAndInstance(clas, (MarsTool)clas.newInstance()));
                         }
                     }
                     catch (Exception e) {
