@@ -2,6 +2,8 @@
 
 package mars;
 
+import dev.amrv.marsover.AppProperties;
+import dev.amrv.marsover.Marsover;
 import java.util.StringTokenizer;
 import mars.util.Binary;
 import java.awt.Color;
@@ -81,7 +83,7 @@ public class Settings extends Observable
     private String[] fontStyleSettingsValues;
     private String[] fontSizeSettingsValues;
     private String[] colorSettingsValues;
-    private Preferences preferences;
+    private AppProperties preferences;
     private String[] syntaxStyleColorSettingsValues;
     private boolean[] syntaxStyleBoldSettingsValues;
     private boolean[] syntaxStyleItalicSettingsValues;
@@ -106,7 +108,7 @@ public class Settings extends Observable
         this.fontStyleSettingsValues = new String[Settings.fontStyleSettingsKeys.length];
         this.fontSizeSettingsValues = new String[Settings.fontSizeSettingsKeys.length];
         this.colorSettingsValues = new String[Settings.colorSettingsKeys.length];
-        this.preferences = Preferences.userNodeForPackage(this.getClass());
+        this.preferences = new AppProperties(Marsover.FILE_SETTINGS, Marsover.RES_SETTINGS);
         this.initialize();
     }
     
@@ -134,14 +136,11 @@ public class Settings extends Observable
     }
     
     private void saveEditorSyntaxStyle(final int index) {
-        try {
+
             this.preferences.put(Settings.syntaxStyleColorSettingsKeys[index], this.syntaxStyleColorSettingsValues[index]);
             this.preferences.putBoolean(Settings.syntaxStyleBoldSettingsKeys[index], this.syntaxStyleBoldSettingsValues[index]);
             this.preferences.putBoolean(Settings.syntaxStyleItalicSettingsKeys[index], this.syntaxStyleItalicSettingsValues[index]);
-            this.preferences.flush();
-        }
-        catch (SecurityException ex) {}
-        catch (BackingStoreException ex2) {}
+
     }
     
     private void initializeEditorSyntaxStyles() {
@@ -637,39 +636,25 @@ public class Settings extends Observable
     }
     
     private void saveBooleanSetting(final int index) {
-        try {
+
             this.preferences.putBoolean(Settings.booleanSettingsKeys[index], this.booleanSettingsValues[index]);
-            this.preferences.flush();
-        }
-        catch (SecurityException ex) {}
-        catch (BackingStoreException ex2) {}
     }
     
     private void saveStringSetting(final int index) {
-        try {
+
             this.preferences.put(Settings.stringSettingsKeys[index], this.stringSettingsValues[index]);
-            this.preferences.flush();
-        }
-        catch (SecurityException ex) {}
-        catch (BackingStoreException ex2) {}
+
     }
     
     private void saveFontSetting(final int index, final String[] settingsKeys, final String[] settingsValues) {
-        try {
             this.preferences.put(settingsKeys[index], settingsValues[index]);
-            this.preferences.flush();
-        }
-        catch (SecurityException ex) {}
-        catch (BackingStoreException ex2) {}
+
     }
     
     private void saveColorSetting(final int index) {
-        try {
+
             this.preferences.put(Settings.colorSettingsKeys[index], this.colorSettingsValues[index]);
-            this.preferences.flush();
-        }
-        catch (SecurityException ex) {}
-        catch (BackingStoreException ex2) {}
+
     }
     
     private int[] getTextSegmentColumnOrder(final String stringOfColumnIndexes) {
