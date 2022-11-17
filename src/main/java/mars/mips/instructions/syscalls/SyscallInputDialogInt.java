@@ -3,11 +3,11 @@
 package mars.mips.instructions.syscalls;
 
 import javax.swing.JOptionPane;
-import mars.mips.hardware.AddressErrorException;
-import mars.ProcessingException;
 import mars.Globals;
-import mars.mips.hardware.RegisterFile;
+import mars.ProcessingException;
 import mars.ProgramStatement;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.RegisterFile;
 
 public class SyscallInputDialogInt extends AbstractSyscall
 {

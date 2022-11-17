@@ -2,11 +2,10 @@
 
 package mars.tools;
 
-import java.awt.Component;
-import javax.swing.JScrollPane;
 import java.awt.Font;
-import javax.swing.JTextArea;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class IntroToTools extends AbstractMarsToolAndApplication
 {

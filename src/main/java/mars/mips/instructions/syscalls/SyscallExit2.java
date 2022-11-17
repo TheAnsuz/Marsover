@@ -2,10 +2,10 @@
 
 package mars.mips.instructions.syscalls;
 
-import mars.ProcessingException;
-import mars.mips.hardware.RegisterFile;
 import mars.Globals;
+import mars.ProcessingException;
 import mars.ProgramStatement;
+import mars.mips.hardware.RegisterFile;
 
 public class SyscallExit2 extends AbstractSyscall
 {

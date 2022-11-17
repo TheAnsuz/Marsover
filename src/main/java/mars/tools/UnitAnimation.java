@@ -2,43 +2,41 @@
 
 package mars.tools;
 
-import java.awt.RenderingHints;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.awt.image.ImageObserver;
-import java.awt.Image;
-import javax.imageio.ImageIO;
-import javax.swing.Timer;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Element;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.Dimension;
 import java.awt.Color;
-import java.awt.GraphicsEnvironment;
-import java.awt.image.BufferedImage;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.text.DecimalFormat;
-import java.awt.GraphicsDevice;
 import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Vector;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 class UnitAnimation extends JPanel implements ActionListener
 {
     private static final long serialVersionUID = -2681757800180958534L;
-    private int PERIOD;
+    private final int PERIOD;
     private static final int PWIDTH = 1000;
     private static final int PHEIGHT = 574;
-    private GraphicsConfiguration gc;
-    private GraphicsDevice gd;
-    private int accelMemory;
-    private DecimalFormat df;
+    private final GraphicsConfiguration gc;
+    private final GraphicsDevice gd;
+    private final int accelMemory;
+    private final DecimalFormat df;
     private int counter;
     private boolean justStarted;
     private int indexX;
@@ -46,21 +44,21 @@ class UnitAnimation extends JPanel implements ActionListener
     private boolean xIsMoving;
     private boolean yIsMoving;
     private Vector<Vector<Vertex>> outputGraph;
-    private ArrayList<Vertex> vertexList;
+    private final ArrayList<Vertex> vertexList;
     private ArrayList<Vertex> vertexTraversed;
-    private HashMap<String, String> registerEquivalenceTable;
+    private final HashMap<String, String> registerEquivalenceTable;
     private String instructionCode;
-    private int countRegLabel;
-    private int countALULabel;
-    private int countPCLabel;
-    private int register;
-    private int control;
-    private int aluControl;
-    private int alu;
-    private int datapatTypeUsed;
-    private Boolean cursorInIM;
-    private Boolean cursorInALU;
-    private Boolean cursorInDataMem;
+    private final int countRegLabel;
+    private final int countALULabel;
+    private final int countPCLabel;
+    private final int register;
+    private final int control;
+    private final int aluControl;
+    private final int alu;
+    private final int datapatTypeUsed;
+    private final Boolean cursorInIM;
+    private final Boolean cursorInALU;
+    private final Boolean cursorInDataMem;
     private Boolean cursorInReg;
     private Graphics2D g2d;
     private BufferedImage datapath;
@@ -83,11 +81,11 @@ class UnitAnimation extends JPanel implements ActionListener
         this.setBackground(Color.white);
         this.setPreferredSize(new Dimension(1000, 574));
         this.initImages();
-        this.vertexList = new ArrayList<Vertex>();
+        this.vertexList = new ArrayList<>();
         this.counter = 0;
         this.justStarted = true;
         this.instructionCode = instructionBinary;
-        this.registerEquivalenceTable = new HashMap<String, String>();
+        this.registerEquivalenceTable = new HashMap<>();
         this.countRegLabel = 400;
         this.countALULabel = 380;
         this.countPCLabel = 380;
@@ -173,13 +171,13 @@ class UnitAnimation extends JPanel implements ActionListener
                     this.vertexList.add(vert);
                 }
             }
-            this.outputGraph = new Vector<Vector<Vertex>>();
-            this.vertexTraversed = new ArrayList<Vertex>();
+            this.outputGraph = new Vector<>();
+            this.vertexTraversed = new ArrayList<>();
             final int size = this.vertexList.size();
             for (int k = 0; k < this.vertexList.size(); ++k) {
                 final Vertex vertex = this.vertexList.get(k);
                 final ArrayList<Integer> targetList = vertex.getTargetVertex();
-                final Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+                final Vector<Vertex> vertexOfTargets = new Vector<>();
                 for (int l = 0; l < targetList.size(); ++l) {
                     vertexOfTargets.add(this.vertexList.get(targetList.get(l)));
                 }
@@ -262,13 +260,13 @@ class UnitAnimation extends JPanel implements ActionListener
                     this.vertexList.add(vert);
                 }
             }
-            this.outputGraph = new Vector<Vector<Vertex>>();
-            this.vertexTraversed = new ArrayList<Vertex>();
+            this.outputGraph = new Vector<>();
+            this.vertexTraversed = new ArrayList<>();
             final int size = this.vertexList.size();
             for (int k = 0; k < this.vertexList.size(); ++k) {
                 final Vertex vertex = this.vertexList.get(k);
                 final ArrayList<Integer> targetList = vertex.getTargetVertex();
-                final Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+                final Vector<Vertex> vertexOfTargets = new Vector<>();
                 for (int l = 0; l < targetList.size(); ++l) {
                     vertexOfTargets.add(this.vertexList.get(targetList.get(l)));
                 }
@@ -586,7 +584,7 @@ class UnitAnimation extends JPanel implements ActionListener
         private boolean first_interaction;
         private boolean active;
         private boolean isText;
-        private ArrayList<Integer> targetVertex;
+        private final ArrayList<Integer> targetVertex;
         
         public Vertex(final int index, final int init, final int end, final String name, final int oppositeAxis, final boolean isMovingXaxis, final String listOfColors, final String listTargetVertex, final boolean isText) {
             this.numIndex = index;
@@ -615,7 +613,7 @@ class UnitAnimation extends JPanel implements ActionListener
                 this.direction = 2;
             }
             final String[] list = listTargetVertex.split("#");
-            this.targetVertex = new ArrayList<Integer>();
+            this.targetVertex = new ArrayList<>();
             for (int i = 0; i < list.length; ++i) {
                 this.targetVertex.add(Integer.parseInt(list[i]));
             }

@@ -2,17 +2,16 @@
 
 package mars.venus;
 
-import mars.util.SystemIO;
-import java.awt.Component;
-import mars.mips.hardware.Memory;
+import java.awt.event.ActionEvent;
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
+import mars.ProcessingException;
 import mars.mips.hardware.Coprocessor0;
 import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.Memory;
 import mars.mips.hardware.RegisterFile;
-import mars.ProcessingException;
-import mars.Globals;
-import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
-import javax.swing.Icon;
+import mars.util.SystemIO;
 
 public class RunResetAction extends GuiAction
 {

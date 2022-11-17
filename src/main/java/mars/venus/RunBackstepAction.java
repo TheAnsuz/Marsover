@@ -2,17 +2,15 @@
 
 package mars.venus;
 
-import mars.mips.hardware.Coprocessor1;
-import mars.mips.hardware.Coprocessor0;
-import mars.mips.hardware.RegisterFile;
-import java.util.Observer;
-import mars.mips.hardware.Memory;
-import mars.Globals;
-import java.awt.Component;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import mars.Globals;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.RegisterFile;
 
 public class RunBackstepAction extends GuiAction
 {

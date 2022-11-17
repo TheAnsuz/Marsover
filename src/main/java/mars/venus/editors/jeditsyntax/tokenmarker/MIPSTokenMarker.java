@@ -2,21 +2,20 @@
 
 package mars.venus.editors.jeditsyntax.tokenmarker;
 
-import mars.mips.hardware.Register;
-import mars.mips.hardware.Coprocessor1;
-import mars.mips.hardware.RegisterFile;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
+import javax.swing.text.Segment;
+import mars.Globals;
 import mars.assembler.Directives;
-import mars.venus.editors.jeditsyntax.PopupHelpItem;
+import mars.assembler.TokenTypes;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.Register;
+import mars.mips.hardware.RegisterFile;
 import mars.mips.instructions.BasicInstruction;
 import mars.mips.instructions.Instruction;
-import mars.Globals;
-import java.util.ArrayList;
-import mars.assembler.TokenTypes;
-import javax.swing.text.Segment;
 import mars.venus.editors.jeditsyntax.KeywordMap;
+import mars.venus.editors.jeditsyntax.PopupHelpItem;
 
 public class MIPSTokenMarker extends TokenMarker
 {
@@ -214,7 +213,7 @@ public class MIPSTokenMarker extends TokenMarker
         ArrayList matches = null;
         if (token != null && token.id == 6) {
             final ArrayList<Instruction> instrMatches = Globals.instructionSet.matchOperator(tokenText);
-            if (instrMatches.size() > 0) {
+            if (!instrMatches.isEmpty()) {
                 int realMatches = 0;
                 matches = new ArrayList();
                 for (int i = 0; i < instrMatches.size(); ++i) {

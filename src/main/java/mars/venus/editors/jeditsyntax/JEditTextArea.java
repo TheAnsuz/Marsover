@@ -2,74 +2,67 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.AbstractUndoableEdit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.AdjustmentEvent;
-import java.util.Enumeration;
-import java.awt.Insets;
-import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
-import java.util.Vector;
-import javax.swing.SwingUtilities;
-import javax.swing.MenuElement;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractButton;
-import javax.swing.MenuSelectionManager;
-import java.awt.event.ActionListener;
-import javax.swing.JMenuItem;
-import mars.Globals;
-import java.util.ArrayList;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.CaretEvent;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.StringSelection;
-import javax.swing.event.CaretListener;
-import javax.swing.undo.UndoableEdit;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
-import mars.venus.editors.jeditsyntax.tokenmarker.Token;
-import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
-import javax.swing.text.TabExpander;
-import javax.swing.text.Utilities;
 import java.awt.FontMetrics;
-import java.awt.event.KeyEvent;
+import java.awt.Insets;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseListener;
-import java.awt.event.ComponentListener;
-import java.awt.event.AdjustmentListener;
 import java.awt.LayoutManager;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Vector;
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import java.awt.Component;
-import javax.swing.JScrollPane;
-import javax.swing.text.Segment;
-import javax.swing.event.EventListenerList;
-import javax.swing.Timer;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
-import java.awt.Color;
-import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.MenuElement;
+import javax.swing.MenuSelectionManager;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.EventListenerList;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.Segment;
+import javax.swing.text.Utilities;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
+import mars.Globals;
+import mars.venus.editors.jeditsyntax.tokenmarker.Token;
+import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
 
 public class JEditTextArea extends JComponent
 {
@@ -416,7 +409,7 @@ public class JEditTextArea extends JComponent
                 final char c = segmentArray[i + segmentOffset];
                 int charWidth;
                 if (c == '\t') {
-                    charWidth = (int)this.painter.nextTabStop((float)width, i) - width;
+                    charWidth = (int)this.painter.nextTabStop(width, i) - width;
                 }
                 else {
                     charWidth = fm.charWidth(c);
@@ -464,7 +457,7 @@ public class JEditTextArea extends JComponent
                 final char c2 = segmentArray[segmentOffset + offset + j];
                 int charWidth2;
                 if (c2 == '\t') {
-                    charWidth2 = (int)this.painter.nextTabStop((float)width, offset + j) - width;
+                    charWidth2 = (int)this.painter.nextTabStop(width, offset + j) - width;
                 }
                 else {
                     charWidth2 = fm.charWidth(c2);
@@ -1241,7 +1234,7 @@ public class JEditTextArea extends JComponent
         private Component center;
         private Component right;
         private Component bottom;
-        private Vector leftOfScrollBar;
+        private final Vector leftOfScrollBar;
         
         ScrollLayout() {
             this.leftOfScrollBar = new Vector();
@@ -1659,8 +1652,8 @@ public class JEditTextArea extends JComponent
     
     private class PopupHelpActionListener implements ActionListener
     {
-        private String tokenText;
-        private String text;
+        private final String tokenText;
+        private final String text;
         
         public PopupHelpActionListener(final String tokenText, final String text) {
             this.tokenText = tokenText;

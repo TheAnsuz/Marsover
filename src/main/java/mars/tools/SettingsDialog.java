@@ -2,29 +2,24 @@
 
 package mars.tools;
 
-import javax.swing.JLabel;
-import javax.swing.JColorChooser;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.Box;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Container;
-import java.awt.Component;
-import java.awt.GridLayout;
-import javax.swing.JPanel;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import java.awt.Frame;
-import javax.swing.JFrame;
-import java.awt.Color;
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.border.TitledBorder;
 
 class SettingsDialog extends JDialog
 {
@@ -49,7 +44,7 @@ class SettingsDialog extends JDialog
     
     SettingsDialog(final JFrame frame) {
         super(frame, "Magnifier Tool Settings");
-        this.scribblerLineWidthSettings = new Integer[] { new Integer(1), new Integer(2), new Integer(3), new Integer(4), new Integer(5), new Integer(6), new Integer(7), new Integer(8) };
+        this.scribblerLineWidthSettings = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8};
         (this.dialog = this).setDefaultCloseOperation(2);
         final Container contentPane = this.getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -145,7 +140,7 @@ class SettingsDialog extends JDialog
         scribblerSettings.setBorder(new TitledBorder("Scribbler"));
         final Box scribblerSettingsBox = Box.createHorizontalBox();
         scribblerSettings.add(scribblerSettingsBox);
-        (this.lineWidthSetting = new JComboBox((Integer[])this.scribblerLineWidthSettings)).setToolTipText("Scribbler line thickness in pixels.");
+        (this.lineWidthSetting = new JComboBox(this.scribblerLineWidthSettings)).setToolTipText("Scribbler line thickness in pixels.");
         this.lineWidthSetting.setSelectedIndex(((Magnifier)this.getOwner()).scribblerSettings.getLineWidth() - 1);
         (this.lineColorSetting = new JButton("   ")).setToolTipText("Click here to change Scribbler line color.");
         this.lineColorSetting.setBackground(((Magnifier)this.getOwner()).scribblerSettings.getLineColor());

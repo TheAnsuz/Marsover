@@ -2,8 +2,8 @@
 
 package mars.mips.instructions.syscalls;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 class ToneGenerator
 {

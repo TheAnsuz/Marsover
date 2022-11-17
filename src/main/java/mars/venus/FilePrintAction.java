@@ -2,14 +2,12 @@
 
 package mars.venus;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.BufferedReader;
-import java.io.StringReader;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 public class FilePrintAction extends GuiAction
 {
@@ -33,14 +31,14 @@ public class FilePrintAction extends GuiAction
             return;
         }
         final BufferedReader in = new BufferedReader(new StringReader(editPane.getSource()));
-        final int lineNumberDigits = new Integer(editPane.getSourceLineCount()).toString().length();
+        final int lineNumberDigits = Integer.toString(editPane.getSourceLineCount()).length();
         String lineNumberString = "";
         int lineNumber = 0;
         try {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 if (editPane.showingLineNumbers()) {
                     ++lineNumber;
-                    for (lineNumberString = new Integer(lineNumber).toString() + ": "; lineNumberString.length() < lineNumberDigits; lineNumberString += " ") {}
+                    for (lineNumberString = Integer.toString(lineNumber) + ": "; lineNumberString.length() < lineNumberDigits; lineNumberString += " ") {}
                 }
                 line = lineNumberString + line + "\n";
                 out.write(line.toCharArray(), 0, line.length());

@@ -2,29 +2,24 @@
 
 package mars.venus;
 
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.Box;
-import java.awt.event.ActionListener;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import java.awt.Component;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.Container;
-import java.awt.Frame;
-import mars.Globals;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import javax.swing.AbstractButton;
+import javax.swing.Box;
 import javax.swing.Icon;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+import mars.Globals;
 
 public class SettingsExceptionHandlerAction extends GuiAction
 {
@@ -115,7 +110,7 @@ public class SettingsExceptionHandlerAction extends GuiAction
     {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            final boolean selected = ((JCheckBox)e.getSource()).isSelected();
+            final boolean selected = ((AbstractButton)e.getSource()).isSelected();
             SettingsExceptionHandlerAction.this.exceptionHandlerSelectionButton.setEnabled(selected);
             SettingsExceptionHandlerAction.this.exceptionHandlerDisplay.setEnabled(selected);
         }

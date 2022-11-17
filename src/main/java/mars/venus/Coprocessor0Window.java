@@ -2,35 +2,31 @@
 
 package mars.venus;
 
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.JTableHeader;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.Color;
-import javax.swing.table.TableModel;
-import mars.util.Binary;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.table.DefaultTableCellRenderer;
-import mars.mips.hardware.RegisterAccessNotice;
-import mars.simulator.SimulatorNotice;
 import java.util.Observable;
-import javax.swing.event.TableModelEvent;
-import mars.mips.hardware.Coprocessor0;
-import java.awt.Component;
-import javax.swing.JScrollPane;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import javax.swing.table.TableCellRenderer;
-import mars.Globals;
-import mars.simulator.Simulator;
-import mars.Settings;
-import mars.mips.hardware.Register;
-import javax.swing.JTable;
 import java.util.Observer;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import mars.Globals;
+import mars.Settings;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Register;
+import mars.mips.hardware.RegisterAccessNotice;
+import mars.simulator.Simulator;
+import mars.simulator.SimulatorNotice;
+import mars.util.Binary;
 
 public class Coprocessor0Window extends JPanel implements Observer
 {
@@ -69,7 +65,7 @@ public class Coprocessor0Window extends JPanel implements Observer
         for (int i = 0; i < Coprocessor0Window.registers.length; ++i) {
             this.rowGivenRegNumber[Coprocessor0Window.registers[i].getNumber()] = i;
             this.tableData[i][0] = Coprocessor0Window.registers[i].getName();
-            this.tableData[i][1] = new Integer(Coprocessor0Window.registers[i].getNumber());
+            this.tableData[i][1] = Coprocessor0Window.registers[i].getNumber();
             this.tableData[i][2] = NumberDisplayBaseChooser.formatNumber(Coprocessor0Window.registers[i].getValue(), NumberDisplayBaseChooser.getBase(Coprocessor0Window.settings.getDisplayValuesInHex()));
         }
         return this.tableData;
@@ -145,8 +141,8 @@ public class Coprocessor0Window extends JPanel implements Observer
     
     private class RegisterCellRenderer extends DefaultTableCellRenderer
     {
-        private Font font;
-        private int alignment;
+        private final Font font;
+        private final int alignment;
         
         public RegisterCellRenderer(final Font font, final int alignment) {
             this.font = font;
@@ -257,8 +253,8 @@ public class Coprocessor0Window extends JPanel implements Observer
     
     private class MyTippedJTable extends JTable
     {
-        private String[] regToolTips;
-        private String[] columnToolTips;
+        private final String[] regToolTips;
+        private final String[] columnToolTips;
         
         MyTippedJTable(final RegTableModel m) {
             super(m);

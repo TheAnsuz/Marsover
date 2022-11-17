@@ -172,8 +172,8 @@ public class Binary
     }
     
     public static String intToHexString(final int d) {
-        final String leadingZero = new String("0");
-        final String leadingX = new String("0x");
+        final String leadingZero = "0";
+        final String leadingX = "0x";
         String t;
         for (t = Integer.toHexString(d); t.length() < 8; t = leadingZero.concat(t)) {}
         t = leadingX.concat(t);
@@ -181,8 +181,8 @@ public class Binary
     }
     
     public static String intToHalfHexString(final int d) {
-        final String leadingZero = new String("0");
-        final String leadingX = new String("0x");
+        final String leadingZero = "0";
+        final String leadingX = "0x";
         String t = Integer.toHexString(d);
         if (t.length() > 4) {
             t = t.substring(t.length() - 4, t.length());
@@ -212,7 +212,7 @@ public class Binary
     }
     
     public static int stringToInt(final String s) throws NumberFormatException {
-        String work = new String(s);
+        String work = s;
         int result = 0;
         try {
             result = Integer.decode(s);
@@ -249,7 +249,7 @@ public class Binary
     }
     
     public static long stringToLong(final String s) throws NumberFormatException {
-        String work = new String(s);
+        String work = s;
         long result = 0L;
         try {
             result = Long.decode(s);

@@ -3,12 +3,11 @@
 package mars.venus;
 
 import java.lang.reflect.Modifier;
-import mars.tools.MarsTool;
-import java.util.HashMap;
-import mars.util.FilenameFinder;
 import java.util.ArrayList;
-import javax.swing.Action;
+import java.util.HashMap;
 import javax.swing.JMenu;
+import mars.tools.MarsTool;
+import mars.util.FilenameFinder;
 
 public class ToolLoader
 {

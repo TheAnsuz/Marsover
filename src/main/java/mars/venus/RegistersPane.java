@@ -2,7 +2,6 @@
 
 package mars.venus;
 
-import java.awt.Component;
 import javax.swing.JTabbedPane;
 
 public class RegistersPane extends JTabbedPane
@@ -10,7 +9,7 @@ public class RegistersPane extends JTabbedPane
     RegistersWindow regsTab;
     Coprocessor1Window cop1Tab;
     Coprocessor0Window cop0Tab;
-    private VenusUI mainUI;
+    private final VenusUI mainUI;
     
     public RegistersPane(final VenusUI appFrame, final RegistersWindow regs, final Coprocessor1Window cop1, final Coprocessor0Window cop0) {
         this.mainUI = appFrame;

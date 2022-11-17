@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ErrorList
 {
-    private ArrayList<ErrorMessage> messages;
+    private final ArrayList<ErrorMessage> messages;
     private int errorCount;
     private int warningCount;
     public static final String ERROR_MESSAGE_PREFIX = "Error";

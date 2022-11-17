@@ -2,11 +2,11 @@
 
 package mars.assembler;
 
-import mars.mips.hardware.Register;
 import mars.Globals;
-import mars.util.Binary;
 import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.Register;
 import mars.mips.hardware.RegisterFile;
+import mars.util.Binary;
 
 public final class TokenTypes
 {

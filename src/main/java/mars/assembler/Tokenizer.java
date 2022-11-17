@@ -2,16 +2,15 @@
 
 package mars.assembler;
 
-import mars.Globals;
-import java.util.Collection;
-import mars.ErrorMessage;
 import java.io.File;
-import mars.ProcessingException;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
-import mars.MIPSprogram;
+import java.util.Map;
 import mars.ErrorList;
+import mars.ErrorMessage;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.ProcessingException;
 
 public class Tokenizer
 {
@@ -32,15 +31,15 @@ public class Tokenizer
     
     public ArrayList tokenize(final MIPSprogram p) throws ProcessingException {
         this.sourceMIPSprogram = p;
-        this.equivalents = new HashMap<String, String>();
+        this.equivalents = new HashMap<>();
         final ArrayList tokenList = new ArrayList();
-        final ArrayList<SourceLine> source = this.processIncludes(p, new HashMap<String, String>());
+        final ArrayList<SourceLine> source = this.processIncludes(p, new HashMap<>());
         p.setSourceLineList(source);
         for (int i = 0; i < source.size(); ++i) {
             final String sourceLine = source.get(i).getSource();
             final TokenList currentLineTokens = this.tokenizeLine(i + 1, sourceLine);
             tokenList.add(currentLineTokens);
-            if (sourceLine.length() > 0 && sourceLine != currentLineTokens.getProcessedLine()) {
+            if (sourceLine.length() > 0 && (sourceLine == null ? currentLineTokens.getProcessedLine() != null : !sourceLine.equals(currentLineTokens.getProcessedLine()))) {
                 source.set(i, new SourceLine(currentLineTokens.getProcessedLine(), source.get(i).getMIPSprogram(), source.get(i).getLineNumber()));
             }
         }
@@ -52,7 +51,7 @@ public class Tokenizer
     
     private ArrayList<SourceLine> processIncludes(final MIPSprogram program, final Map<String, String> inclFiles) throws ProcessingException {
         final ArrayList<String> source = program.getSourceList();
-        final ArrayList<SourceLine> result = new ArrayList<SourceLine>(source.size());
+        final ArrayList<SourceLine> result = new ArrayList<>(source.size());
         for (int i = 0; i < source.size(); ++i) {
             final String line = source.get(i);
             final TokenList tl = this.tokenizeLine(program, i + 1, line, false);

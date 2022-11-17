@@ -2,63 +2,62 @@
 
 package mars.venus;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.TableColumnModelEvent;
-import javax.swing.table.JTableHeader;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Insets;
-import javax.swing.border.EmptyBorder;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import mars.Settings;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.DefaultTableColumnModel;
-import mars.mips.hardware.AddressErrorException;
-import java.awt.event.MouseListener;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.awt.Point;
-import javax.swing.table.TableModel;
-import javax.swing.event.TableModelEvent;
-import mars.mips.hardware.RegisterFile;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.AbstractButton;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
-import java.util.Arrays;
-import java.util.Enumeration;
-import mars.mips.hardware.Memory;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.simulator.SimulatorNotice;
-import java.util.Observable;
-import mars.util.Binary;
-import java.util.ArrayList;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.table.TableCellRenderer;
-import mars.util.EditorFont;
-import mars.ProgramStatement;
-import java.awt.Component;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import java.awt.LayoutManager;
-import java.awt.FlowLayout;
-import mars.Globals;
-import mars.simulator.Simulator;
-import javax.swing.event.TableModelListener;
-import java.awt.Font;
-import java.awt.Container;
-import java.util.Hashtable;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JPanel;
-import java.util.Observer;
-import javax.swing.JInternalFrame;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import mars.Globals;
+import mars.ProgramStatement;
+import mars.Settings;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
+import mars.simulator.Simulator;
+import mars.simulator.SimulatorNotice;
+import mars.util.Binary;
+import mars.util.EditorFont;
 
 public class TextSegmentWindow extends JInternalFrame implements Observer
 {
-    private JPanel programArgumentsPanel;
-    private JTextField programArgumentsTextField;
+    private final JPanel programArgumentsPanel;
+    private final JTextField programArgumentsTextField;
     private static final int PROGRAM_ARGUMENT_TEXTFIELD_COLUMNS = 40;
     private JTable table;
     private JScrollPane tableScroller;
@@ -66,9 +65,9 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     private int[] intAddresses;
     private Hashtable<Integer,Integer> addressRows;
     private Hashtable<Integer, ModifiedCode> executeMods;
-    private Container contentPane;
+    private final Container contentPane;
     private TextTableModel tableModel;
-    private Font tableCellFont;
+    private final Font tableCellFont;
     private boolean codeHighlighting;
     private boolean breakpointsEnabled;
     private int highlightAddress;
@@ -104,7 +103,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
         this.data = new Object[sourceStatementList.size()][TextSegmentWindow.columnNames.length];
         this.intAddresses = new int[this.data.length];
         this.addressRows = new Hashtable(this.data.length);
-        this.executeMods = new Hashtable<Integer, ModifiedCode>(this.data.length);
+        this.executeMods = new Hashtable<>(this.data.length);
         int maxSourceLineNumber = 0;
         for (int i = sourceStatementList.size() - 1; i >= 0; --i) {
             final ProgramStatement statement = sourceStatementList.get(i);
@@ -118,13 +117,13 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
         for (int j = 0; j < sourceStatementList.size(); ++j) {
             final ProgramStatement statement2 = sourceStatementList.get(j);
             this.intAddresses[j] = statement2.getAddress();
-            this.addressRows.put(new Integer(this.intAddresses[j]), new Integer(j));
+            this.addressRows.put(this.intAddresses[j], j);
             this.data[j][0] = Boolean.FALSE;
             this.data[j][1] = NumberDisplayBaseChooser.formatUnsignedInteger(statement2.getAddress(), addressBase);
             this.data[j][2] = NumberDisplayBaseChooser.formatNumber(statement2.getBinaryStatement(), 16);
             this.data[j][3] = statement2.getPrintableBasicAssemblyStatement();
             String sourceString = "";
-            if (!statement2.getSource().equals("")) {
+            if (!statement2.getSource().isEmpty()) {
                 leadingSpaces = sourceLineDigits - ("" + statement2.getSourceLine()).length();
                 String lineNumber = "          ".substring(0, leadingSpaces) + statement2.getSourceLine() + ": ";
                 if (statement2.getSourceLine() == lastLine) {
@@ -269,7 +268,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
                     if (this.tableModel.getValueAt(row, 2).equals(strValue)) {
                         return;
                     }
-                    mc = new ModifiedCode(Integer.valueOf(row), this.tableModel.getValueAt(row, 2), this.tableModel.getValueAt(row, 3), this.tableModel.getValueAt(row, 4));
+                    mc = new ModifiedCode(row, this.tableModel.getValueAt(row, 2), this.tableModel.getValueAt(row, 3), this.tableModel.getValueAt(row, 4));
                     this.executeMods.put(row, mc);
                     strBasic = new ProgramStatement(value, address).getPrintableBasicAssemblyStatement();
                 }
@@ -342,7 +341,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
                 this.tableModel.setValueAt(Boolean.FALSE, i, 0);
             }
         }
-        ((JCheckBox)((DefaultCellEditor)this.table.getCellEditor(0, 0)).getComponent()).setSelected(false);
+        ((AbstractButton)((DefaultCellEditor)this.table.getCellEditor(0, 0)).getComponent()).setSelected(false);
     }
     
     public void highlightStepAtPC() {
@@ -444,7 +443,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     private int findRowForAddress(final int address) throws IllegalArgumentException {
         int addressRow = 0;
         try {
-            addressRow = this.addressRows.get(new Integer(address));
+            addressRow = this.addressRows.get(address);
         }
         catch (NullPointerException e) {
             throw new IllegalArgumentException();
@@ -543,10 +542,10 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     
     private class ModifiedCode
     {
-        private Integer row;
-        private Object code;
-        private Object basic;
-        private Object source;
+        private final Integer row;
+        private final Object code;
+        private final Object basic;
+        private final Object source;
         
         private ModifiedCode(final Integer row, final Object code, final Object basic, final Object source) {
             this.row = row;
@@ -677,7 +676,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer
     private class MyTippedJTable extends JTable
     {
         private JTableHeader tableHeader;
-        private String[] columnToolTips;
+        private final String[] columnToolTips;
         
         MyTippedJTable(final TextTableModel m) {
             super(m);

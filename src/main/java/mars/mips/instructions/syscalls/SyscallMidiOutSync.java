@@ -3,8 +3,8 @@
 package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
-import mars.mips.hardware.RegisterFile;
 import mars.ProgramStatement;
+import mars.mips.hardware.RegisterFile;
 
 public class SyscallMidiOutSync extends AbstractSyscall
 {

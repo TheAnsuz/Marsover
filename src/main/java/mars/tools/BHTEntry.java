@@ -4,7 +4,7 @@ package mars.tools;
 
 public class BHTEntry
 {
-    private boolean[] m_history;
+    private final boolean[] m_history;
     private boolean m_prediction;
     private int m_incorrect;
     private int m_correct;

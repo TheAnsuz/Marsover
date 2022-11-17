@@ -3,9 +3,9 @@
 package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
-import mars.util.SystemIO;
-import mars.mips.hardware.RegisterFile;
 import mars.ProgramStatement;
+import mars.mips.hardware.RegisterFile;
+import mars.util.SystemIO;
 
 public class SyscallPrintInt extends AbstractSyscall
 {
@@ -15,6 +15,6 @@ public class SyscallPrintInt extends AbstractSyscall
     
     @Override
     public void simulate(final ProgramStatement statement) throws ProcessingException {
-        SystemIO.printString(new Integer(RegisterFile.getValue(4)).toString());
+        SystemIO.printString(Integer.toString(RegisterFile.getValue(4)));
     }
 }

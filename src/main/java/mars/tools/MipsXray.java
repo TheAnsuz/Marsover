@@ -2,66 +2,62 @@
 
 package mars.tools;
 
-import java.awt.RenderingHints;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
-import java.awt.Font;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Document;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Element;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.Dimension;
-import java.awt.PointerInfo;
-import java.awt.MouseInfo;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Vector;
-import java.text.DecimalFormat;
-import java.awt.GraphicsDevice;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.awt.Color;
-import mars.venus.RunBackstepAction;
-import mars.venus.RunStepAction;
-import mars.venus.RunAssembleAction;
-import javax.swing.KeyStroke;
-import java.awt.Toolkit;
-import mars.mips.instructions.BasicInstructionFormat;
-import mars.ProgramStatement;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.instructions.BasicInstruction;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import mars.mips.hardware.Memory;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import java.io.IOException;
-import java.awt.image.ImageObserver;
-import java.awt.Image;
-import javax.imageio.ImageIO;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import mars.Globals;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
 import java.awt.GridBagLayout;
-import java.awt.Component;
-import javax.swing.JOptionPane;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.PointerInfo;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JComponent;
-import javax.swing.Timer;
-import javax.swing.JToolBar;
-import mars.venus.VenusUI;
-import javax.swing.Action;
-import javax.swing.JButton;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
-import java.awt.GraphicsConfiguration;
-import java.awt.Container;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Vector;
+import javax.imageio.ImageIO;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import java.awt.Graphics;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.Timer;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import mars.Globals;
+import mars.ProgramStatement;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.instructions.BasicInstruction;
+import mars.mips.instructions.BasicInstructionFormat;
+import mars.venus.RunAssembleAction;
+import mars.venus.RunBackstepAction;
+import mars.venus.RunStepAction;
+import mars.venus.VenusUI;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class MipsXray extends AbstractMarsToolAndApplication
 {
@@ -239,9 +235,9 @@ public class MipsXray extends AbstractMarsToolAndApplication
         final Toolkit tk = Toolkit.getDefaultToolkit();
         final Class cs = this.getClass();
         try {
-            this.runAssembleAction = new RunAssembleAction("Assemble", new ImageIcon(tk.getImage(cs.getResource("/images/Assemble22.png"))), "Assemble the current file and clear breakpoints", new Integer(65), KeyStroke.getKeyStroke(114, 0), this.mainUI);
-            this.runStepAction = new RunStepAction("Step", new ImageIcon(tk.getImage(cs.getResource("/images/StepForward22.png"))), "Run one step at a time", new Integer(84), KeyStroke.getKeyStroke(118, 0), this.mainUI);
-            this.runBackstepAction = new RunBackstepAction("Backstep", new ImageIcon(tk.getImage(cs.getResource("/images/StepBack22.png"))), "Undo the last step", new Integer(66), KeyStroke.getKeyStroke(119, 0), this.mainUI);
+            this.runAssembleAction = new RunAssembleAction("Assemble", new ImageIcon(tk.getImage(cs.getResource("/images/Assemble22.png"))), "Assemble the current file and clear breakpoints", 65, KeyStroke.getKeyStroke(114, 0), this.mainUI);
+            this.runStepAction = new RunStepAction("Step", new ImageIcon(tk.getImage(cs.getResource("/images/StepForward22.png"))), "Run one step at a time", 84, KeyStroke.getKeyStroke(118, 0), this.mainUI);
+            this.runBackstepAction = new RunBackstepAction("Backstep", new ImageIcon(tk.getImage(cs.getResource("/images/StepBack22.png"))), "Undo the last step", 66, KeyStroke.getKeyStroke(119, 0), this.mainUI);
         }
         catch (Exception e) {
             System.out.println("Internal Error: images folder not found, or other null pointer exception while creating Action objects");
@@ -272,8 +268,8 @@ public class MipsXray extends AbstractMarsToolAndApplication
         private Color color;
         private boolean first_interaction;
         private boolean active;
-        private boolean isText;
-        private ArrayList<Integer> targetVertex;
+        private final boolean isText;
+        private final ArrayList<Integer> targetVertex;
         
         public Vertex(final int index, final int init, final int end, final String name, final int oppositeAxis, final boolean isMovingXaxis, final String listOfColors, final String listTargetVertex, final boolean isText) {
             this.numIndex = index;
@@ -302,7 +298,7 @@ public class MipsXray extends AbstractMarsToolAndApplication
                 this.direction = 2;
             }
             final String[] list = listTargetVertex.split("#");
-            this.targetVertex = new ArrayList<Integer>();
+            this.targetVertex = new ArrayList<>();
             for (int i = 0; i < list.length; ++i) {
                 this.targetVertex.add(Integer.parseInt(list[i]));
             }
@@ -406,13 +402,13 @@ public class MipsXray extends AbstractMarsToolAndApplication
     class DatapathAnimation extends JPanel implements ActionListener, MouseListener
     {
         private static final long serialVersionUID = -2681757800180958534L;
-        private int PERIOD;
+        private final int PERIOD;
         private static final int PWIDTH = 1000;
         private static final int PHEIGHT = 574;
-        private GraphicsConfiguration gc;
-        private GraphicsDevice gd;
-        private int accelMemory;
-        private DecimalFormat df;
+        private final GraphicsConfiguration gc;
+        private final GraphicsDevice gd;
+        private final int accelMemory;
+        private final DecimalFormat df;
         private int counter;
         private boolean justStarted;
         private int indexX;
@@ -420,25 +416,25 @@ public class MipsXray extends AbstractMarsToolAndApplication
         private boolean xIsMoving;
         private boolean yIsMoving;
         private Vector<Vector<Vertex>> outputGraph;
-        private ArrayList<Vertex> vertexList;
+        private final ArrayList<Vertex> vertexList;
         private ArrayList<Vertex> vertexTraversed;
-        private HashMap<String, String> opcodeEquivalenceTable;
-        private HashMap<String, String> functionEquivalenceTable;
-        private HashMap<String, String> registerEquivalenceTable;
+        private final HashMap<String, String> opcodeEquivalenceTable;
+        private final HashMap<String, String> functionEquivalenceTable;
+        private final HashMap<String, String> registerEquivalenceTable;
         private String instructionCode;
-        private int countRegLabel;
-        private int countALULabel;
-        private int countPCLabel;
-        private Color green1;
-        private Color green2;
-        private Color yellow2;
-        private Color orange1;
-        private Color orange;
-        private Color blue2;
-        private int register;
-        private int control;
-        private int aluControl;
-        private int alu;
+        private final int countRegLabel;
+        private final int countALULabel;
+        private final int countPCLabel;
+        private final Color green1;
+        private final Color green2;
+        private final Color yellow2;
+        private final Color orange1;
+        private final Color orange;
+        private final Color blue2;
+        private final int register;
+        private final int control;
+        private final int aluControl;
+        private final int alu;
         private int currentUnit;
         private Graphics2D g2d;
         private BufferedImage datapath;
@@ -468,13 +464,13 @@ public class MipsXray extends AbstractMarsToolAndApplication
             this.setBackground(Color.white);
             this.setPreferredSize(new Dimension(1000, 574));
             this.initImages();
-            this.vertexList = new ArrayList<Vertex>();
+            this.vertexList = new ArrayList<>();
             this.counter = 0;
             this.justStarted = true;
             this.instructionCode = instructionBinary;
-            this.opcodeEquivalenceTable = new HashMap<String, String>();
-            this.functionEquivalenceTable = new HashMap<String, String>();
-            this.registerEquivalenceTable = new HashMap<String, String>();
+            this.opcodeEquivalenceTable = new HashMap<>();
+            this.functionEquivalenceTable = new HashMap<>();
+            this.registerEquivalenceTable = new HashMap<>();
             this.countRegLabel = 400;
             this.countALULabel = 380;
             this.countPCLabel = 380;
@@ -553,13 +549,13 @@ public class MipsXray extends AbstractMarsToolAndApplication
                         this.vertexList.add(vert);
                     }
                 }
-                this.outputGraph = new Vector<Vector<Vertex>>();
-                this.vertexTraversed = new ArrayList<Vertex>();
+                this.outputGraph = new Vector<>();
+                this.vertexTraversed = new ArrayList<>();
                 final int size = this.vertexList.size();
                 for (int k = 0; k < this.vertexList.size(); ++k) {
                     final Vertex vertex = this.vertexList.get(k);
                     final ArrayList<Integer> targetList = vertex.getTargetVertex();
-                    final Vector<Vertex> vertexOfTargets = new Vector<Vertex>();
+                    final Vector<Vertex> vertexOfTargets = new Vector<>();
                     for (int l = 0; l < targetList.size(); ++l) {
                         vertexOfTargets.add(this.vertexList.get(targetList.get(l)));
                     }
@@ -1048,7 +1044,7 @@ public class MipsXray extends AbstractMarsToolAndApplication
             }
             if (v.isActive()) {
                 v.setFirst_interaction(false);
-                actionInFunctionalBlock.draw(this.g2d, (float)v.getOppositeAxis(), (float)v.getCurrent());
+                actionInFunctionalBlock.draw(this.g2d, v.getOppositeAxis(), v.getCurrent());
                 if (v.getCurrent() == v.getEnd()) {
                     v.setActive(false);
                 }

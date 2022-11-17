@@ -2,31 +2,29 @@
 
 package mars.mips.instructions;
 
-import mars.simulator.DelayedBranch;
-import mars.mips.instructions.syscalls.Syscall;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.StringTokenizer;
-import java.io.Reader;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.StringTokenizer;
+import mars.Globals;
+import mars.ProcessingException;
+import mars.ProgramStatement;
+import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Coprocessor0;
 import mars.mips.hardware.Coprocessor1;
 import mars.mips.hardware.Memory;
-import mars.mips.hardware.AddressErrorException;
-import mars.Globals;
-import mars.util.Binary;
 import mars.mips.hardware.RegisterFile;
-import mars.ProcessingException;
-import mars.ProgramStatement;
-import java.util.ArrayList;
+import mars.mips.instructions.syscalls.Syscall;
+import mars.simulator.DelayedBranch;
+import mars.util.Binary;
 
 public class InstructionSet
 {
-    private ArrayList<Instruction> instructionList;
+    private final ArrayList<Instruction> instructionList;
     private ArrayList opcodeMatchMaps;
     private SyscallLoader syscallLoader;
     
@@ -903,7 +901,7 @@ public class InstructionSet
                     round = Integer.MAX_VALUE;
                 }
                 else {
-                    final Float floatObj = new Float(floatValue);
+                    final Float floatObj = floatValue;
                     if (floatValue < 0.0f) {
                         above = floatObj.intValue();
                         below = above - 1;
@@ -1055,7 +1053,7 @@ public class InstructionSet
                     round = Integer.MAX_VALUE;
                 }
                 else {
-                    final Double doubleObj = new Double(doubleValue);
+                    final Double doubleObj = doubleValue;
                     if (doubleValue < 0.0) {
                         above = doubleObj.intValue();
                         below = above - 1;
@@ -1365,7 +1363,7 @@ public class InstructionSet
             @Override
             public void simulate(final ProgramStatement statement) throws ProcessingException {
                 final int[] operands = statement.getOperands();
-                Coprocessor1.updateRegister(operands[0], Float.floatToIntBits((float)Coprocessor1.getValue(operands[1])));
+                Coprocessor1.updateRegister(operands[0], Float.floatToIntBits(Coprocessor1.getValue(operands[1])));
             }
         }));
         this.instructionList.add(new BasicInstruction("cvt.w.d $f1,$f2", "Convert from double precision to word : Set $f1 to 32-bit integer equivalent of double precision value in $f2", BasicInstructionFormat.R_FORMAT, "010001 10001 00000 sssss fffff 100100", new SimulationCode() {
@@ -1936,9 +1934,9 @@ public class InstructionSet
     
     private static class MatchMap implements Comparable
     {
-        private int mask;
-        private int maskLength;
-        private HashMap<Integer,BasicInstruction> matchMap;
+        private final int mask;
+        private final int maskLength;
+        private final HashMap<Integer,BasicInstruction> matchMap;
         
         public MatchMap(final int mask, final HashMap matchMap) {
             this.mask = mask;

@@ -2,24 +2,24 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import javax.swing.text.Utilities;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
-import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
-import java.awt.Font;
-import java.awt.Cursor;
-import javax.swing.ToolTipManager;
-import java.awt.FontMetrics;
-import java.awt.Color;
-import javax.swing.text.Segment;
-import mars.venus.editors.jeditsyntax.tokenmarker.Token;
-import javax.swing.text.TabExpander;
 import javax.swing.JComponent;
+import javax.swing.ToolTipManager;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+import javax.swing.text.Utilities;
+import mars.venus.editors.jeditsyntax.tokenmarker.Token;
+import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
 
 public class TextAreaPainter extends JComponent implements TabExpander
 {
@@ -256,7 +256,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
     public float nextTabStop(final float x, final int tabOffset) {
         final int offset = this.textArea.getHorizontalOffset();
         final int ntabs = ((int)x - offset) / this.tabSize;
-        return (float)((ntabs + 1) * this.tabSize + offset);
+        return ((ntabs + 1) * this.tabSize + offset);
     }
     
     @Override

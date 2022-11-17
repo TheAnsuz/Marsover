@@ -3,8 +3,8 @@
 package mars.pipeline.tomasulo;
 
 import mars.pipeline.Decode;
-import mars.pipeline.StageRegisters;
 import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
+import mars.pipeline.StageRegisters;
 
 public class RoB_entry
 {

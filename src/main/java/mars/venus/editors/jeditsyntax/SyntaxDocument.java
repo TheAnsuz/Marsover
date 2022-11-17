@@ -3,12 +3,12 @@
 package mars.venus.editors.jeditsyntax;
 
 import javax.swing.event.DocumentEvent;
-import javax.swing.undo.UndoableEdit;
-import javax.swing.text.Element;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Segment;
-import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
+import javax.swing.text.Element;
 import javax.swing.text.PlainDocument;
+import javax.swing.text.Segment;
+import javax.swing.undo.UndoableEdit;
+import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
 
 public class SyntaxDocument extends PlainDocument
 {

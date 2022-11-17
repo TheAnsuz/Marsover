@@ -2,24 +2,24 @@
 
 package mars.pipeline.tomasulo;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import mars.mips.instructions.Instruction;
-import mars.util.Binary;
-import mars.mips.hardware.AddressErrorException;
+import java.util.List;
 import mars.Globals;
-import mars.mips.instructions.BasicInstruction;
 import mars.ProcessingException;
 import mars.ProgramStatement;
-import mars.mips.instructions.SimulationCode;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.instructions.BasicInstruction;
 import mars.mips.instructions.BasicInstructionFormat;
-import java.util.ArrayList;
+import mars.mips.instructions.Instruction;
+import mars.mips.instructions.SimulationCode;
+import mars.util.Binary;
 
 public class InstructionSetTomasulo
 {
     private static InstructionSetTomasulo instructionSet;
-    private ArrayList<Instruction> instructionList;
+    private final ArrayList<Instruction> instructionList;
     private ArrayList<MatchMap> opcodeMatchMaps;
     private static int op1;
     private static int op2;
@@ -450,9 +450,9 @@ public class InstructionSetTomasulo
     
     private static class MatchMap implements Comparable
     {
-        private int mask;
-        private int maskLength;
-        private HashMap<Integer,BasicInstruction> matchMap;
+        private final int mask;
+        private final int maskLength;
+        private final HashMap<Integer,BasicInstruction> matchMap;
         
         public MatchMap(final int mask, final HashMap matchMap) {
             this.mask = mask;

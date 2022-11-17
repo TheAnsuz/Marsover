@@ -2,8 +2,8 @@
 
 package mars.mips.instructions.syscalls;
 
-import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.MetaMessage;
 
 class EndOfTrackListener implements MetaEventListener
 {

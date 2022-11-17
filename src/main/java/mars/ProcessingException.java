@@ -2,10 +2,10 @@
 
 package mars;
 
-import mars.util.Binary;
+import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.RegisterFile;
 import mars.simulator.Exceptions;
-import mars.mips.hardware.AddressErrorException;
+import mars.util.Binary;
 
 public class ProcessingException extends Exception
 {

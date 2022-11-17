@@ -2,11 +2,11 @@
 
 package mars.pipeline.pipes;
 
-import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
-import mars.pipeline.Decode;
-import mars.pipeline.StageRegisters;
 import mars.pipeline.BranchPredictor;
+import mars.pipeline.Decode;
+import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.Stage;
+import mars.pipeline.StageRegisters;
 
 public class MulticyclePipeline extends StaticPipe
 {

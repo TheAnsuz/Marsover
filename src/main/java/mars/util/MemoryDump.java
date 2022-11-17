@@ -2,11 +2,11 @@
 
 package mars.util;
 
-import mars.mips.hardware.AddressErrorException;
-import mars.Globals;
-import mars.mips.hardware.Memory;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import mars.Globals;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
 
 public class MemoryDump
 {
@@ -19,7 +19,7 @@ public class MemoryDump
     public static Integer[] getSegmentBounds(final String segment) {
         for (int i = 0; i < MemoryDump.segmentNames.length; ++i) {
             if (MemoryDump.segmentNames[i].equals(segment)) {
-                final Integer[] bounds = { new Integer(getBaseAddresses(MemoryDump.segmentNames)[i]), new Integer(getLimitAddresses(MemoryDump.segmentNames)[i]) };
+                final Integer[] bounds = { getBaseAddresses(MemoryDump.segmentNames)[i], getLimitAddresses(MemoryDump.segmentNames)[i]};
                 return bounds;
             }
         }

@@ -2,10 +2,10 @@
 
 package mars.venus;
 
-import mars.Globals;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class RunToggleBreakpointsAction extends GuiAction
 {

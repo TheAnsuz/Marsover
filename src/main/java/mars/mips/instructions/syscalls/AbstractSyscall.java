@@ -8,7 +8,7 @@ import mars.ProgramStatement;
 public abstract class AbstractSyscall implements Syscall
 {
     private int serviceNumber;
-    private String serviceName;
+    private final String serviceName;
     
     public AbstractSyscall(final int number, final String name) {
         this.serviceNumber = number;

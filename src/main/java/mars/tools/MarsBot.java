@@ -2,23 +2,21 @@
 
 package mars.tools;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Graphics;
-import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JButton;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import mars.mips.hardware.MemoryAccessNotice;
-import java.util.Observable;
-import mars.mips.hardware.AddressErrorException;
 import mars.Globals;
-import java.awt.Point;
-import java.util.Observer;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.MemoryAccessNotice;
 
 public class MarsBot implements Observer, MarsTool
 {
@@ -36,7 +34,7 @@ public class MarsBot implements Observer, MarsTool
     private double MarsBotYPosition;
     private boolean MarsBotMoving;
     private final int trackPts = 256;
-    private Point[] arrayOfTrack;
+    private final Point[] arrayOfTrack;
     private int trackIndex;
     
     public MarsBot() {
@@ -74,37 +72,37 @@ public class MarsBot implements Observer, MarsTool
             final int address = notice.getAddress();
             if (address < 0 && notice.getAccessType() == 1) {
                 String message = "";
-                if (address == -32752) {
-                    message = "MarsBot.update: got move heading value: ";
-                    this.MarsBotHeading = notice.getValue();
-                }
-                else if (address == -32736) {
-                    message = "MarsBot.update: got leave track directive value ";
-                    if (!this.MarsBotLeaveTrack && notice.getValue() == 1) {
-                        this.MarsBotLeaveTrack = true;
-                        this.arrayOfTrack[this.trackIndex] = new Point((int)this.MarsBotXPosition, (int)this.MarsBotYPosition);
-                        ++this.trackIndex;
-                    }
-                    else if (this.MarsBotLeaveTrack || notice.getValue() != 0) {
-                        if (!this.MarsBotLeaveTrack || notice.getValue() != 1) {
-                            if (this.MarsBotLeaveTrack && notice.getValue() == 0) {
-                                this.MarsBotLeaveTrack = false;
-                                this.arrayOfTrack[this.trackIndex] = new Point((int)this.MarsBotXPosition, (int)this.MarsBotYPosition);
-                                ++this.trackIndex;
-                            }
+                switch (address) {
+                    case -32752:
+                        message = "MarsBot.update: got move heading value: ";
+                        this.MarsBotHeading = notice.getValue();
+                        break;
+                    case -32736:
+                        message = "MarsBot.update: got leave track directive value ";
+                        if (!this.MarsBotLeaveTrack && notice.getValue() == 1) {
+                            this.MarsBotLeaveTrack = true;
+                            this.arrayOfTrack[this.trackIndex] = new Point((int)this.MarsBotXPosition, (int)this.MarsBotYPosition);
+                            ++this.trackIndex;
                         }
-                    }
+                        else if (this.MarsBotLeaveTrack || notice.getValue() != 0) {
+                            if (!this.MarsBotLeaveTrack || notice.getValue() != 1) {
+                                if (this.MarsBotLeaveTrack && notice.getValue() == 0) {
+                                    this.MarsBotLeaveTrack = false;
+                                    this.arrayOfTrack[this.trackIndex] = new Point((int)this.MarsBotXPosition, (int)this.MarsBotYPosition);
+                                    ++this.trackIndex;
+                                }
+                            }
+                        }   break;
+                    case -32688:
+                        message = "MarsBot.update: got move control value: ";
+                        this.MarsBotMoving = notice.getValue() != 0;
+                        break;
+                    case -32720:
+                    case -32704:
+                        break;
+                    default:
+                        break;
                 }
-                else if (address == -32688) {
-                    message = "MarsBot.update: got move control value: ";
-                    if (notice.getValue() == 0) {
-                        this.MarsBotMoving = false;
-                    }
-                    else {
-                        this.MarsBotMoving = true;
-                    }
-                }
-                else if (address == -32720 || address == -32704) {}
             }
         }
     }
@@ -175,8 +173,8 @@ public class MarsBot implements Observer, MarsTool
     
     private class MarsBotDisplay extends JPanel
     {
-        private int width;
-        private int height;
+        private final int width;
+        private final int height;
         private boolean clearTheDisplay;
         
         public MarsBotDisplay(final int tw, final int th) {

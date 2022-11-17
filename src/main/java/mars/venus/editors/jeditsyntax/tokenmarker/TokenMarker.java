@@ -28,7 +28,7 @@ public abstract class TokenMarker
             prev = this.lineInfo[lineIndex - 1];
         }
         final byte oldToken = info.token;
-        final byte token = this.markTokensImpl((byte)((prev == null) ? 0 : prev.token), line, lineIndex);
+        final byte token = this.markTokensImpl(((prev == null) ? 0 : prev.token), line, lineIndex);
         info.token = token;
         if (this.lastLine != lineIndex || !this.nextLineRequested) {
             this.nextLineRequested = (oldToken != token);

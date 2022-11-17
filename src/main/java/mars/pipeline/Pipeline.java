@@ -2,12 +2,12 @@
 
 package mars.pipeline;
 
+import mars.pipeline.DiagramaMulticiclo.DiagramaMulticiclo;
+import mars.pipeline.predictors.IdealPredictor;
+import mars.pipeline.predictors.NotTakenPredictor;
 import mars.pipeline.predictors.StopPredictor;
 import mars.pipeline.predictors.TakenPredictor;
-import mars.pipeline.predictors.NotTakenPredictor;
-import mars.pipeline.predictors.IdealPredictor;
 import mars.pipeline.tomasulo.Tomasulo;
-import mars.pipeline.DiagramaMulticiclo.DiagramaMulticiclo;
 
 public abstract class Pipeline
 {

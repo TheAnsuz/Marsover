@@ -2,16 +2,16 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import javax.swing.text.BadLocationException;
-import java.awt.event.KeyEvent;
-import javax.swing.JPopupMenu;
 import java.awt.Component;
-import java.util.EventObject;
 import java.awt.event.ActionEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.EventObject;
+import java.util.Hashtable;
+import javax.swing.JPopupMenu;
+import javax.swing.text.BadLocationException;
 
 public abstract class InputHandler extends KeyAdapter
 {
@@ -383,7 +383,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class end implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public end(final boolean select) {
             this.select = select;
@@ -439,7 +439,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class document_end implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public document_end(final boolean select) {
             this.select = select;
@@ -459,7 +459,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class home implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public home(final boolean select) {
             this.select = select;
@@ -500,7 +500,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class document_home implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public document_home(final boolean select) {
             this.select = select;
@@ -546,7 +546,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class next_char implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public next_char(final boolean select) {
             this.select = select;
@@ -571,7 +571,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class next_line implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public next_line(final boolean select) {
             this.select = select;
@@ -603,7 +603,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class next_page implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public next_page(final boolean select) {
             this.select = select;
@@ -633,7 +633,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class next_word implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public next_word(final boolean select) {
             this.select = select;
@@ -678,7 +678,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class prev_char implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public prev_char(final boolean select) {
             this.select = select;
@@ -703,7 +703,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class prev_line implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public prev_line(final boolean select) {
             this.select = select;
@@ -735,7 +735,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class prev_page implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public prev_page(final boolean select) {
             this.select = select;
@@ -763,7 +763,7 @@ public abstract class InputHandler extends KeyAdapter
     
     public static class prev_word implements ActionListener
     {
-        private boolean select;
+        private final boolean select;
         
         public prev_word(final boolean select) {
             this.select = select;

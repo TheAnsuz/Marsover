@@ -2,39 +2,35 @@
 
 package mars.venus;
 
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.JTableHeader;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import javax.swing.table.TableModel;
-import mars.util.Binary;
-import javax.swing.table.AbstractTableModel;
-import java.awt.Font;
-import javax.swing.table.DefaultTableCellRenderer;
-import mars.mips.hardware.RegisterAccessNotice;
-import mars.simulator.SimulatorNotice;
-import java.util.Observable;
-import javax.swing.event.TableModelEvent;
-import mars.mips.hardware.InvalidRegisterAccessException;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.GridLayout;
-import mars.mips.hardware.Coprocessor1;
-import javax.swing.JLabel;
-import java.awt.Component;
-import javax.swing.JScrollPane;
-import javax.swing.table.TableCellRenderer;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import mars.Globals;
-import mars.simulator.Simulator;
-import mars.Settings;
-import javax.swing.JCheckBox;
-import mars.mips.hardware.Register;
-import javax.swing.JTable;
-import java.util.Observer;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import mars.Globals;
+import mars.Settings;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.InvalidRegisterAccessException;
+import mars.mips.hardware.Register;
+import mars.mips.hardware.RegisterAccessNotice;
+import mars.simulator.Simulator;
+import mars.simulator.SimulatorNotice;
+import mars.util.Binary;
 
 public class Coprocessor1Window extends JPanel implements ActionListener, Observer
 {
@@ -44,7 +40,7 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
     private boolean highlighting;
     private int highlightRow;
     private ExecutePane executePane;
-    private JCheckBox[] conditionFlagCheckBox;
+    private final JCheckBox[] conditionFlagCheckBox;
     private static final int NAME_COLUMN = 0;
     private static final int FLOAT_COLUMN = 1;
     private static final int DOUBLE_COLUMN = 2;
@@ -201,8 +197,8 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
     
     private class RegisterCellRenderer extends DefaultTableCellRenderer
     {
-        private Font font;
-        private int alignment;
+        private final Font font;
+        private final int alignment;
         
         public RegisterCellRenderer(final Font font, final int alignment) {
             this.font = font;
@@ -345,8 +341,8 @@ public class Coprocessor1Window extends JPanel implements ActionListener, Observ
     
     private class MyTippedJTable extends JTable
     {
-        private String[] regToolTips;
-        private String[] columnToolTips;
+        private final String[] regToolTips;
+        private final String[] columnToolTips;
         
         MyTippedJTable(final RegTableModel m) {
             super(m);

@@ -2,21 +2,21 @@
 
 package mars.venus;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 import javax.swing.Icon;
-import mars.Globals;
+import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.Component;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
-import javax.swing.JTabbedPane;
+import mars.Globals;
 
 public class MainPane extends JTabbedPane
 {
     EditPane editTab;
     ExecutePane executeTab;
     EditTabbedPane editTabbedPane;
-    private VenusUI mainUI;
+    private final VenusUI mainUI;
     
     public MainPane(final VenusUI appFrame, final Editor editor, final RegistersWindow regs, final Coprocessor1Window cop1Regs, final Coprocessor0Window cop0Regs) {
         this.mainUI = appFrame;

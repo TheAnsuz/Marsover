@@ -2,39 +2,35 @@
 
 package mars.tools;
 
-import mars.util.Binary;
 import java.awt.BorderLayout;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import javax.swing.BorderFactory;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.LayoutManager;
-import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JComponent;
+import java.util.Observable;
 import java.util.Random;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.border.EmptyBorder;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.util.Binary;
 
 public class CacheSimulator extends AbstractMarsToolAndApplication
 {
@@ -166,7 +162,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
         final TitledBorder otb = new TitledBorder("Cache Organization");
         otb.setTitleJustification(2);
         organization.setBorder(otb);
-        (this.cachePlacementSelector = new JComboBox((String[])this.placementPolicyChoices)).setEditable(false);
+        (this.cachePlacementSelector = new JComboBox(this.placementPolicyChoices)).setEditable(false);
         this.cachePlacementSelector.setBackground(this.backgroundColor);
         this.cachePlacementSelector.setSelectedIndex(this.defaultPlacementPolicyIndex);
         this.cachePlacementSelector.addActionListener(new ActionListener() {
@@ -176,10 +172,10 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
                 CacheSimulator.this.reset();
             }
         });
-        (this.cacheReplacementSelector = new JComboBox((String[])this.replacementPolicyChoices)).setEditable(false);
+        (this.cacheReplacementSelector = new JComboBox(this.replacementPolicyChoices)).setEditable(false);
         this.cacheReplacementSelector.setBackground(this.backgroundColor);
         this.cacheReplacementSelector.setSelectedIndex(this.defaultReplacementPolicyIndex);
-        (this.cacheBlockSizeSelector = new JComboBox((String[])this.cacheBlockSizeChoices)).setEditable(false);
+        (this.cacheBlockSizeSelector = new JComboBox(this.cacheBlockSizeChoices)).setEditable(false);
         this.cacheBlockSizeSelector.setBackground(this.backgroundColor);
         this.cacheBlockSizeSelector.setSelectedIndex(this.defaultCacheBlockSizeIndex);
         this.cacheBlockSizeSelector.addActionListener(new ActionListener() {
@@ -189,7 +185,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
                 CacheSimulator.this.reset();
             }
         });
-        (this.cacheBlockCountSelector = new JComboBox((String[])this.cacheBlockCountChoices)).setEditable(false);
+        (this.cacheBlockCountSelector = new JComboBox(this.cacheBlockCountChoices)).setEditable(false);
         this.cacheBlockCountSelector.setBackground(this.backgroundColor);
         this.cacheBlockCountSelector.setSelectedIndex(this.defaultCacheBlockCountIndex);
         this.cacheBlockCountSelector.addActionListener(new ActionListener() {
@@ -203,7 +199,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
                 CacheSimulator.this.animations.fillAnimationBoxWithCacheBlocks();
             }
         });
-        (this.cacheSetSizeSelector = new JComboBox((String[])this.cacheSetSizeChoices)).setEditable(false);
+        (this.cacheSetSizeSelector = new JComboBox(this.cacheSetSizeChoices)).setEditable(false);
         this.cacheSetSizeSelector.setBackground(this.backgroundColor);
         this.cacheSetSizeSelector.setSelectedIndex(this.defaultCacheSetSizeIndex);
         this.cacheSetSizeSelector.addActionListener(new ActionListener() {
@@ -422,7 +418,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
     }
     
     private void updateCacheSetSizeSelector() {
-        this.cacheSetSizeSelector.setModel(new DefaultComboBoxModel<String>(this.determineSetSizeChoices(this.cacheBlockCountSelector.getSelectedIndex(), this.cachePlacementSelector.getSelectedIndex())));
+        this.cacheSetSizeSelector.setModel(new DefaultComboBoxModel<>(this.determineSetSizeChoices(this.cacheBlockCountSelector.getSelectedIndex(), this.cachePlacementSelector.getSelectedIndex())));
     }
     
     private AbstractCache createNewCache() {
@@ -444,15 +440,15 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
     }
     
     private void updateMemoryAccessCountDisplay() {
-        this.memoryAccessCountDisplay.setText(new Integer(this.memoryAccessCount).toString());
+        this.memoryAccessCountDisplay.setText(Integer.toString(this.memoryAccessCount));
     }
     
     private void updateCacheHitCountDisplay() {
-        this.cacheHitCountDisplay.setText(new Integer(this.cacheHitCount).toString());
+        this.cacheHitCountDisplay.setText(Integer.toString(this.cacheHitCount));
     }
     
     private void updateCacheMissCountDisplay() {
-        this.cacheMissCountDisplay.setText(new Integer(this.cacheMissCount).toString());
+        this.cacheMissCountDisplay.setText(Integer.toString(this.cacheMissCount));
     }
     
     private void updateCacheHitRateDisplay() {
@@ -487,7 +483,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
     {
         private boolean valid;
         private int tag;
-        private int sizeInWords;
+        private final int sizeInWords;
         private int mostRecentAccessTime;
         
         public CacheBlock(final int sizeInWords) {
@@ -500,8 +496,8 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
     
     private class CacheAccessResult
     {
-        private boolean hitOrMiss;
-        private int blockNumber;
+        private final boolean hitOrMiss;
+        private final int blockNumber;
         
         public CacheAccessResult(final boolean hitOrMiss, final int blockNumber) {
             this.hitOrMiss = hitOrMiss;
@@ -519,10 +515,10 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
     
     private abstract class AbstractCache
     {
-        private int numberOfBlocks;
-        private int blockSizeInWords;
-        private int setSizeInBlocks;
-        private int numberOfSets;
+        private final int numberOfBlocks;
+        private final int blockSizeInWords;
+        private final int setSizeInBlocks;
+        private final int numberOfSets;
         protected CacheBlock[] blocks;
         
         protected AbstractCache(final int numberOfBlocks, final int blockSizeInWords, final int setSizeInBlocks) {
@@ -678,7 +674,7 @@ public class CacheSimulator extends AbstractMarsToolAndApplication
     
     private class Animation
     {
-        private Box animation;
+        private final Box animation;
         private JTextField[] blocks;
         public final Color hitColor;
         public final Color missColor;

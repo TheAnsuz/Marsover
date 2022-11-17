@@ -2,21 +2,20 @@
 
 package mars.assembler;
 
-import mars.mips.hardware.Coprocessor1;
-import mars.mips.hardware.Coprocessor0;
-import mars.mips.hardware.RegisterFile;
-import java.util.List;
-import java.util.Collections;
-import mars.ErrorMessage;
-import mars.ErrorList;
 import java.util.ArrayList;
+import java.util.Collections;
+import mars.ErrorList;
+import mars.ErrorMessage;
 import mars.MIPSprogram;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.RegisterFile;
 
 public class Macro
 {
     private String name;
     private MIPSprogram program;
-    private ArrayList<String> labels;
+    private final ArrayList<String> labels;
     private int fromLine;
     private int toLine;
     private int origFromLine;
@@ -32,8 +31,8 @@ public class Macro
         final int n2 = 0;
         this.origToLine = n2;
         this.origFromLine = n2;
-        this.args = new ArrayList<String>();
-        this.labels = new ArrayList<String>();
+        this.args = new ArrayList<>();
+        this.labels = new ArrayList<>();
     }
     
     public String getName() {

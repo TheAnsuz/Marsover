@@ -2,21 +2,21 @@
 
 package mars.pipeline.tomasulo;
 
-import mars.ProgramStatement;
-import mars.mips.hardware.AddressErrorException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.ProgramStatement;
+import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Memory;
+import mars.pipeline.BranchPredictor;
 import mars.pipeline.Decode;
 import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.StageRegisters;
-import mars.pipeline.BranchPredictor;
 
 public class TomasuloP4_alumnos extends Tomasulo_alumnos
 {
     private boolean emitiendoIncorrectas;
     private int ultimaInstucci\u00f3nIncorrecta;
-    private BTB btb;
+    private final BTB btb;
     
     public TomasuloP4_alumnos() {
         super(BranchPredictor.BranchPredictor_type.ideal);

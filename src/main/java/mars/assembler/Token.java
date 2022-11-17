@@ -7,10 +7,10 @@ import mars.MIPSprogram;
 public class Token
 {
     private TokenTypes type;
-    private String value;
-    private MIPSprogram sourceMIPSprogram;
-    private int sourceLine;
-    private int sourcePos;
+    private final String value;
+    private final MIPSprogram sourceMIPSprogram;
+    private final int sourceLine;
+    private final int sourcePos;
     private MIPSprogram originalMIPSprogram;
     private int originalSourceLine;
     

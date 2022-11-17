@@ -2,11 +2,11 @@
 
 package mars.mips.instructions.syscalls;
 
+import java.util.Date;
 import mars.ProcessingException;
+import mars.ProgramStatement;
 import mars.mips.hardware.RegisterFile;
 import mars.util.Binary;
-import java.util.Date;
-import mars.ProgramStatement;
 
 public class SyscallTime extends AbstractSyscall
 {

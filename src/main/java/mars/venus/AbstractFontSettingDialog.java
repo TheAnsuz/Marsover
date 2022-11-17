@@ -2,37 +2,32 @@
 
 package mars.venus;
 
-import javax.swing.JList;
-import javax.swing.JSeparator;
-import javax.swing.border.LineBorder;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
-import javax.swing.ListCellRenderer;
-import java.util.Vector;
-import mars.util.EditorFont;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
-import java.awt.Container;
-import java.awt.Component;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Frame;
-import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.JSpinner;
-import javax.swing.JSlider;
+import java.awt.event.WindowEvent;
+import java.util.Vector;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.ListCellRenderer;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import mars.util.EditorFont;
 
 public abstract class AbstractFontSettingDialog extends JDialog
 {
@@ -83,14 +78,14 @@ public abstract class AbstractFontSettingDialog extends JDialog
         this.fontFamilySelector.setMaximumRowCount(commonFontFamilies.length);
         this.fontFamilySelector.setToolTipText("Short list of common font families followed by complete list.");
         final String[] fontStyles = EditorFont.getFontStyleStrings();
-        (this.fontStyleSelector = new JComboBox((String[])fontStyles)).setSelectedItem(EditorFont.styleIntToStyleString(this.currentFont.getStyle()));
+        (this.fontStyleSelector = new JComboBox(fontStyles)).setSelectedItem(EditorFont.styleIntToStyleString(this.currentFont.getStyle()));
         this.fontStyleSelector.setEditable(false);
         this.fontStyleSelector.setToolTipText("List of available font styles.");
         (this.fontSizeSelector = new JSlider(6, 72, this.currentFont.getSize())).setToolTipText("Use slider to select font size from 6 to 72.");
         this.fontSizeSelector.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(final ChangeEvent e) {
-                final Integer value = new Integer(((JSlider)e.getSource()).getValue());
+                final Integer value = ((JSlider)e.getSource()).getValue();
                 AbstractFontSettingDialog.this.fontSizeSpinSelector.setValue(value);
                 AbstractFontSettingDialog.this.fontSample.setFont(AbstractFontSettingDialog.this.getFont());
             }
@@ -153,7 +148,7 @@ public abstract class AbstractFontSettingDialog extends JDialog
         this.fontFamilySelector.setSelectedItem(this.initialFontFamily);
         this.fontStyleSelector.setSelectedItem(this.initialFontStyle);
         this.fontSizeSelector.setValue(EditorFont.sizeStringToSizeInt(this.initialFontSize));
-        this.fontSizeSpinSelector.setValue(new Integer(EditorFont.sizeStringToSizeInt(this.initialFontSize)));
+        this.fontSizeSpinSelector.setValue(EditorFont.sizeStringToSizeInt(this.initialFontSize));
     }
     
     protected abstract void apply(final Font p0);

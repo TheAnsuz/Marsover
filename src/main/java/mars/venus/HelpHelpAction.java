@@ -2,52 +2,47 @@
 
 package mars.venus;
 
-import java.awt.FlowLayout;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLFrameHyperlinkEvent;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.JTextField;
-import java.util.ArrayList;
-import javax.swing.ListCellRenderer;
-import mars.mips.instructions.Instruction;
-import mars.Globals;
-import java.util.Iterator;
-import java.awt.Font;
-import javax.swing.JList;
-import java.util.List;
-import java.util.Collections;
-import mars.assembler.Directives;
-import java.util.Vector;
-import javax.swing.JSplitPane;
-import java.io.InputStream;
-import javax.swing.JLabel;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.JScrollPane;
-import javax.swing.JEditorPane;
-import java.io.Reader;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import java.awt.LayoutManager;
-import java.awt.Container;
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.Frame;
-import javax.swing.JDialog;
-import java.awt.Component;
-import javax.swing.JTabbedPane;
-import java.awt.event.ActionEvent;
-import java.awt.Dimension;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
-import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.ListCellRenderer;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLFrameHyperlinkEvent;
+import mars.Globals;
+import mars.assembler.Directives;
+import mars.mips.instructions.Instruction;
 
 public class HelpHelpAction extends GuiAction
 {
@@ -114,7 +109,7 @@ public class HelpHelpAction extends GuiAction
             final StringBuffer text = new StringBuffer();
             String line;
             while ((line = in.readLine()) != null) {
-                text.append(line + "\n");
+                text.append(line).append("\n");
             }
             in.close();
             final JEditorPane helpDisplay = new JEditorPane("text/html", text.toString());
@@ -139,7 +134,7 @@ public class HelpHelpAction extends GuiAction
             final StringBuffer text = new StringBuffer("<pre>");
             String line;
             while ((line = in.readLine()) != null) {
-                text.append(line + "\n");
+                text.append(line).append("\n");
             }
             in.close();
             text.append("</pre>");

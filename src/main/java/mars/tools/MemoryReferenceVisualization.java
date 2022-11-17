@@ -2,35 +2,32 @@
 
 package mars.tools;
 
-import java.util.Arrays;
-import javax.swing.event.ChangeEvent;
-import javax.swing.JColorChooser;
-import javax.swing.event.ChangeListener;
-import javax.swing.JSlider;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import mars.util.Binary;
-import mars.mips.hardware.Memory;
-import javax.swing.JLabel;
-import javax.swing.border.Border;
-import java.awt.LayoutManager;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
+import java.util.Arrays;
 import java.util.Observable;
-import java.awt.Component;
-import javax.swing.JComponent;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JPanel;
-import java.awt.Graphics;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.util.Binary;
 
 public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
 {
@@ -191,7 +188,7 @@ public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
                 MemoryReferenceVisualization.this.updateDisplay();
             }
         });
-        (this.wordsPerUnitSelector = new JComboBox((String[])this.wordsPerUnitChoices)).setEditable(false);
+        (this.wordsPerUnitSelector = new JComboBox(this.wordsPerUnitChoices)).setEditable(false);
         this.wordsPerUnitSelector.setBackground(this.backgroundColor);
         this.wordsPerUnitSelector.setSelectedIndex(0);
         this.wordsPerUnitSelector.setToolTipText("Number of memory words represented by one visualization element (rectangle)");
@@ -202,7 +199,7 @@ public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
                 MemoryReferenceVisualization.this.reset();
             }
         });
-        (this.visualizationUnitPixelWidthSelector = new JComboBox((String[])this.visualizationUnitPixelWidthChoices)).setEditable(false);
+        (this.visualizationUnitPixelWidthSelector = new JComboBox(this.visualizationUnitPixelWidthChoices)).setEditable(false);
         this.visualizationUnitPixelWidthSelector.setBackground(this.backgroundColor);
         this.visualizationUnitPixelWidthSelector.setSelectedIndex(4);
         this.visualizationUnitPixelWidthSelector.setToolTipText("Width in pixels of rectangle representing memory access");
@@ -214,7 +211,7 @@ public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
                 MemoryReferenceVisualization.this.updateDisplay();
             }
         });
-        (this.visualizationUnitPixelHeightSelector = new JComboBox((String[])this.visualizationUnitPixelHeightChoices)).setEditable(false);
+        (this.visualizationUnitPixelHeightSelector = new JComboBox(this.visualizationUnitPixelHeightChoices)).setEditable(false);
         this.visualizationUnitPixelHeightSelector.setBackground(this.backgroundColor);
         this.visualizationUnitPixelHeightSelector.setSelectedIndex(4);
         this.visualizationUnitPixelHeightSelector.setToolTipText("Height in pixels of rectangle representing memory access");
@@ -226,7 +223,7 @@ public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
                 MemoryReferenceVisualization.this.updateDisplay();
             }
         });
-        (this.visualizationPixelWidthSelector = new JComboBox((String[])this.displayAreaPixelWidthChoices)).setEditable(false);
+        (this.visualizationPixelWidthSelector = new JComboBox(this.displayAreaPixelWidthChoices)).setEditable(false);
         this.visualizationPixelWidthSelector.setBackground(this.backgroundColor);
         this.visualizationPixelWidthSelector.setSelectedIndex(2);
         this.visualizationPixelWidthSelector.setToolTipText("Total width in pixels of visualization area");
@@ -241,7 +238,7 @@ public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
                 MemoryReferenceVisualization.this.updateDisplay();
             }
         });
-        (this.visualizationPixelHeightSelector = new JComboBox((String[])this.displayAreaPixelHeightChoices)).setEditable(false);
+        (this.visualizationPixelHeightSelector = new JComboBox(this.displayAreaPixelHeightChoices)).setEditable(false);
         this.visualizationPixelHeightSelector.setBackground(this.backgroundColor);
         this.visualizationPixelHeightSelector.setSelectedIndex(2);
         this.visualizationPixelHeightSelector.setToolTipText("Total height in pixels of visualization area");
@@ -256,7 +253,7 @@ public class MemoryReferenceVisualization extends AbstractMarsToolAndApplication
                 MemoryReferenceVisualization.this.updateDisplay();
             }
         });
-        (this.displayBaseAddressSelector = new JComboBox((String[])this.displayBaseAddressChoices)).setEditable(false);
+        (this.displayBaseAddressSelector = new JComboBox(this.displayBaseAddressChoices)).setEditable(false);
         this.displayBaseAddressSelector.setBackground(this.backgroundColor);
         this.displayBaseAddressSelector.setSelectedIndex(this.defaultBaseAddressIndex);
         this.displayBaseAddressSelector.setToolTipText("Base address for visualization area (upper left corner)");

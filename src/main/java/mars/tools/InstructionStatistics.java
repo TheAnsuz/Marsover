@@ -2,22 +2,20 @@
 
 package mars.tools;
 
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import mars.ProgramStatement;
-import mars.mips.hardware.Memory;
-import java.awt.Component;
-import javax.swing.JLabel;
-import java.awt.Insets;
 import java.awt.GridBagConstraints;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.Observable;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import mars.ProgramStatement;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
 
 public class InstructionStatistics extends AbstractMarsToolAndApplication
 {
@@ -104,50 +102,49 @@ public class InstructionStatistics extends AbstractMarsToolAndApplication
     protected int getInstructionCategory(final ProgramStatement stmt) {
         final int opCode = stmt.getBinaryStatement() >>> 26;
         final int funct = stmt.getBinaryStatement() & 0x1F;
-        if (opCode == 0) {
-            if (funct == 0) {
-                return 0;
-            }
-            if (2 <= funct && funct <= 7) {
-                return 0;
-            }
-            if (funct == 8 || funct == 9) {
-                return 1;
-            }
-            if (16 <= funct && funct <= 47) {
-                return 0;
-            }
-            return 4;
-        }
-        else if (opCode == 1) {
-            if (0 <= funct && funct <= 7) {
-                return 2;
-            }
-            if (16 <= funct && funct <= 19) {
-                return 2;
-            }
-            return 4;
-        }
-        else {
-            if (opCode == 2 || opCode == 3) {
-                return 1;
-            }
-            if (4 <= opCode && opCode <= 7) {
-                return 2;
-            }
-            if (8 <= opCode && opCode <= 15) {
-                return 0;
-            }
-            if (20 <= opCode && opCode <= 23) {
-                return 2;
-            }
-            if (32 <= opCode && opCode <= 38) {
-                return 3;
-            }
-            if (40 <= opCode && opCode <= 46) {
-                return 3;
-            }
-            return 4;
+        switch (opCode) {
+            case 0:
+                if (funct == 0) {
+                    return 0;
+                }
+                if (2 <= funct && funct <= 7) {
+                    return 0;
+                }
+                if (funct == 8 || funct == 9) {
+                    return 1;
+                }
+                if (16 <= funct && funct <= 47) {
+                    return 0;
+                }
+                return 4;
+            case 1:
+                if (0 <= funct && funct <= 7) {
+                    return 2;
+                }
+                if (16 <= funct && funct <= 19) {
+                    return 2;
+                }
+                return 4;
+            default:
+                if (opCode == 2 || opCode == 3) {
+                        return 1;
+                        }
+                if (4 <= opCode && opCode <= 7) {
+                        return 2;
+                        }
+                if (8 <= opCode && opCode <= 15) {
+                        return 0;
+                        }
+                if (20 <= opCode && opCode <= 23) {
+                        return 2;
+                        }
+                if (32 <= opCode && opCode <= 38) {
+                        return 3;
+                        }
+                if (40 <= opCode && opCode <= 46) {
+                        return 3;
+                        }
+                return 4;
         }
     }
     

@@ -2,10 +2,9 @@
 
 package mars.pipeline.tomasulo;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import mars.pipeline.Decode;
 
 public class BTB

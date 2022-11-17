@@ -2,50 +2,46 @@
 
 package mars.venus;
 
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.DefaultComboBoxModel;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.simulator.SimulatorNotice;
-import java.util.Observable;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableCellRenderer;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.hardware.RegisterFile;
-import javax.swing.event.TableModelEvent;
-import mars.util.Binary;
-import java.awt.event.MouseListener;
-import java.awt.Rectangle;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.util.Date;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ComboBoxModel;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import java.awt.Toolkit;
-import java.awt.LayoutManager;
-import java.awt.GridLayout;
-import mars.Globals;
-import mars.simulator.Simulator;
-import mars.mips.hardware.Memory;
-import javax.swing.JComboBox;
-import mars.Settings;
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Container;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.util.Observer;
-import javax.swing.JInternalFrame;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
+import mars.Globals;
+import mars.Settings;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
+import mars.simulator.Simulator;
+import mars.simulator.SimulatorNotice;
+import mars.util.Binary;
 
 public class DataSegmentWindow extends JInternalFrame implements Observer
 {
@@ -65,7 +61,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer
     private JButton extnButton;
     private JButton mmioButton;
     private JButton textButton;
-    private JCheckBox asciiDisplayCheckBox;
+    private final JCheckBox asciiDisplayCheckBox;
     static final int VALUES_PER_ROW = 8;
     static final int NUMBER_OF_ROWS = 16;
     static final int NUMBER_OF_COLUMNS = 9;
@@ -805,7 +801,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer
     
     private class MyTippedJTable extends JTable
     {
-        private String[] columnToolTips;
+        private final String[] columnToolTips;
         
         MyTippedJTable(final DataTableModel m) {
             super(m);

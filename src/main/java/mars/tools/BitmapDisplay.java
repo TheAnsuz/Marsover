@@ -3,28 +3,25 @@
 package mars.tools;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import mars.util.Binary;
-import mars.mips.hardware.Memory;
-import javax.swing.JLabel;
-import javax.swing.border.Border;
-import java.awt.LayoutManager;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
 import java.util.Observable;
-import java.awt.Component;
-import javax.swing.JComponent;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JPanel;
-import java.awt.Graphics;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.util.Binary;
 
 public class BitmapDisplay extends AbstractMarsToolAndApplication
 {
@@ -159,7 +156,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication
     
     private JComponent buildOrganizationArea() {
         final JPanel organization = new JPanel(new GridLayout(8, 1));
-        (this.visualizationUnitPixelWidthSelector = new JComboBox((String[])this.visualizationUnitPixelWidthChoices)).setEditable(false);
+        (this.visualizationUnitPixelWidthSelector = new JComboBox(this.visualizationUnitPixelWidthChoices)).setEditable(false);
         this.visualizationUnitPixelWidthSelector.setBackground(this.backgroundColor);
         this.visualizationUnitPixelWidthSelector.setSelectedIndex(0);
         this.visualizationUnitPixelWidthSelector.setToolTipText("Width in pixels of rectangle representing memory word");
@@ -171,7 +168,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication
                 BitmapDisplay.this.updateDisplay();
             }
         });
-        (this.visualizationUnitPixelHeightSelector = new JComboBox((String[])this.visualizationUnitPixelHeightChoices)).setEditable(false);
+        (this.visualizationUnitPixelHeightSelector = new JComboBox(this.visualizationUnitPixelHeightChoices)).setEditable(false);
         this.visualizationUnitPixelHeightSelector.setBackground(this.backgroundColor);
         this.visualizationUnitPixelHeightSelector.setSelectedIndex(0);
         this.visualizationUnitPixelHeightSelector.setToolTipText("Height in pixels of rectangle representing memory word");
@@ -183,7 +180,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication
                 BitmapDisplay.this.updateDisplay();
             }
         });
-        (this.visualizationPixelWidthSelector = new JComboBox((String[])this.displayAreaPixelWidthChoices)).setEditable(false);
+        (this.visualizationPixelWidthSelector = new JComboBox(this.displayAreaPixelWidthChoices)).setEditable(false);
         this.visualizationPixelWidthSelector.setBackground(this.backgroundColor);
         this.visualizationPixelWidthSelector.setSelectedIndex(3);
         this.visualizationPixelWidthSelector.setToolTipText("Total width in pixels of display area");
@@ -197,7 +194,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication
                 BitmapDisplay.this.updateDisplay();
             }
         });
-        (this.visualizationPixelHeightSelector = new JComboBox((String[])this.displayAreaPixelHeightChoices)).setEditable(false);
+        (this.visualizationPixelHeightSelector = new JComboBox(this.displayAreaPixelHeightChoices)).setEditable(false);
         this.visualizationPixelHeightSelector.setBackground(this.backgroundColor);
         this.visualizationPixelHeightSelector.setSelectedIndex(2);
         this.visualizationPixelHeightSelector.setToolTipText("Total height in pixels of display area");
@@ -211,7 +208,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication
                 BitmapDisplay.this.updateDisplay();
             }
         });
-        (this.displayBaseAddressSelector = new JComboBox((String[])this.displayBaseAddressChoices)).setEditable(false);
+        (this.displayBaseAddressSelector = new JComboBox(this.displayBaseAddressChoices)).setEditable(false);
         this.displayBaseAddressSelector.setBackground(this.backgroundColor);
         this.displayBaseAddressSelector.setSelectedIndex(this.defaultBaseAddressIndex);
         this.displayBaseAddressSelector.setToolTipText("Base address for display area (upper left corner)");

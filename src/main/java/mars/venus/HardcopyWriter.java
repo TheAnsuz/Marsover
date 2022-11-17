@@ -2,21 +2,21 @@
 
 package mars.venus;
 
-import java.io.FileReader;
-import java.awt.Toolkit;
-import java.util.Date;
-import java.util.TimeZone;
-import java.text.DateFormat;
-import java.awt.PageAttributes;
-import java.awt.JobAttributes;
-import java.awt.Frame;
-import java.util.Properties;
-import java.awt.FontMetrics;
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.JobAttributes;
+import java.awt.PageAttributes;
 import java.awt.PrintJob;
+import java.awt.Toolkit;
+import java.io.FileReader;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Properties;
+import java.util.TimeZone;
 
 public class HardcopyWriter extends Writer
 {
@@ -94,35 +94,35 @@ public class HardcopyWriter extends Writer
                 if (this.page == null) {
                     this.newpage();
                 }
-                if (buffer[i] == '\n') {
-                    if (!this.last_char_was_return) {
-                        this.newline();
-                    }
-                }
-                else if (buffer[i] == '\r') {
-                    this.newline();
-                    this.last_char_was_return = true;
-                }
-                else {
-                    this.last_char_was_return = false;
-                    if (!Character.isWhitespace(buffer[i]) || Character.isSpaceChar(buffer[i]) || buffer[i] == '\t') {
-                        if (this.charnum >= this.chars_per_line) {
+                switch (buffer[i]) {
+                    case '\n':
+                        if (!this.last_char_was_return) {
                             this.newline();
-                            if (this.page == null) {
-                                this.newpage();
-                            }
-                        }
-                        if (Character.isSpaceChar(buffer[i])) {
-                            ++this.charnum;
-                        }
-                        else if (buffer[i] == '\t') {
-                            this.charnum += this.chars_per_tab - this.charnum % this.chars_per_tab;
-                        }
-                        else {
-                            this.page.drawChars(buffer, i, 1, this.x0 + this.charnum * this.charwidth, this.y0 + this.linenum * this.lineheight + this.lineascent);
-                            ++this.charnum;
-                        }
-                    }
+                        }   break;
+                    case '\r':
+                        this.newline();
+                        this.last_char_was_return = true;
+                        break;
+                    default:
+                        this.last_char_was_return = false;
+                        if (!Character.isWhitespace(buffer[i]) || Character.isSpaceChar(buffer[i]) || buffer[i] == '\t') {
+                                if (this.charnum >= this.chars_per_line) {
+                                        this.newline();
+                                        if (this.page == null) {
+                                                this.newpage();
+                                                }
+                                        }
+                                if (Character.isSpaceChar(buffer[i])) {
+                                        ++this.charnum;
+                                        }
+                                        else if (buffer[i] == '\t') {
+                                                this.charnum += this.chars_per_tab - this.charnum % this.chars_per_tab;
+                                                }
+                                                else {
+                                                        this.page.drawChars(buffer, i, 1, this.x0 + this.charnum * this.charwidth, this.y0 + this.linenum * this.lineheight + this.lineascent);
+                                                        ++this.charnum;
+                                                        }
+                                }   break;
                 }
             }
         }

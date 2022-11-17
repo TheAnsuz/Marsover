@@ -6,8 +6,8 @@ import java.util.Observable;
 
 public class Register extends Observable
 {
-    private String name;
-    private int number;
+    private final String name;
+    private final int number;
     private int resetValue;
     private volatile int value;
     

@@ -2,43 +2,42 @@
 
 package mars;
 
-import java.util.Iterator;
-import mars.mips.hardware.InvalidRegisterAccessException;
-import mars.pipeline.pipes.StaticPipe;
-import mars.mips.hardware.RegisterAccessNotice;
-import mars.pipeline.Decode;
-import mars.pipeline.tomasulo.Tomasulo;
-import mars.pipeline.StageRegisters;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import java.util.Observer;
-import mars.mips.hardware.Memory;
-import mars.simulator.ProgramArgumentList;
-import java.util.Collection;
-import mars.util.FilenameFinder;
-import mars.mips.hardware.MemoryConfiguration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import mars.pipeline.pipe_config;
-import mars.mips.hardware.Coprocessor1;
-import mars.mips.hardware.RegisterFile;
-import javax.swing.SwingUtilities;
-import mars.venus.VenusUI;
-import mars.mips.dump.DumpFormat;
-import java.io.IOException;
-import mars.mips.hardware.AddressErrorException;
-import java.io.FileNotFoundException;
-import mars.mips.dump.DumpFormatLoader;
-import mars.util.Binary;
-import mars.util.MemoryDump;
 import java.io.File;
-import mars.mips.hardware.MemoryConfigurations;
-import mars.pipeline.Pipeline;
-import mars.pipeline.Stage;
-import mars.pipeline.BranchPredictor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
+import mars.mips.dump.DumpFormat;
+import mars.mips.dump.DumpFormatLoader;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.InvalidRegisterAccessException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.MemoryConfiguration;
+import mars.mips.hardware.MemoryConfigurations;
+import mars.mips.hardware.RegisterAccessNotice;
+import mars.mips.hardware.RegisterFile;
+import mars.pipeline.BranchPredictor;
+import mars.pipeline.Decode;
+import mars.pipeline.Pipeline;
+import mars.pipeline.Stage;
+import mars.pipeline.StageRegisters;
+import mars.pipeline.pipe_config;
+import mars.pipeline.pipes.StaticPipe;
+import mars.pipeline.tomasulo.Tomasulo;
+import mars.simulator.ProgramArgumentList;
+import mars.util.Binary;
+import mars.util.FilenameFinder;
+import mars.util.MemoryDump;
+import mars.venus.VenusUI;
 
 public class MarsLaunch
 {
@@ -130,7 +129,7 @@ public class MarsLaunch
             if (segInfo == null) {
                 try {
                     final String[] memoryRange = this.checkMemoryAddressRange(triple[0]);
-                    segInfo = new Integer[] { new Integer(Binary.stringToInt(memoryRange[0])), new Integer(Binary.stringToInt(memoryRange[1])) };
+                    segInfo = new Integer[] { Binary.stringToInt(memoryRange[0]), Binary.stringToInt(memoryRange[1])};
                 }
                 catch (NumberFormatException nfe) {
                     segInfo = null;
@@ -301,7 +300,7 @@ public class MarsLaunch
                                 this.displayHelp();
                                 return false;
                             }
-                            if (args[i].indexOf("$") == 0) {
+                            if (args[i].indexOf('$') == 0) {
                                 if (RegisterFile.getUserRegister(args[i]) == null && Coprocessor1.getRegister(args[i]) == null) {
                                     this.out.println("Invalid Register Name: " + args[i]);
                                 }
@@ -445,8 +444,8 @@ public class MarsLaunch
     
     private String[] checkMemoryAddressRange(final String arg) throws NumberFormatException {
         String[] memoryRange = null;
-        if (arg.indexOf("-") > 0 && arg.indexOf("-") < arg.length() - 1) {
-            memoryRange = new String[] { arg.substring(0, arg.indexOf("-")), arg.substring(arg.indexOf("-") + 1) };
+        if (arg.indexOf('-') > 0 && arg.indexOf('-') < arg.length() - 1) {
+            memoryRange = new String[] { arg.substring(0, arg.indexOf('-')), arg.substring(arg.indexOf('-') + 1) };
             if (Binary.stringToInt(memoryRange[0]) > Binary.stringToInt(memoryRange[1]) || !Memory.wordAligned(Binary.stringToInt(memoryRange[0])) || !Memory.wordAligned(Binary.stringToInt(memoryRange[1]))) {
                 throw new NumberFormatException();
             }
@@ -491,7 +490,7 @@ public class MarsLaunch
     private void establishObserver() {
         final Observer instructionCounter = new Observer() {
             private int lastAddress = 0;
-            private int lastLaunch = -100;
+            private final int lastLaunch = -100;
             
             @Override
             public void update(final Observable o, final Object obj) {
@@ -526,7 +525,7 @@ public class MarsLaunch
     private void establishTomasuloObserver() {
         final Observer instructionCounter = new Observer() {
             boolean last_instruction_sent = false;
-            private StageRegisters st_reg = new StageRegisters();
+            private final StageRegisters st_reg = new StageRegisters();
             private final Tomasulo tpipe = (Tomasulo)MarsLaunch.this.pipe2;
             
             private void launchToPipe() {
@@ -649,32 +648,31 @@ public class MarsLaunch
                 if (this.verbose) {
                     this.out.print(reg + "\t");
                 }
-                if (this.displayFormat == 1) {
-                    this.out.print(Binary.binaryStringToHexString(Binary.intToBinaryString(ivalue)));
-                    if (hasDouble) {
-                        this.out.println("\t" + Binary.binaryStringToHexString(Binary.longToBinaryString(lvalue)));
-                    }
-                    else {
-                        this.out.println("");
-                    }
-                }
-                else if (this.displayFormat == 0) {
-                    this.out.print(fvalue);
-                    if (hasDouble) {
-                        this.out.println("\t" + dvalue);
-                    }
-                    else {
-                        this.out.println("");
-                    }
-                }
-                else {
-                    this.out.print(Binary.intToAscii(ivalue));
-                    if (hasDouble) {
-                        this.out.println("\t" + Binary.intToAscii(Binary.highOrderLongToInt(lvalue)) + Binary.intToAscii(Binary.lowOrderLongToInt(lvalue)));
-                    }
-                    else {
-                        this.out.println("");
-                    }
+                switch (this.displayFormat) {
+                    case 1:
+                        this.out.print(Binary.binaryStringToHexString(Binary.intToBinaryString(ivalue)));
+                        if (hasDouble) {
+                            this.out.println("\t" + Binary.binaryStringToHexString(Binary.longToBinaryString(lvalue)));
+                        }
+                        else {
+                            this.out.println("");
+                        }   break;
+                    case 0:
+                        this.out.print(fvalue);
+                        if (hasDouble) {
+                            this.out.println("\t" + dvalue);
+                        }
+                        else {
+                            this.out.println("");
+                        }   break;
+                    default:
+                        this.out.print(Binary.intToAscii(ivalue));
+                        if (hasDouble) {
+                                this.out.println("\t" + Binary.intToAscii(Binary.highOrderLongToInt(lvalue)) + Binary.intToAscii(Binary.lowOrderLongToInt(lvalue)));
+                                }
+                                else {
+                                        this.out.println("");
+                                        }   break;
                 }
             }
         }

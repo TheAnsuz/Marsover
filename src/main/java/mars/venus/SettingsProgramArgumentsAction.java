@@ -2,11 +2,11 @@
 
 package mars.venus;
 
-import mars.Globals;
-import javax.swing.JCheckBoxMenuItem;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class SettingsProgramArgumentsAction extends GuiAction
 {
@@ -16,7 +16,7 @@ public class SettingsProgramArgumentsAction extends GuiAction
     
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final boolean selected = ((JCheckBoxMenuItem)e.getSource()).isSelected();
+        final boolean selected = ((AbstractButton)e.getSource()).isSelected();
         Globals.getSettings().setProgramArguments(selected);
         if (selected) {
             Globals.getGui().getMainPane().getExecutePane().getTextSegmentWindow().addProgramArgumentsPanel();

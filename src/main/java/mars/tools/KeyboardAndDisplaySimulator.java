@@ -2,53 +2,50 @@
 
 package mars.tools;
 
-import javax.swing.Box;
-import mars.venus.AbstractFontSettingDialog;
-import java.util.Random;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.JLabel;
-import java.awt.event.KeyEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentAdapter;
-import mars.mips.hardware.AddressErrorException;
-import mars.Globals;
-import java.awt.event.KeyListener;
-import javax.swing.text.DefaultCaret;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import java.awt.event.ComponentListener;
-import javax.swing.border.Border;
-import java.awt.Frame;
-import javax.swing.JDialog;
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Frame;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.FontMetrics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
-import javax.swing.border.TitledBorder;
-import mars.simulator.Simulator;
-import mars.mips.hardware.Coprocessor0;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
 import java.util.Observable;
-import java.awt.Component;
-import javax.swing.JSplitPane;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import javax.swing.JComponent;
-import mars.util.Binary;
-import mars.mips.hardware.Memory;
-import java.awt.Font;
+import java.util.Random;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JSlider;
 import javax.swing.JComboBox;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.Insets;
-import java.awt.Dimension;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.DefaultCaret;
+import mars.Globals;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.simulator.Simulator;
+import mars.util.Binary;
+import mars.venus.AbstractFontSettingDialog;
 
 public class KeyboardAndDisplaySimulator extends AbstractMarsToolAndApplication
 {
@@ -253,7 +250,7 @@ public class KeyboardAndDisplaySimulator extends AbstractMarsToolAndApplication
             final String row = new String(charArray);
             final StringBuffer str = new StringBuffer(row);
             for (int i = 1; i < this.rows; ++i) {
-                str.append("\n" + row);
+                str.append("\n").append(row);
             }
             initialText = str.toString();
         }
@@ -352,7 +349,7 @@ public class KeyboardAndDisplaySimulator extends AbstractMarsToolAndApplication
         (this.displayScrollPane = new JScrollPane(this.display)).setPreferredSize(KeyboardAndDisplaySimulator.preferredTextAreaDimension);
         this.displayPanel.add(this.displayScrollPane);
         this.displayOptions = new JPanel();
-        (this.delayTechniqueChooser = new JComboBox((TransmitterDelayTechnique[])this.delayTechniques)).setToolTipText("Technique for determining simulated transmitter device processing delay");
+        (this.delayTechniqueChooser = new JComboBox(this.delayTechniques)).setToolTipText("Technique for determining simulated transmitter device processing delay");
         this.delayTechniqueChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -506,7 +503,7 @@ public class KeyboardAndDisplaySimulator extends AbstractMarsToolAndApplication
         private static final int DELAY_INDEX_MIN = 0;
         private static final int DELAY_INDEX_MAX = 40;
         private static final int DELAY_INDEX_INIT = 4;
-        private double[] delayTable;
+        private final double[] delayTable;
         private JLabel sliderLabel;
         private volatile int delayLengthIndex;
         

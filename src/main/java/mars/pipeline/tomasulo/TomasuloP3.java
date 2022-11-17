@@ -2,15 +2,15 @@
 
 package mars.pipeline.tomasulo;
 
-import mars.mips.hardware.AddressErrorException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Memory;
-import mars.pipeline.tomasulo.estaciones.EstacionPF;
+import mars.pipeline.BranchPredictor;
 import mars.pipeline.Decode;
 import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.StageRegisters;
-import mars.pipeline.BranchPredictor;
+import mars.pipeline.tomasulo.estaciones.EstacionPF;
 
 public class TomasuloP3 extends Tomasulo_implementado
 {

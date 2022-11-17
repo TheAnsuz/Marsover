@@ -2,17 +2,16 @@
 
 package mars.tools;
 
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import mars.ProgramStatement;
 import java.awt.event.ActionEvent;
-import javax.swing.table.TableModel;
-import javax.swing.JComponent;
-import mars.mips.hardware.RegisterFile;
-import mars.mips.hardware.Memory;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import javax.swing.JComponent;
+import mars.ProgramStatement;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
 
 public class BHTSimulator extends AbstractMarsToolAndApplication implements ActionListener
 {
@@ -42,8 +41,8 @@ public class BHTSimulator extends AbstractMarsToolAndApplication implements Acti
         this.m_gui = new BHTSimGUI();
         this.m_bhtModel = new BHTableModel(16, 1, false);
         this.m_gui.getTabBHT().setModel(this.m_bhtModel);
-        this.m_gui.getCbBHThistory().setSelectedItem(new Integer(1));
-        this.m_gui.getCbBHTentries().setSelectedItem(new Integer(16));
+        this.m_gui.getCbBHThistory().setSelectedItem(1);
+        this.m_gui.getCbBHTentries().setSelectedItem(16);
         this.m_gui.getCbBHTentries().addActionListener(this);
         this.m_gui.getCbBHThistory().addActionListener(this);
         this.m_gui.getCbBHTinitVal().addActionListener(this);
@@ -72,7 +71,7 @@ public class BHTSimulator extends AbstractMarsToolAndApplication implements Acti
         this.m_gui.getTfAddress().setText("");
         this.m_gui.getTfIndex().setText("");
         this.m_gui.getTaLog().setText("");
-        this.m_bhtModel.initBHT((int)this.m_gui.getCbBHTentries().getSelectedItem(), (int)this.m_gui.getCbBHThistory().getSelectedItem(), ((String)this.m_gui.getCbBHTinitVal().getSelectedItem()).equals("TAKE"));
+        this.m_bhtModel.initBHT((int)this.m_gui.getCbBHTentries().getSelectedItem(), (int)this.m_gui.getCbBHThistory().getSelectedItem(), this.m_gui.getCbBHTinitVal().getSelectedItem().equals("TAKE"));
         this.m_pendingBranchInstAddress = 0;
         this.m_lastBranchTaken = false;
     }

@@ -2,11 +2,11 @@
 
 package mars.venus;
 
-import javax.swing.JCheckBoxMenuItem;
-import mars.Globals;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class SettingsSelfModifyingCodeAction extends GuiAction
 {
@@ -16,6 +16,6 @@ public class SettingsSelfModifyingCodeAction extends GuiAction
     
     @Override
     public void actionPerformed(final ActionEvent e) {
-        Globals.getSettings().setBooleanSetting(20, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+        Globals.getSettings().setBooleanSetting(20, ((AbstractButton)e.getSource()).isSelected());
     }
 }

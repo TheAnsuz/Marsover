@@ -2,18 +2,17 @@
 
 package mars.pipeline.tomasulo.estaciones;
 
-import mars.mips.instructions.BasicInstruction;
-import mars.ProcessingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mars.ProgramStatement;
-import mars.pipeline.tomasulo.InstructionSetTomasulo;
-import mars.pipeline.tomasulo.RoB_entry;
-import mars.pipeline.tomasulo.registro;
+import mars.ProcessingException;
+import mars.mips.instructions.BasicInstruction;
 import mars.pipeline.Decode;
-import mars.pipeline.tomasulo.ReorderBuffer;
-import mars.pipeline.tomasulo.Tomasulo_conf;
 import mars.pipeline.tomasulo.Estacion;
+import mars.pipeline.tomasulo.InstructionSetTomasulo;
+import mars.pipeline.tomasulo.ReorderBuffer;
+import mars.pipeline.tomasulo.RoB_entry;
+import mars.pipeline.tomasulo.Tomasulo_conf;
+import mars.pipeline.tomasulo.registro;
 
 public class EstacionLW extends Estacion
 {

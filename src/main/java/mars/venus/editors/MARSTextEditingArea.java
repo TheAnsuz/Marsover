@@ -2,12 +2,12 @@
 
 package mars.venus.editors;
 
-import java.awt.Component;
 import java.awt.Color;
-import java.awt.FontMetrics;
+import java.awt.Component;
 import java.awt.Font;
-import javax.swing.undo.UndoManager;
+import java.awt.FontMetrics;
 import javax.swing.text.Document;
+import javax.swing.undo.UndoManager;
 
 public interface MARSTextEditingArea
 {

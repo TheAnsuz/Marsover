@@ -2,18 +2,17 @@
 
 package mars.pipeline.pipes;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import mars.mips.hardware.AddressErrorException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Memory;
 import mars.pipeline.BranchPredictor;
+import mars.pipeline.Pipeline;
 import mars.pipeline.Stage;
 import mars.pipeline.StageRegisters;
-import mars.pipeline.Pipeline;
 
 public abstract class StaticPipe extends Pipeline
 {

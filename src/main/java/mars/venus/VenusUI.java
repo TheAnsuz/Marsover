@@ -2,36 +2,31 @@
 
 package mars.venus;
 
-import java.awt.event.MouseListener;
-import javax.swing.JPopupMenu;
-import java.awt.AWTEvent;
-import java.awt.event.KeyEvent;
-import mars.mips.dump.DumpFormatLoader;
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
-import javax.swing.ImageIcon;
-import java.awt.Image;
-import java.net.URL;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
 import java.awt.BorderLayout;
-import java.awt.LayoutManager;
-import java.awt.FlowLayout;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
-import mars.Globals;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.URL;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenuItem;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
-import javax.swing.JMenuBar;
-import javax.swing.JFrame;
+import javax.swing.KeyStroke;
+import mars.Globals;
+import mars.mips.dump.DumpFormatLoader;
 
 public class VenusUI extends JFrame
 {
@@ -237,32 +232,32 @@ public class VenusUI extends JFrame
         final Toolkit tk = Toolkit.getDefaultToolkit();
         final Class cs = this.getClass();
         try {
-            this.fileNewAction = new FileNewAction("New", new ImageIcon(tk.getImage(cs.getResource("/images/New22.png"))), "Create a new file for editing", new Integer(78), KeyStroke.getKeyStroke(78, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.fileOpenAction = new FileOpenAction("Open ...", new ImageIcon(tk.getImage(cs.getResource("/images/Open22.png"))), "Open a file for editing", new Integer(79), KeyStroke.getKeyStroke(79, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.fileCloseAction = new FileCloseAction("Close", null, "Close the current file", new Integer(67), KeyStroke.getKeyStroke(87, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.fileCloseAllAction = new FileCloseAllAction("Close All", null, "Close all open files", new Integer(76), null, this.mainUI);
-            this.fileSaveAction = new FileSaveAction("Save", new ImageIcon(tk.getImage(cs.getResource("/images/Save22.png"))), "Save the current file", new Integer(83), KeyStroke.getKeyStroke(83, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.fileSaveAsAction = new FileSaveAsAction("Save as ...", new ImageIcon(tk.getImage(cs.getResource("/images/SaveAs22.png"))), "Save current file with different name", new Integer(65), null, this.mainUI);
-            this.fileSaveAllAction = new FileSaveAllAction("Save All", null, "Save all open files", new Integer(86), null, this.mainUI);
-            this.fileDumpMemoryAction = new FileDumpMemoryAction("Dump Memory ...", new ImageIcon(tk.getImage(cs.getResource("/images/Dump22.png"))), "Dump machine code or data in an available format", new Integer(68), KeyStroke.getKeyStroke(68, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.filePrintAction = new FilePrintAction("Print ...", new ImageIcon(tk.getImage(cs.getResource("/images/Print22.gif"))), "Print current file", new Integer(80), null, this.mainUI);
-            this.fileExitAction = new FileExitAction("Exit", null, "Exit Mars", new Integer(88), null, this.mainUI);
-            this.editUndoAction = new EditUndoAction("Undo", new ImageIcon(tk.getImage(cs.getResource("/images/Undo22.png"))), "Undo last edit", new Integer(85), KeyStroke.getKeyStroke(90, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.editRedoAction = new EditRedoAction("Redo", new ImageIcon(tk.getImage(cs.getResource("/images/Redo22.png"))), "Redo last edit", new Integer(82), KeyStroke.getKeyStroke(89, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.editCutAction = new EditCutAction("Cut", new ImageIcon(tk.getImage(cs.getResource("/images/Cut22.gif"))), "Cut", new Integer(67), KeyStroke.getKeyStroke(88, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.editCopyAction = new EditCopyAction("Copy", new ImageIcon(tk.getImage(cs.getResource("/images/Copy22.png"))), "Copy", new Integer(79), KeyStroke.getKeyStroke(67, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.editPasteAction = new EditPasteAction("Paste", new ImageIcon(tk.getImage(cs.getResource("/images/Paste22.png"))), "Paste", new Integer(80), KeyStroke.getKeyStroke(86, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.editFindReplaceAction = new EditFindReplaceAction("Find/Replace", new ImageIcon(tk.getImage(cs.getResource("/images/Find22.png"))), "Find/Replace", new Integer(70), KeyStroke.getKeyStroke(70, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.editSelectAllAction = new EditSelectAllAction("Select All", null, "Select All", new Integer(65), KeyStroke.getKeyStroke(65, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.runAssembleAction = new RunAssembleAction("Assemble", new ImageIcon(tk.getImage(cs.getResource("/images/Assemble22.png"))), "Assemble the current file and clear breakpoints", new Integer(65), KeyStroke.getKeyStroke(114, 0), this.mainUI);
-            this.runGoAction = new RunGoAction("Go", new ImageIcon(tk.getImage(cs.getResource("/images/Play22.png"))), "Run the current program", new Integer(71), KeyStroke.getKeyStroke(116, 0), this.mainUI);
-            this.runStepAction = new RunStepAction("Step", new ImageIcon(tk.getImage(cs.getResource("/images/StepForward22.png"))), "Run one step at a time", new Integer(84), KeyStroke.getKeyStroke(118, 0), this.mainUI);
-            this.runBackstepAction = new RunBackstepAction("Backstep", new ImageIcon(tk.getImage(cs.getResource("/images/StepBack22.png"))), "Undo the last step", new Integer(66), KeyStroke.getKeyStroke(119, 0), this.mainUI);
-            this.runPauseAction = new RunPauseAction("Pause", new ImageIcon(tk.getImage(cs.getResource("/images/Pause22.png"))), "Pause the currently running program", new Integer(80), KeyStroke.getKeyStroke(120, 0), this.mainUI);
-            this.runStopAction = new RunStopAction("Stop", new ImageIcon(tk.getImage(cs.getResource("/images/Stop22.png"))), "Stop the currently running program", new Integer(83), KeyStroke.getKeyStroke(122, 0), this.mainUI);
-            this.runResetAction = new RunResetAction("Reset", new ImageIcon(tk.getImage(cs.getResource("/images/Reset22.png"))), "Reset MIPS memory and registers", new Integer(82), KeyStroke.getKeyStroke(123, 0), this.mainUI);
-            this.runClearBreakpointsAction = new RunClearBreakpointsAction("Clear all breakpoints", null, "Clears all execution breakpoints set since the last assemble.", new Integer(75), KeyStroke.getKeyStroke(75, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
-            this.runToggleBreakpointsAction = new RunToggleBreakpointsAction("Toggle all breakpoints", null, "Disable/enable all breakpoints without clearing (can also click Bkpt column header)", new Integer(84), KeyStroke.getKeyStroke(84, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.fileNewAction = new FileNewAction("New", new ImageIcon(tk.getImage(cs.getResource("/images/New22.png"))), "Create a new file for editing", 78, KeyStroke.getKeyStroke(78, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.fileOpenAction = new FileOpenAction("Open ...", new ImageIcon(tk.getImage(cs.getResource("/images/Open22.png"))), "Open a file for editing", 79, KeyStroke.getKeyStroke(79, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.fileCloseAction = new FileCloseAction("Close", null, "Close the current file", 67, KeyStroke.getKeyStroke(87, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.fileCloseAllAction = new FileCloseAllAction("Close All", null, "Close all open files", 76, null, this.mainUI);
+            this.fileSaveAction = new FileSaveAction("Save", new ImageIcon(tk.getImage(cs.getResource("/images/Save22.png"))), "Save the current file", 83, KeyStroke.getKeyStroke(83, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.fileSaveAsAction = new FileSaveAsAction("Save as ...", new ImageIcon(tk.getImage(cs.getResource("/images/SaveAs22.png"))), "Save current file with different name", 65, null, this.mainUI);
+            this.fileSaveAllAction = new FileSaveAllAction("Save All", null, "Save all open files", 86, null, this.mainUI);
+            this.fileDumpMemoryAction = new FileDumpMemoryAction("Dump Memory ...", new ImageIcon(tk.getImage(cs.getResource("/images/Dump22.png"))), "Dump machine code or data in an available format", 68, KeyStroke.getKeyStroke(68, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.filePrintAction = new FilePrintAction("Print ...", new ImageIcon(tk.getImage(cs.getResource("/images/Print22.gif"))), "Print current file", 80, null, this.mainUI);
+            this.fileExitAction = new FileExitAction("Exit", null, "Exit Mars", 88, null, this.mainUI);
+            this.editUndoAction = new EditUndoAction("Undo", new ImageIcon(tk.getImage(cs.getResource("/images/Undo22.png"))), "Undo last edit", 85, KeyStroke.getKeyStroke(90, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.editRedoAction = new EditRedoAction("Redo", new ImageIcon(tk.getImage(cs.getResource("/images/Redo22.png"))), "Redo last edit", 82, KeyStroke.getKeyStroke(89, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.editCutAction = new EditCutAction("Cut", new ImageIcon(tk.getImage(cs.getResource("/images/Cut22.gif"))), "Cut", 67, KeyStroke.getKeyStroke(88, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.editCopyAction = new EditCopyAction("Copy", new ImageIcon(tk.getImage(cs.getResource("/images/Copy22.png"))), "Copy", 79, KeyStroke.getKeyStroke(67, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.editPasteAction = new EditPasteAction("Paste", new ImageIcon(tk.getImage(cs.getResource("/images/Paste22.png"))), "Paste", 80, KeyStroke.getKeyStroke(86, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.editFindReplaceAction = new EditFindReplaceAction("Find/Replace", new ImageIcon(tk.getImage(cs.getResource("/images/Find22.png"))), "Find/Replace", 70, KeyStroke.getKeyStroke(70, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.editSelectAllAction = new EditSelectAllAction("Select All", null, "Select All", 65, KeyStroke.getKeyStroke(65, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.runAssembleAction = new RunAssembleAction("Assemble", new ImageIcon(tk.getImage(cs.getResource("/images/Assemble22.png"))), "Assemble the current file and clear breakpoints", 65, KeyStroke.getKeyStroke(114, 0), this.mainUI);
+            this.runGoAction = new RunGoAction("Go", new ImageIcon(tk.getImage(cs.getResource("/images/Play22.png"))), "Run the current program", 71, KeyStroke.getKeyStroke(116, 0), this.mainUI);
+            this.runStepAction = new RunStepAction("Step", new ImageIcon(tk.getImage(cs.getResource("/images/StepForward22.png"))), "Run one step at a time", 84, KeyStroke.getKeyStroke(118, 0), this.mainUI);
+            this.runBackstepAction = new RunBackstepAction("Backstep", new ImageIcon(tk.getImage(cs.getResource("/images/StepBack22.png"))), "Undo the last step", 66, KeyStroke.getKeyStroke(119, 0), this.mainUI);
+            this.runPauseAction = new RunPauseAction("Pause", new ImageIcon(tk.getImage(cs.getResource("/images/Pause22.png"))), "Pause the currently running program", 80, KeyStroke.getKeyStroke(120, 0), this.mainUI);
+            this.runStopAction = new RunStopAction("Stop", new ImageIcon(tk.getImage(cs.getResource("/images/Stop22.png"))), "Stop the currently running program", 83, KeyStroke.getKeyStroke(122, 0), this.mainUI);
+            this.runResetAction = new RunResetAction("Reset", new ImageIcon(tk.getImage(cs.getResource("/images/Reset22.png"))), "Reset MIPS memory and registers", 82, KeyStroke.getKeyStroke(123, 0), this.mainUI);
+            this.runClearBreakpointsAction = new RunClearBreakpointsAction("Clear all breakpoints", null, "Clears all execution breakpoints set since the last assemble.", 75, KeyStroke.getKeyStroke(75, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
+            this.runToggleBreakpointsAction = new RunToggleBreakpointsAction("Toggle all breakpoints", null, "Disable/enable all breakpoints without clearing (can also click Bkpt column header)", 84, KeyStroke.getKeyStroke(84, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), this.mainUI);
             this.settingsLabelAction = new SettingsLabelAction("Show Labels Window (symbol table)", null, "Toggle visibility of Labels window (symbol table) in the Execute tab", null, null, this.mainUI);
             this.settingsPopupInputAction = new SettingsPopupInputAction("Popup dialog for input syscalls (5,6,7,8,12)", null, "If set, use popup dialog for input syscalls (5,6,7,8,12) instead of cursor in Run I/O window", null, null, this.mainUI);
             this.settingsValueDisplayBaseAction = new SettingsValueDisplayBaseAction("Values displayed in hexadecimal", null, "Toggle between hexadecimal and decimal display of memory/register values", null, null, this.mainUI);
@@ -279,7 +274,7 @@ public class VenusUI extends JFrame
             this.settingsHighlightingAction = new SettingsHighlightingAction("Highlighting...", null, "View and modify Execute Tab highlighting colors", null, null, this.mainUI);
             this.settingsExceptionHandlerAction = new SettingsExceptionHandlerAction("Exception Handler...", null, "If set, the specified exception handler file will be included in all Assemble operations.", null, null, this.mainUI);
             this.settingsMemoryConfigurationAction = new SettingsMemoryConfigurationAction("Memory Configuration...", null, "View and modify memory segment base addresses for simulated MIPS.", null, null, this.mainUI);
-            this.helpHelpAction = new HelpHelpAction("Help", new ImageIcon(tk.getImage(cs.getResource("/images/Help22.png"))), "Help", new Integer(72), KeyStroke.getKeyStroke(112, 0), this.mainUI);
+            this.helpHelpAction = new HelpHelpAction("Help", new ImageIcon(tk.getImage(cs.getResource("/images/Help22.png"))), "Help", 72, KeyStroke.getKeyStroke(112, 0), this.mainUI);
             this.helpAboutAction = new HelpAboutAction("About ...", null, "Information about Mars", null, null, this.mainUI);
         }
         catch (NullPointerException e) {
@@ -316,7 +311,7 @@ public class VenusUI extends JFrame
         this.file.add(this.fileSave);
         this.file.add(this.fileSaveAs);
         this.file.add(this.fileSaveAll);
-        if (new DumpFormatLoader().loadDumpFormats().size() > 0) {
+        if (!new DumpFormatLoader().loadDumpFormats().isEmpty()) {
             this.file.add(this.fileDumpMemory);
         }
         this.file.addSeparator();
@@ -439,7 +434,7 @@ public class VenusUI extends JFrame
         toolBar.add(this.Open);
         toolBar.add(this.Save);
         toolBar.add(this.SaveAs);
-        if (new DumpFormatLoader().loadDumpFormats().size() > 0) {
+        if (!new DumpFormatLoader().loadDumpFormats().isEmpty()) {
             toolBar.add(this.DumpMemory);
         }
         toolBar.add(this.Print);

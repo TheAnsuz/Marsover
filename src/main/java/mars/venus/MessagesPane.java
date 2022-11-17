@@ -2,38 +2,34 @@
 
 package mars.venus;
 
-import javax.swing.text.Position;
-import javax.swing.undo.UndoableEdit;
-import java.awt.EventQueue;
-import javax.swing.text.AttributeSet;
-import javax.swing.event.DocumentEvent;
-import mars.simulator.Simulator;
-import javax.swing.text.NavigationFilter;
-import javax.swing.event.DocumentListener;
-import java.util.concurrent.ArrayBlockingQueue;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import mars.Globals;
-import java.io.File;
-import javax.swing.Box;
-import java.awt.event.MouseListener;
-import java.awt.Color;
-import javax.swing.text.BadLocationException;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.concurrent.ArrayBlockingQueue;
+import javax.swing.Box;
 import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.Dimension;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.NavigationFilter;
+import javax.swing.text.Position;
+import javax.swing.undo.UndoableEdit;
+import mars.Globals;
+import mars.simulator.Simulator;
 
 public class MessagesPane extends JTabbedPane
 {
@@ -267,7 +263,7 @@ public class MessagesPane extends JTabbedPane
         final Simulator.StopListener stopListener;
         
         Asker(final int maxLen) {
-            this.resultQueue = new ArrayBlockingQueue<String>(1);
+            this.resultQueue = new ArrayBlockingQueue<>(1);
             this.listener = new DocumentListener() {
                 @Override
                 public void insertUpdate(final DocumentEvent e) {

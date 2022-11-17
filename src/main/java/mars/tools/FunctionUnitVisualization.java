@@ -2,23 +2,19 @@
 
 package mars.tools;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JPanel;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class FunctionUnitVisualization extends JFrame
 {
-    private JPanel contentPane;
-    private String instruction;
-    private int register;
-    private int control;
-    private int aluControl;
-    private int alu;
+    private final JPanel contentPane;
+    private final String instruction;
+    private final int register;
+    private final int control;
+    private final int aluControl;
+    private final int alu;
     private int currentUnit;
     
     public FunctionUnitVisualization(final String instruction, final int functionalUnit) {

@@ -2,9 +2,9 @@
 
 package mars;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
 import mars.assembler.SourceLine;
 
 public class ErrorMessage
@@ -68,7 +68,7 @@ public class ErrorMessage
         this.position = 0;
         this.message = message;
         final ArrayList<Integer> defineLine = this.parseMacroHistory(statement.getSource());
-        if (defineLine.size() == 0) {
+        if (defineLine.isEmpty()) {
             this.line = statement.getSourceLine();
             this.macroExpansionHistory = "";
         }
@@ -81,8 +81,8 @@ public class ErrorMessage
     private ArrayList<Integer> parseMacroHistory(final String string) {
         final Pattern pattern = Pattern.compile("<\\d+>");
         final Matcher matcher = pattern.matcher(string);
-        String verify = new String(string).trim();
-        final ArrayList<Integer> macroHistory = new ArrayList<Integer>();
+        String verify = string.trim();
+        final ArrayList<Integer> macroHistory = new ArrayList<>();
         while (matcher.find()) {
             final String match = matcher.group();
             if (verify.indexOf(match) != 0) {

@@ -2,10 +2,10 @@
 
 package mars.mips.instructions;
 
-import mars.ProcessingException;
-import mars.assembler.Tokenizer;
 import java.util.StringTokenizer;
+import mars.ProcessingException;
 import mars.assembler.TokenList;
+import mars.assembler.Tokenizer;
 
 public abstract class Instruction
 {

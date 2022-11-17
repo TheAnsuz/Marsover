@@ -2,11 +2,11 @@
 
 package mars.simulator;
 
-import mars.ProgramStatement;
-import mars.mips.hardware.Coprocessor1;
-import mars.mips.hardware.Coprocessor0;
-import mars.mips.hardware.RegisterFile;
 import mars.Globals;
+import mars.ProgramStatement;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.RegisterFile;
 
 public class BackStepper
 {
@@ -23,7 +23,7 @@ public class BackStepper
     private static final int DO_NOTHING = 10;
     private static final int NOT_PC_VALUE = -1;
     private boolean engaged;
-    private BackstepStack backSteps;
+    private final BackstepStack backSteps;
     
     public BackStepper() {
         this.engaged = true;
@@ -197,10 +197,10 @@ public class BackStepper
     
     private class BackstepStack
     {
-        private int capacity;
+        private final int capacity;
         private int size;
         private int top;
-        private BackStep[] stack;
+        private final BackStep[] stack;
         
         private BackstepStack(final int capacity) {
             this.capacity = capacity;

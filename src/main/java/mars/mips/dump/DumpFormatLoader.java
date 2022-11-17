@@ -3,8 +3,8 @@
 package mars.mips.dump;
 
 import java.lang.reflect.Modifier;
-import mars.util.FilenameFinder;
 import java.util.ArrayList;
+import mars.util.FilenameFinder;
 
 public class DumpFormatLoader
 {

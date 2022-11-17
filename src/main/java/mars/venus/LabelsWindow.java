@@ -2,50 +2,47 @@
 
 package mars.venus;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Point;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
-import mars.assembler.Symbol;
-import java.util.List;
-import java.util.Collections;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.assembler.Symbol;
 import mars.assembler.SymbolTable;
 import mars.mips.hardware.Memory;
 import mars.util.Binary;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.ItemEvent;
-import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
-import java.awt.Dimension;
-import javax.swing.JComponent;
-import java.awt.event.MouseListener;
-import javax.swing.JLabel;
-import javax.swing.Box;
-import mars.MIPSprogram;
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import java.awt.event.ItemListener;
-import java.awt.LayoutManager;
-import java.awt.GridLayout;
-import mars.Globals;
-import java.util.Comparator;
-import java.util.ArrayList;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import java.awt.Container;
-import javax.swing.JInternalFrame;
 
 public class LabelsWindow extends JInternalFrame
 {
-    private Container contentPane;
-    private JPanel labelPanel;
-    private JCheckBox dataLabels;
-    private JCheckBox textLabels;
+    private final Container contentPane;
+    private final JPanel labelPanel;
+    private final JCheckBox dataLabels;
+    private final JCheckBox textLabels;
     private ArrayList<LabelsForSymbolTable> listOfLabelsForSymbolTable;
-    private LabelsWindow labelsWindow;
+    private final LabelsWindow labelsWindow;
     private static final int MAX_DISPLAYED_CHARS = 24;
     private static final int PREFERRED_NAME_COLUMN_WIDTH = 60;
     private static final int PREFERRED_ADDRESS_COLUMN_WIDTH = 60;
@@ -63,7 +60,7 @@ public class LabelsWindow extends JInternalFrame
     
     public LabelsWindow() {
         super("Labels", true, false, true, true);
-        this.tableSortingComparators = new Comparator[] { new LabelAddressAscendingComparator(), new DescendingComparator((Comparator)new LabelAddressAscendingComparator()), new LabelAddressAscendingComparator(), new DescendingComparator((Comparator)new LabelAddressAscendingComparator()), new LabelNameAscendingComparator(), new LabelNameAscendingComparator(), new DescendingComparator((Comparator)new LabelNameAscendingComparator()), new DescendingComparator((Comparator)new LabelNameAscendingComparator()) };
+        this.tableSortingComparators = new Comparator[] { new LabelAddressAscendingComparator(), new DescendingComparator(new LabelAddressAscendingComparator()), new LabelAddressAscendingComparator(), new DescendingComparator(new LabelAddressAscendingComparator()), new LabelNameAscendingComparator(), new LabelNameAscendingComparator(), new DescendingComparator(new LabelNameAscendingComparator()), new DescendingComparator(new LabelNameAscendingComparator()) };
         this.sortState = 0;
         try {
             this.sortState = Integer.parseInt(Globals.getSettings().getLabelSortState());
@@ -190,12 +187,12 @@ public class LabelsWindow extends JInternalFrame
     
     private class LabelsForSymbolTable
     {
-        private MIPSprogram myMIPSprogram;
+        private final MIPSprogram myMIPSprogram;
         private Object[][] labelData;
         private JTable labelTable;
         private ArrayList<Symbol> symbols;
-        private SymbolTable symbolTable;
-        private String tableName;
+        private final SymbolTable symbolTable;
+        private final String tableName;
         
         public LabelsForSymbolTable(final MIPSprogram myMIPSprogram) {
             this.myMIPSprogram = myMIPSprogram;
@@ -358,7 +355,7 @@ public class LabelsWindow extends JInternalFrame
                     LabelsWindow.this.sortState = LabelsWindow.sortStateTransitions[LabelsWindow.this.sortState][realIndex];
                     LabelsWindow.this.tableSortComparator = LabelsWindow.this.tableSortingComparators[LabelsWindow.this.sortState];
                     LabelsWindow.columnNames = LabelsWindow.sortColumnHeadings[LabelsWindow.this.sortState];
-                    Globals.getSettings().setLabelSortState(new Integer(LabelsWindow.this.sortState).toString());
+                    Globals.getSettings().setLabelSortState(Integer.toString(LabelsWindow.this.sortState));
                     LabelsWindow.this.setupTable();
                     Globals.getGui().getMainPane().getExecutePane().setLabelWindowVisibility(false);
                     Globals.getGui().getMainPane().getExecutePane().setLabelWindowVisibility(true);
@@ -403,7 +400,7 @@ public class LabelsWindow extends JInternalFrame
     
     private class DescendingComparator implements Comparator
     {
-        private Comparator opposite;
+        private final Comparator opposite;
         
         private DescendingComparator(final Comparator opposite) {
             this.opposite = opposite;

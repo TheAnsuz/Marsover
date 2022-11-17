@@ -2,9 +2,9 @@
 
 package mars.mips.hardware;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import mars.Globals;
-import java.util.ArrayList;
 
 public class MemoryConfigurations
 {

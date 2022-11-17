@@ -6,10 +6,10 @@ import mars.MIPSprogram;
 
 public class SourceLine
 {
-    private String source;
+    private final String source;
     private String filename;
-    private MIPSprogram mipsProgram;
-    private int lineNumber;
+    private final MIPSprogram mipsProgram;
+    private final int lineNumber;
     
     public SourceLine(final String source, final MIPSprogram mipsProgram, final int lineNumber) {
         this.source = source;

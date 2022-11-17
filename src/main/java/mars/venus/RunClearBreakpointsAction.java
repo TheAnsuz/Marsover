@@ -2,12 +2,12 @@
 
 package mars.venus;
 
-import javax.swing.event.TableModelEvent;
 import java.awt.event.ActionEvent;
-import mars.Globals;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import mars.Globals;
 
 public class RunClearBreakpointsAction extends GuiAction implements TableModelListener
 {

@@ -2,11 +2,11 @@
 
 package mars.venus;
 
-import mars.Globals;
-import javax.swing.JCheckBoxMenuItem;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class SettingsAddressDisplayBaseAction extends GuiAction
 {
@@ -16,7 +16,7 @@ public class SettingsAddressDisplayBaseAction extends GuiAction
     
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final boolean isHex = ((JCheckBoxMenuItem)e.getSource()).isSelected();
+        final boolean isHex = ((AbstractButton)e.getSource()).isSelected();
         Globals.getGui().getMainPane().getExecutePane().getAddressDisplayBaseChooser().setSelected(isHex);
         Globals.getSettings().setDisplayAddressesInHex(isHex);
     }

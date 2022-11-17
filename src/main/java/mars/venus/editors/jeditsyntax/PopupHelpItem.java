@@ -20,7 +20,7 @@ public class PopupHelpItem
             this.description = description;
         }
         else {
-            final int detailPosition = description.indexOf(":");
+            final int detailPosition = description.indexOf(':');
             this.description = ((detailPosition == -1) ? description : description.substring(0, detailPosition));
         }
         this.exampleLength = this.example.length();

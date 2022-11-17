@@ -3,9 +3,9 @@
 package mars.venus;
 
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
-import javax.swing.Icon;
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 public class GuiAction extends AbstractAction
 {

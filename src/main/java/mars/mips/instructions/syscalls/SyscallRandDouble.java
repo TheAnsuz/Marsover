@@ -2,12 +2,12 @@
 
 package mars.mips.instructions.syscalls;
 
-import mars.mips.hardware.InvalidRegisterAccessException;
-import mars.ProcessingException;
-import mars.mips.hardware.Coprocessor1;
 import java.util.Random;
-import mars.mips.hardware.RegisterFile;
+import mars.ProcessingException;
 import mars.ProgramStatement;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.InvalidRegisterAccessException;
+import mars.mips.hardware.RegisterFile;
 
 public class SyscallRandDouble extends AbstractSyscall
 {
@@ -17,7 +17,7 @@ public class SyscallRandDouble extends AbstractSyscall
     
     @Override
     public void simulate(final ProgramStatement statement) throws ProcessingException {
-        final Integer index = new Integer(RegisterFile.getValue(4));
+        final Integer index = RegisterFile.getValue(4);
         Random stream = RandomStreams.randomStreams.get(index);
         if (stream == null) {
             stream = new Random();

@@ -2,14 +2,13 @@
 
 package mars.venus;
 
-import mars.tools.MarsTool;
 import java.awt.event.ActionEvent;
-import javax.swing.Icon;
 import javax.swing.AbstractAction;
+import mars.tools.MarsTool;
 
 public class ToolAction extends AbstractAction
 {
-    private Class<? extends MarsTool> toolClass;
+    private final Class<? extends MarsTool> toolClass;
     
     public ToolAction(final Class toolClass, final String toolName) {
         super(toolName, null);

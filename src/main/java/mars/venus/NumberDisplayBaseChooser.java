@@ -2,14 +2,14 @@
 
 package mars.venus;
 
-import mars.util.Binary;
-import java.awt.event.ActionListener;
-import mars.Globals;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import mars.Globals;
+import mars.util.Binary;
 
 public class NumberDisplayBaseChooser extends JCheckBox
 {
@@ -104,7 +104,7 @@ public class NumberDisplayBaseChooser extends JCheckBox
         if (this.base == 16) {
             return Binary.intToHexString(value);
         }
-        return new Integer(value).toString();
+        return Integer.toString(value);
     }
     
     public String formatUnsignedInteger(final int value) {

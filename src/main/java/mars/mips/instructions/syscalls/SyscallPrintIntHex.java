@@ -3,10 +3,10 @@
 package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
-import mars.util.SystemIO;
-import mars.util.Binary;
-import mars.mips.hardware.RegisterFile;
 import mars.ProgramStatement;
+import mars.mips.hardware.RegisterFile;
+import mars.util.Binary;
+import mars.util.SystemIO;
 
 public class SyscallPrintIntHex extends AbstractSyscall
 {

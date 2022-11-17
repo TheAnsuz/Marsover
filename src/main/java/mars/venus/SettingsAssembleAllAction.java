@@ -2,11 +2,11 @@
 
 package mars.venus;
 
-import javax.swing.JCheckBoxMenuItem;
-import mars.Globals;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class SettingsAssembleAllAction extends GuiAction
 {
@@ -16,6 +16,6 @@ public class SettingsAssembleAllAction extends GuiAction
     
     @Override
     public void actionPerformed(final ActionEvent e) {
-        Globals.getSettings().setAssembleAllEnabled(((JCheckBoxMenuItem)e.getSource()).isSelected());
+        Globals.getSettings().setAssembleAllEnabled(((AbstractButton)e.getSource()).isSelected());
     }
 }

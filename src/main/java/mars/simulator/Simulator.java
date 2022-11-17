@@ -2,28 +2,27 @@
 
 package mars.simulator;
 
-import mars.venus.RunGoAction;
-import mars.venus.RunStepAction;
-import mars.ProgramStatement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Observable;
+import javax.swing.AbstractAction;
 import javax.swing.SwingUtilities;
-import mars.mips.hardware.Memory;
-import mars.mips.instructions.BasicInstruction;
+import mars.ErrorList;
+import mars.ErrorMessage;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.ProcessingException;
+import mars.ProgramStatement;
 import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Coprocessor0;
-import mars.ErrorMessage;
-import mars.util.Binary;
-import mars.ErrorList;
+import mars.mips.hardware.Memory;
 import mars.mips.hardware.RegisterFile;
-import java.util.Arrays;
-import mars.venus.RunSpeedPanel;
-import java.util.Iterator;
-import mars.ProcessingException;
+import mars.mips.instructions.BasicInstruction;
+import mars.util.Binary;
 import mars.util.SystemIO;
-import javax.swing.AbstractAction;
-import mars.MIPSprogram;
-import mars.Globals;
-import java.util.ArrayList;
-import java.util.Observable;
+import mars.venus.RunGoAction;
+import mars.venus.RunSpeedPanel;
+import mars.venus.RunStepAction;
 
 public class Simulator extends Observable
 {
@@ -38,7 +37,7 @@ public class Simulator extends Observable
     public static final int NORMAL_TERMINATION = 4;
     public static final int CLIFF_TERMINATION = 5;
     public static final int PAUSE_OR_STOP = 6;
-    private ArrayList<StopListener> stopListeners;
+    private final ArrayList<StopListener> stopListeners;
     
     public static Simulator getInstance() {
         if (Simulator.simulator == null) {
@@ -48,7 +47,7 @@ public class Simulator extends Observable
     }
     
     private Simulator() {
-        this.stopListeners = new ArrayList<StopListener>(1);
+        this.stopListeners = new ArrayList<>(1);
         this.simulatorThread = null;
         if (Globals.getGui() != null) {
             Simulator.interactiveGUIUpdater = new UpdateGUI();
@@ -113,15 +112,15 @@ public class Simulator extends Observable
     
     class SimThread extends SwingWorker
     {
-        private MIPSprogram p;
-        private int pc;
-        private int maxSteps;
+        private final MIPSprogram p;
+        private final int pc;
+        private final int maxSteps;
         private int[] breakPoints;
         private boolean done;
         private ProcessingException pe;
         private volatile boolean stop;
         private volatile AbstractAction stopper;
-        private AbstractAction starter;
+        private final AbstractAction starter;
         private int constructReturnReason;
         
         SimThread(final MIPSprogram p, final int pc, final int maxSteps, final int[] breakPoints, final AbstractAction starter) {
@@ -167,7 +166,7 @@ public class Simulator extends Observable
                 this.done = true;
                 SystemIO.resetFiles();
                 Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, this.pc);
-                return new Boolean(this.done);
+                return this.done;
             }
             int steps = 0;
             int pc = 0;
@@ -196,7 +195,7 @@ public class Simulator extends Observable
                             this.done = true;
                             SystemIO.resetFiles();
                             Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-                            return new Boolean(this.done);
+                            return this.done;
                         }
                         ProgramStatement exceptionHandler = null;
                         try {
@@ -209,7 +208,7 @@ public class Simulator extends Observable
                             this.done = true;
                             SystemIO.resetFiles();
                             Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-                            return new Boolean(this.done);
+                            return this.done;
                         }
                         RegisterFile.setProgramCounter(Memory.exceptionHandlerAddress);
                     }
@@ -225,26 +224,26 @@ public class Simulator extends Observable
                     this.constructReturnReason = 6;
                     this.done = false;
                     Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-                    return new Boolean(this.done);
+                    return this.done;
                 }
                 if (this.breakPoints != null && Arrays.binarySearch(this.breakPoints, RegisterFile.getProgramCounter()) >= 0) {
                     this.constructReturnReason = 1;
                     this.done = false;
                     Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-                    return new Boolean(this.done);
+                    return this.done;
                 }
                 if (this.maxSteps > 0 && ++steps >= this.maxSteps) {
                     this.constructReturnReason = 3;
                     this.done = false;
                     Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-                    return new Boolean(this.done);
+                    return this.done;
                 }
                 if (Simulator.interactiveGUIUpdater != null && this.maxSteps != 1 && RunSpeedPanel.getInstance().getRunSpeed() < 40.0) {
                     SwingUtilities.invokeLater(Simulator.interactiveGUIUpdater);
                 }
                 if ((Globals.getGui() != null || Globals.runSpeedPanelExists) && this.maxSteps != 1 && RunSpeedPanel.getInstance().getRunSpeed() < 40.0) {
                     try {
-                        Thread.sleep((int)(1000.0 / RunSpeedPanel.getInstance().getRunSpeed()));
+                        Thread.sleep((long)(1000.0 / RunSpeedPanel.getInstance().getRunSpeed()));
                     }
                     catch (InterruptedException ex2) {}
                 }
@@ -261,7 +260,7 @@ public class Simulator extends Observable
                     this.done = true;
                     SystemIO.resetFiles();
                     Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-                    return new Boolean(this.done);
+                    return this.done;
                 }
             }
             if (DelayedBranch.isTriggered() || DelayedBranch.isRegistered()) {
@@ -271,7 +270,7 @@ public class Simulator extends Observable
             this.done = true;
             SystemIO.resetFiles();
             Simulator.getInstance().notifyObserversOfExecutionStop(this.maxSteps, pc);
-            return new Boolean(this.done);
+            return this.done;
         }
         
         @Override

@@ -2,8 +2,8 @@
 
 package mars.pipeline.DiagramaMulticiclo;
 
-import mars.pipeline.tomasulo.Tomasulo_conf;
 import mars.pipeline.Decode;
+import mars.pipeline.tomasulo.Tomasulo_conf;
 
 public class InstructionInfo
 {
@@ -306,27 +306,30 @@ public class InstructionInfo
             }
         }
         if (this.EX_init != -1 && !this.descartada) {
-            if (tipo == 0) {
-                if (ciclo_actual == this.EX_init) {
-                    str += "| EX ";
-                    ++ciclo_actual;
-                }
-            }
-            else if (tipo == 1) {
-                int i = ciclo_actual - this.Issue;
-                while (ciclo_actual <= this.EX_init) {
-                    str = str + "| X" + i + " ";
-                    ++i;
-                    ++ciclo_actual;
-                }
-            }
-            else if (tipo == 2) {
-                int i = ciclo_actual - this.Issue;
-                while (ciclo_actual <= this.EX_init) {
-                    str = str + "| D" + i + " ";
-                    ++i;
-                    ++ciclo_actual;
-                }
+            switch (tipo) {
+                case 0:
+                    if (ciclo_actual == this.EX_init) {
+                        str += "| EX ";
+                        ++ciclo_actual;
+                    }   break;
+                case 1:{
+                    int i = ciclo_actual - this.Issue;
+                    while (ciclo_actual <= this.EX_init) {
+                        str = str + "| X" + i + " ";
+                        ++i;
+                        ++ciclo_actual;
+                    }       break;
+                    }
+                case 2:{
+                    int i = ciclo_actual - this.Issue;
+                    while (ciclo_actual <= this.EX_init) {
+                        str = str + "| D" + i + " ";
+                        ++i;
+                        ++ciclo_actual;
+                    }       break;
+                    }
+                default:
+                    break;
             }
         }
         if (ciclo_actual == this.EX_end) {

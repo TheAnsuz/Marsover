@@ -2,9 +2,9 @@
 
 package mars.pipeline;
 
+import mars.Globals;
 import mars.mips.instructions.BasicInstruction;
 import mars.mips.instructions.BasicInstructionFormat;
-import mars.Globals;
 
 public class Decode
 {

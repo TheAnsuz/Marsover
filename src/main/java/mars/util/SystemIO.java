@@ -2,16 +2,15 @@
 
 package mars.util;
 
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.IOException;
-import mars.Globals;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import mars.Globals;
 
 public class SystemIO
 {
@@ -144,7 +143,7 @@ public class SystemIO
             return data.length();
         }
         if (!FileIOData.fdInUse(fd, 1)) {
-            SystemIO.fileErrorString = new String("File descriptor " + fd + " is not open for writing");
+            SystemIO.fileErrorString = "File descriptor " + fd + " is not open for writing";
             return -1;
         }
         final OutputStream outputStream = (OutputStream)FileIOData.getStreamInUse(fd);
@@ -155,11 +154,11 @@ public class SystemIO
             outputStream.flush();
         }
         catch (IOException e) {
-            SystemIO.fileErrorString = new String("IO Exception on write of file with fd " + fd);
+            SystemIO.fileErrorString = "IO Exception on write of file with fd " + fd;
             return -1;
         }
         catch (IndexOutOfBoundsException e2) {
-            SystemIO.fileErrorString = new String("IndexOutOfBoundsException on write of file with fd" + fd);
+            SystemIO.fileErrorString = "IndexOutOfBoundsException on write of file with fd" + fd;
             return -1;
         }
         return lengthRequested;
@@ -171,12 +170,12 @@ public class SystemIO
             final String input = Globals.getGui().getMessagesPane().getInputString(lengthRequested);
             final byte[] bytesRead = input.getBytes();
             for (int i = 0; i < myBuffer.length; ++i) {
-                myBuffer[i] = (byte)((i < bytesRead.length) ? bytesRead[i] : 0);
+                myBuffer[i] = ((i < bytesRead.length) ? bytesRead[i] : 0);
             }
             return Math.min(myBuffer.length, bytesRead.length);
         }
         if (!FileIOData.fdInUse(fd, 0)) {
-            SystemIO.fileErrorString = new String("File descriptor " + fd + " is not open for reading");
+            SystemIO.fileErrorString = "File descriptor " + fd + " is not open for reading";
             return -1;
         }
         final InputStream InputStream = (InputStream)FileIOData.getStreamInUse(fd);
@@ -187,11 +186,11 @@ public class SystemIO
             }
         }
         catch (IOException e) {
-            SystemIO.fileErrorString = new String("IO Exception on read of file with fd " + fd);
+            SystemIO.fileErrorString = "IO Exception on read of file with fd " + fd;
             return -1;
         }
         catch (IndexOutOfBoundsException e2) {
-            SystemIO.fileErrorString = new String("IndexOutOfBoundsException on read of file with fd" + fd);
+            SystemIO.fileErrorString = "IndexOutOfBoundsException on read of file with fd" + fd;
             return -1;
         }
         return retValue;
@@ -210,7 +209,7 @@ public class SystemIO
                 FileIOData.setStreamInUse(fdToUse, inputStream);
             }
             catch (FileNotFoundException e) {
-                SystemIO.fileErrorString = new String("File " + filename + " not found, open for input.");
+                SystemIO.fileErrorString = "File " + filename + " not found, open for input.";
                 retValue = -1;
             }
         }
@@ -220,7 +219,7 @@ public class SystemIO
                 FileIOData.setStreamInUse(fdToUse, outputStream);
             }
             catch (FileNotFoundException e) {
-                SystemIO.fileErrorString = new String("File " + filename + " not found, open for output.");
+                SystemIO.fileErrorString = "File " + filename + " not found, open for output.";
                 retValue = -1;
             }
         }
@@ -247,7 +246,7 @@ public class SystemIO
     }
     
     static {
-        SystemIO.fileErrorString = new String("File operation OK");
+        SystemIO.fileErrorString = "File operation OK";
         SystemIO.inputReader = null;
     }
     
@@ -311,13 +310,13 @@ public class SystemIO
                 FileIOData.streams[fd] = null;
                 try {
                     if (keepFlag == 0) {
-                        ((FileInputStream)keepStream).close();
+                        ((AutoCloseable)keepStream).close();
                     }
                     else {
-                        ((FileOutputStream)keepStream).close();
+                        ((AutoCloseable)keepStream).close();
                     }
                 }
-                catch (IOException ex) {}
+                catch (Exception ex) {}
             }
             else {
                 FileIOData.fileFlags[fd] = -1;
@@ -327,23 +326,23 @@ public class SystemIO
         private static int nowOpening(final String filename, final int flag) {
             int i = 0;
             if (filenameInUse(filename)) {
-                SystemIO.fileErrorString = new String("File name " + filename + " is already open.");
+                SystemIO.fileErrorString = "File name " + filename + " is already open.";
                 return -1;
             }
             if (flag != 0 && flag != 1 && flag != 9) {
-                SystemIO.fileErrorString = new String("File name " + filename + " has unknown requested opening flag");
+                SystemIO.fileErrorString = "File name " + filename + " has unknown requested opening flag";
                 return -1;
             }
             while (FileIOData.fileNames[i] != null && i < 32) {
                 ++i;
             }
             if (i >= 32) {
-                SystemIO.fileErrorString = new String("File name " + filename + " exceeds maximum open file limit of " + 32);
+                SystemIO.fileErrorString = "File name " + filename + " exceeds maximum open file limit of " + 32;
                 return -1;
             }
-            FileIOData.fileNames[i] = new String(filename);
+            FileIOData.fileNames[i] = filename;
             FileIOData.fileFlags[i] = flag;
-            SystemIO.fileErrorString = new String("File operation OK");
+            SystemIO.fileErrorString = "File operation OK";
             return i;
         }
         

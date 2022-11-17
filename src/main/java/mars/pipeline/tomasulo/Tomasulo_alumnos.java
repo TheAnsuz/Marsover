@@ -2,11 +2,11 @@
 
 package mars.pipeline.tomasulo;
 
-import mars.pipeline.tomasulo.estaciones_alumnos.EstacionPF_alumnos;
-import mars.pipeline.tomasulo.estaciones_alumnos.EstacionINT_alumnos;
-import mars.pipeline.tomasulo.estaciones_alumnos.EstacionSW_alumnos;
-import mars.pipeline.tomasulo.estaciones_alumnos.EstacionLW_alumnos;
 import mars.pipeline.BranchPredictor;
+import mars.pipeline.tomasulo.estaciones_alumnos.EstacionINT_alumnos;
+import mars.pipeline.tomasulo.estaciones_alumnos.EstacionLW_alumnos;
+import mars.pipeline.tomasulo.estaciones_alumnos.EstacionPF_alumnos;
+import mars.pipeline.tomasulo.estaciones_alumnos.EstacionSW_alumnos;
 
 public abstract class Tomasulo_alumnos extends Tomasulo
 {

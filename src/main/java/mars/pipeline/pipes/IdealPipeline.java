@@ -2,8 +2,8 @@
 
 package mars.pipeline.pipes;
 
-import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.BranchPredictor;
+import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.Stage;
 
 public class IdealPipeline extends StaticPipe

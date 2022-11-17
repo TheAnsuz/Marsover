@@ -3,8 +3,8 @@
 package mars.venus;
 
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 public class FileSaveAllAction extends GuiAction
 {

@@ -2,17 +2,16 @@
 
 package mars.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.swing.filechooser.FileFilter;
-import java.util.Enumeration;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Collection;
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
 
 public class FilenameFinder
 {
@@ -63,7 +62,7 @@ public class FilenameFinder
     
     public static ArrayList getFilenameList(final ClassLoader classLoader, final String directoryPath, final ArrayList<String> fileExtensions) {
         ArrayList filenameList = new ArrayList();
-        if (fileExtensions == null || fileExtensions.size() == 0) {
+        if (fileExtensions == null || fileExtensions.isEmpty()) {
             filenameList = getFilenameList(classLoader, directoryPath, "");
         }
         else {
@@ -93,7 +92,7 @@ public class FilenameFinder
     
     public static ArrayList getFilenameList(final String directoryPath, final ArrayList<String> fileExtensions) {
         ArrayList filenameList = new ArrayList();
-        if (fileExtensions == null || fileExtensions.size() == 0) {
+        if (fileExtensions == null || fileExtensions.isEmpty()) {
             filenameList = getFilenameList(directoryPath, "");
         }
         else {
@@ -120,7 +119,7 @@ public class FilenameFinder
     
     public static ArrayList getFilenameList(final ArrayList nameList, final ArrayList<String> fileExtensions) {
         ArrayList filenameList = new ArrayList();
-        if (fileExtensions == null || fileExtensions.size() == 0) {
+        if (fileExtensions == null || fileExtensions.isEmpty()) {
             filenameList = getFilenameList(nameList, "");
         }
         else {
@@ -207,9 +206,9 @@ public class FilenameFinder
     
     private static class MarsFileFilter extends FileFilter
     {
-        private ArrayList<String> extensions;
-        private String fullDescription;
-        private boolean acceptDirectories;
+        private final ArrayList<String> extensions;
+        private final String fullDescription;
+        private final boolean acceptDirectories;
         
         private MarsFileFilter(final ArrayList extensions, final String description, final boolean acceptDirectories) {
             this.extensions = extensions;
@@ -219,7 +218,7 @@ public class FilenameFinder
         
         private String buildFullDescription(final String description, final ArrayList<String> extensions) {
             String result = (description == null) ? "" : description;
-            if (extensions.size() > 0) {
+            if (!extensions.isEmpty()) {
                 result += "  (";
             }
             for (int i = 0; i < extensions.size(); ++i) {
@@ -228,7 +227,7 @@ public class FilenameFinder
                     result = result + ((i == 0) ? "" : "; ") + "*" + ((extension.charAt(0) == '.') ? "" : ".") + extension;
                 }
             }
-            if (extensions.size() > 0) {
+            if (!extensions.isEmpty()) {
                 result += ")";
             }
             return result;

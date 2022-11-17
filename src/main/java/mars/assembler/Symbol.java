@@ -4,9 +4,9 @@ package mars.assembler;
 
 public class Symbol
 {
-    private String name;
+    private final String name;
     private int address;
-    private boolean data;
+    private final boolean data;
     public static final boolean TEXT_SYMBOL = false;
     public static final boolean DATA_SYMBOL = true;
     

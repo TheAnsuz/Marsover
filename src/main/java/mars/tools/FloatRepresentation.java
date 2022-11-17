@@ -2,37 +2,35 @@
 
 package mars.tools;
 
-import java.awt.Polygon;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Polygon;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
-import mars.util.Binary;
-import mars.Globals;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JComboBox;
-import mars.mips.hardware.Coprocessor1;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.JEditorPane;
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import java.awt.BorderLayout;
-import java.awt.event.KeyListener;
-import java.awt.Component;
-import java.awt.LayoutManager;
-import java.awt.GridLayout;
-import javax.swing.Box;
-import mars.mips.hardware.AccessNotice;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Observable;
+import javax.swing.Box;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+import javax.swing.text.JTextComponent;
+import mars.Globals;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.Coprocessor1;
 import mars.mips.hardware.Register;
-import java.awt.Color;
-import java.awt.Font;
+import mars.util.Binary;
 
 public class FloatRepresentation extends AbstractMarsToolAndApplication
 {
@@ -247,7 +245,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
         for (int i = 0; i < this.fpRegisters.length; ++i) {
             registerList[i + 1] = this.fpRegisters[i].getName();
         }
-        final JComboBox registerSelect = new JComboBox((String[])registerList);
+        final JComboBox registerSelect = new JComboBox(registerList);
         registerSelect.setSelectedIndex(0);
         registerSelect.setToolTipText("Attach to selected FP register");
         registerSelect.addActionListener(new ActionListener() {
@@ -355,7 +353,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
         public FlavorsOfFloat buildOneFromHexString(final String hexString) {
             this.hexString = "0x" + this.addLeadingZeroes((hexString.indexOf("0X") == 0 || hexString.indexOf("0x") == 0) ? hexString.substring(2) : hexString, 8);
             this.binaryString = Binary.hexStringToBinaryString(this.hexString);
-            this.decimalString = new Float(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString))).toString();
+            this.decimalString = Float.toString(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString)));
             this.expansionString = this.buildExpansionFromBinaryString(this.binaryString);
             this.intValue = Binary.binaryStringToInt(this.binaryString);
             return this;
@@ -364,7 +362,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
         private FlavorsOfFloat buildOneFromBinaryString() {
             this.binaryString = this.getFullBinaryStringFromDisplays();
             this.hexString = Binary.binaryStringToHexString(this.binaryString);
-            this.decimalString = new Float(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString))).toString();
+            this.decimalString = Float.toString(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString)));
             this.expansionString = this.buildExpansionFromBinaryString(this.binaryString);
             this.intValue = Binary.binaryStringToInt(this.binaryString);
             return this;
@@ -378,7 +376,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
             catch (NumberFormatException nfe) {
                 return null;
             }
-            this.decimalString = new Float(floatValue).toString();
+            this.decimalString = Float.toString(floatValue);
             this.intValue = Float.floatToIntBits(floatValue);
             this.binaryString = Binary.intToBinaryString(this.intValue);
             this.hexString = Binary.binaryStringToHexString(this.binaryString);
@@ -390,7 +388,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
             this.intValue = intValue;
             this.binaryString = Binary.intToBinaryString(intValue);
             this.hexString = Binary.binaryStringToHexString(this.binaryString);
-            this.decimalString = new Float(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString))).toString();
+            this.decimalString = Float.toString(Float.intBitsToFloat(Binary.binaryStringToInt(this.binaryString)));
             this.expansionString = this.buildExpansionFromBinaryString(this.binaryString);
             return this;
         }
@@ -412,7 +410,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
     
     private class HexDisplayKeystrokeListener extends KeyAdapter
     {
-        private int digitLength;
+        private final int digitLength;
         
         public HexDisplayKeystrokeListener(final int length) {
             this.digitLength = length;
@@ -441,7 +439,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
         @Override
         public void keyPressed(final KeyEvent e) {
             if (e.getKeyChar() == '\n' || e.getKeyChar() == '\t') {
-                FloatRepresentation.this.updateDisplaysAndRegister(new FlavorsOfFloat().buildOneFromHexString(((JTextField)e.getSource()).getText()));
+                FloatRepresentation.this.updateDisplaysAndRegister(new FlavorsOfFloat().buildOneFromHexString(((JTextComponent)e.getSource()).getText()));
                 FloatRepresentation.this.instructions.setText(FloatRepresentation.this.defaultInstructions);
                 e.consume();
             }
@@ -482,7 +480,7 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
     
     private class BinaryDisplayKeystrokeListener extends KeyAdapter
     {
-        private int bitLength;
+        private final int bitLength;
         
         public BinaryDisplayKeystrokeListener(final int length) {
             this.bitLength = length;
@@ -550,10 +548,10 @@ public class FloatRepresentation extends AbstractMarsToolAndApplication
         @Override
         public void keyPressed(final KeyEvent e) {
             if (e.getKeyChar() == '\n') {
-                final FlavorsOfFloat fof = new FlavorsOfFloat().buildOneFromDecimalString(((JTextField)e.getSource()).getText());
+                final FlavorsOfFloat fof = new FlavorsOfFloat().buildOneFromDecimalString(((JTextComponent)e.getSource()).getText());
                 if (fof == null) {
                     Toolkit.getDefaultToolkit().beep();
-                    FloatRepresentation.this.instructions.setText("'" + ((JTextField)e.getSource()).getText() + "' is not a valid floating point number.");
+                    FloatRepresentation.this.instructions.setText("'" + ((JTextComponent)e.getSource()).getText() + "' is not a valid floating point number.");
                 }
                 else {
                     FloatRepresentation.this.updateDisplaysAndRegister(fof);

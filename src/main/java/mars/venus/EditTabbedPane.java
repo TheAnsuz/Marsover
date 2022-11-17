@@ -2,36 +2,33 @@
 
 package mars.venus;
 
+import java.awt.Point;
 import java.beans.PropertyChangeEvent;
-import javax.swing.filechooser.FileFilter;
-import mars.ProcessingException;
-import mars.MIPSprogram;
-import java.awt.event.ActionEvent;
-import mars.util.FilenameFinder;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
-import java.io.IOException;
 import javax.swing.JOptionPane;
-import java.io.Writer;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.awt.Point;
-import mars.mips.hardware.RegisterFile;
-import java.io.File;
-import java.awt.Component;
-import mars.Globals;
+import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JTabbedPane;
+import javax.swing.filechooser.FileFilter;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.ProcessingException;
+import mars.mips.hardware.RegisterFile;
+import mars.util.FilenameFinder;
 
 public class EditTabbedPane extends JTabbedPane
 {
     EditPane editTab;
     MainPane mainPane;
-    private VenusUI mainUI;
-    private Editor editor;
-    private FileOpener fileOpener;
+    private final VenusUI mainUI;
+    private final Editor editor;
+    private final FileOpener fileOpener;
     
     public EditTabbedPane(final VenusUI appFrame, final Editor editor, final MainPane mainPane) {
         this.mainUI = appFrame;
@@ -402,11 +399,11 @@ public class EditTabbedPane extends JTabbedPane
     private class FileOpener
     {
         private File mostRecentlyOpenedFile;
-        private JFileChooser fileChooser;
+        private final JFileChooser fileChooser;
         private int fileFilterCount;
-        private ArrayList<FileFilter> fileFilterList;
-        private PropertyChangeListener listenForUserAddedFileFilter;
-        private Editor theEditor;
+        private final ArrayList<FileFilter> fileFilterList;
+        private final PropertyChangeListener listenForUserAddedFileFilter;
+        private final Editor theEditor;
         
         public FileOpener(final Editor theEditor) {
             this.mostRecentlyOpenedFile = null;
@@ -465,7 +462,7 @@ public class EditTabbedPane extends JTabbedPane
                 final StringBuffer fileContents = new StringBuffer((int)theFile.length());
                 int lineNumber = 1;
                 for (String line = Globals.program.getSourceLine(lineNumber++); line != null; line = Globals.program.getSourceLine(lineNumber++)) {
-                    fileContents.append(line + "\n");
+                    fileContents.append(line).append("\n");
                 }
                 editPane.setSourceCode(fileContents.toString(), true);
                 editPane.discardAllUndoableEdits();
@@ -513,7 +510,7 @@ public class EditTabbedPane extends JTabbedPane
         {
             @Override
             public void propertyChange(final PropertyChangeEvent e) {
-                if (e.getPropertyName() == "ChoosableFileFilterChangedProperty") {
+                if ("ChoosableFileFilterChangedProperty".equals(e.getPropertyName())) {
                     final FileFilter[] newFilters = (FileFilter[])e.getNewValue();
                     final FileFilter[] oldFilters = (FileFilter[])e.getOldValue();
                     if (newFilters.length > FileOpener.this.fileFilterList.size()) {

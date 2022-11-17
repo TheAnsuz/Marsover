@@ -2,24 +2,22 @@
 
 package mars.tools;
 
-import mars.ProgramStatement;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.instructions.BasicInstructionFormat;
-import mars.mips.instructions.BasicInstruction;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import mars.mips.hardware.Memory;
-import javax.swing.JLabel;
-import java.awt.Component;
-import java.awt.Insets;
 import java.awt.GridBagConstraints;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.Observable;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import mars.ProgramStatement;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.instructions.BasicInstruction;
+import mars.mips.instructions.BasicInstructionFormat;
 
 public class InstructionCounter extends AbstractMarsToolAndApplication
 {

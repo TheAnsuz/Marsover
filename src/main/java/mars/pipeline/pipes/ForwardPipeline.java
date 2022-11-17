@@ -2,9 +2,9 @@
 
 package mars.pipeline.pipes;
 
-import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
-import mars.pipeline.Decode;
 import mars.pipeline.BranchPredictor;
+import mars.pipeline.Decode;
+import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.Stage;
 
 public class ForwardPipeline extends StaticPipe

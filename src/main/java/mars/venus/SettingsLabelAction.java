@@ -2,11 +2,11 @@
 
 package mars.venus;
 
-import mars.Globals;
-import javax.swing.JCheckBoxMenuItem;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import javax.swing.AbstractButton;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class SettingsLabelAction extends GuiAction
 {
@@ -16,7 +16,7 @@ public class SettingsLabelAction extends GuiAction
     
     @Override
     public void actionPerformed(final ActionEvent e) {
-        final boolean visibility = ((JCheckBoxMenuItem)e.getSource()).isSelected();
+        final boolean visibility = ((AbstractButton)e.getSource()).isSelected();
         Globals.getGui().getMainPane().getExecutePane().setLabelWindowVisibility(visibility);
         Globals.getSettings().setLabelWindowVisibility(visibility);
     }

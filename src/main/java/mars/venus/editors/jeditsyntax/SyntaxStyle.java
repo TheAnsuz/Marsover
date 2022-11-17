@@ -2,18 +2,18 @@
 
 package mars.venus.editors.jeditsyntax;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import mars.util.Binary;
-import java.awt.FontMetrics;
-import java.awt.Font;
-import java.awt.Color;
 
 public class SyntaxStyle
 {
-    private Color color;
-    private boolean italic;
-    private boolean bold;
+    private final Color color;
+    private final boolean italic;
+    private final boolean bold;
     private Font lastFont;
     private Font lastStyledFont;
     private FontMetrics fontMetrics;

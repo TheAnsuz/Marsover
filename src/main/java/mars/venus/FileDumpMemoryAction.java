@@ -2,40 +2,34 @@
 
 package mars.venus;
 
-import javax.swing.JList;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JOptionPane;
-import javax.swing.JFileChooser;
 import java.util.ArrayList;
-import mars.mips.dump.DumpFormat;
 import javax.swing.Box;
-import javax.swing.ListCellRenderer;
-import mars.mips.dump.DumpFormatLoader;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import java.awt.Label;
-import mars.util.Binary;
-import mars.mips.hardware.AddressErrorException;
-import mars.util.MemoryDump;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.Container;
-import java.awt.Frame;
-import java.awt.Component;
-import mars.Globals;
-import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import mars.Globals;
+import mars.mips.dump.DumpFormat;
+import mars.mips.dump.DumpFormatLoader;
+import mars.mips.hardware.AddressErrorException;
+import mars.util.Binary;
+import mars.util.MemoryDump;
 
 public class FileDumpMemoryAction extends GuiAction
 {
@@ -122,13 +116,13 @@ public class FileDumpMemoryAction extends GuiAction
             System.arraycopy(this.segmentListArray, 0, tempArray, 0, segmentCount);
             this.segmentListArray = tempArray;
         }
-        (this.segmentListSelector = new JComboBox((String[])this.segmentListArray)).setSelectedIndex(0);
+        (this.segmentListSelector = new JComboBox(this.segmentListArray)).setSelectedIndex(0);
         final JPanel segmentPanel = new JPanel(new BorderLayout());
         segmentPanel.add(new Label("Memory Segment"), "North");
         segmentPanel.add(this.segmentListSelector);
         contents.add(segmentPanel, "West");
         final ArrayList dumpFormats = new DumpFormatLoader().loadDumpFormats();
-        (this.formatListSelector = new JComboBox((String[])dumpFormats.toArray())).setRenderer(new DumpFormatComboBoxRenderer(this.formatListSelector));
+        (this.formatListSelector = new JComboBox(dumpFormats.toArray())).setRenderer(new DumpFormatComboBoxRenderer(this.formatListSelector));
         this.formatListSelector.setSelectedIndex(0);
         final JPanel formatPanel = new JPanel(new BorderLayout());
         formatPanel.add(new Label("Dump Format"), "North");
@@ -211,7 +205,7 @@ public class FileDumpMemoryAction extends GuiAction
     
     private class DumpFormatComboBoxRenderer extends BasicComboBoxRenderer
     {
-        private JComboBox<DumpFormat> myMaster;
+        private final JComboBox<DumpFormat> myMaster;
         
         public DumpFormatComboBoxRenderer(final JComboBox myMaster) {
             this.myMaster = myMaster;

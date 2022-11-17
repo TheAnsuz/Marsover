@@ -2,14 +2,14 @@
 
 package mars.mips.hardware;
 
-import java.util.Vector;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.Observer;
-import mars.util.Binary;
+import java.util.Vector;
 import mars.Globals;
 import mars.ProgramStatement;
-import java.util.Collection;
-import java.util.Observable;
+import mars.util.Binary;
 
 public class Memory extends Observable
 {
@@ -361,7 +361,7 @@ public class Memory extends Observable
                 }
             }
             try {
-                value = ((this.getStatementNoNotify(address) == null) ? null : new Integer(this.getStatementNoNotify(address).getBinaryStatement()));
+                value = ((this.getStatementNoNotify(address) == null) ? null : this.getStatementNoNotify(address).getBinaryStatement());
             }
             catch (AddressErrorException aee) {
                 value = null;
@@ -529,7 +529,7 @@ public class Memory extends Observable
     }
     
     private void notifyAnyObservers(final int type, final int address, final int length, final int value) {
-        if ((Globals.program != null || Globals.getGui() == null) && this.observables.size() > 0) {
+        if ((Globals.program != null || Globals.getGui() == null) && !this.observables.isEmpty()) {
             for (final MemoryObservable mo : this.observables) {
                 if (mo.match(address)) {
                     mo.notifyObserver(new MemoryAccessNotice(type, address, length, value));
@@ -613,7 +613,7 @@ public class Memory extends Observable
             return null;
         }
         value = blockTable[block][offset];
-        return new Integer(value);
+        return value;
     }
     
     private int replaceByte(final int sourceValue, final int bytePosInSource, final int destValue, final int bytePosInDest) {
@@ -686,8 +686,8 @@ public class Memory extends Observable
     
     private class MemoryObservable extends Observable implements Comparable
     {
-        private int lowAddress;
-        private int highAddress;
+        private final int lowAddress;
+        private final int highAddress;
         
         public MemoryObservable(final Observer obs, final int startAddr, final int endAddr) {
             this.lowAddress = startAddr;

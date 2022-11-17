@@ -2,11 +2,11 @@
 
 package mars.pipeline.tomasulo;
 
-import mars.pipeline.tomasulo.estaciones.EstacionPF;
+import mars.pipeline.BranchPredictor;
 import mars.pipeline.Decode;
 import mars.pipeline.DiagramaMulticiclo.InstructionInfo;
 import mars.pipeline.StageRegisters;
-import mars.pipeline.BranchPredictor;
+import mars.pipeline.tomasulo.estaciones.EstacionPF;
 
 public class TomasuloP2 extends Tomasulo_implementado
 {

@@ -2,50 +2,47 @@
 
 package mars.venus;
 
-import javax.swing.JColorChooser;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
-import mars.venus.editors.jeditsyntax.SyntaxUtilities;
-import javax.swing.AbstractButton;
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.ActionListener;
-import javax.swing.Box;
-import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import javax.swing.JRadioButton;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.text.Caret;
-import javax.swing.JSpinner;
-import javax.swing.JPanel;
-import java.awt.Font;
-import mars.venus.editors.jeditsyntax.SyntaxStyle;
-import javax.swing.JCheckBox;
-import javax.swing.JToggleButton;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-import javax.swing.border.BevelBorder;
-import java.awt.Color;
-import java.awt.Frame;
-import mars.Globals;
-import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
-import javax.swing.border.Border;
-import javax.swing.JTextField;
-import javax.swing.JSlider;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.Caret;
+import mars.Globals;
+import mars.venus.editors.jeditsyntax.SyntaxStyle;
+import mars.venus.editors.jeditsyntax.SyntaxUtilities;
+import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
 
 public class SettingsEditorAction extends GuiAction
 {
@@ -259,10 +256,10 @@ public class SettingsEditorAction extends GuiAction
         
         private void resetOtherSettings() {
             this.tabSizeSelector.setValue(this.initialEditorTabSize);
-            this.tabSizeSpinSelector.setValue(new Integer(this.initialEditorTabSize));
+            this.tabSizeSpinSelector.setValue(this.initialEditorTabSize);
             this.lineHighlightCheck.setSelected(this.initialLineHighlighting);
             this.autoIndentCheck.setSelected(this.initialAutoIndent);
-            this.blinkRateSpinSelector.setValue(new Integer(this.initialCaretBlinkRate));
+            this.blinkRateSpinSelector.setValue(this.initialCaretBlinkRate);
             this.blinkCaret.setBlinkRate(this.initialCaretBlinkRate);
             this.popupGuidanceOptions[this.initialPopupGuidance].setSelected(true);
         }
@@ -274,7 +271,7 @@ public class SettingsEditorAction extends GuiAction
             this.tabSizeSelector.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(final ChangeEvent e) {
-                    final Integer value = new Integer(((JSlider)e.getSource()).getValue());
+                    final Integer value = ((JSlider)e.getSource()).getValue();
                     EditorFontDialog.this.tabSizeSpinSelector.setValue(value);
                 }
             });
@@ -470,7 +467,7 @@ public class SettingsEditorAction extends GuiAction
         
         private class BoldItalicChanger implements ActionListener
         {
-            private int row;
+            private final int row;
             
             public BoldItalicChanger(final int row) {
                 this.row = row;
@@ -479,7 +476,7 @@ public class SettingsEditorAction extends GuiAction
             @Override
             public void actionPerformed(final ActionEvent e) {
                 final Font f = EditorFontDialog.this.samples[this.row].getFont();
-                if (e.getActionCommand() == "B") {
+                if ("B".equals(e.getActionCommand())) {
                     if (EditorFontDialog.this.bold[this.row].isSelected()) {
                         EditorFontDialog.this.samples[this.row].setFont(f.deriveFont(f.getStyle() | 0x1));
                     }
@@ -500,7 +497,7 @@ public class SettingsEditorAction extends GuiAction
         
         private class ForegroundChanger implements ActionListener
         {
-            private int row;
+            private final int row;
             
             public ForegroundChanger(final int pos) {
                 this.row = pos;
@@ -521,7 +518,7 @@ public class SettingsEditorAction extends GuiAction
         
         private class DefaultChanger implements ItemListener
         {
-            private int row;
+            private final int row;
             
             public DefaultChanger(final int pos) {
                 this.row = pos;

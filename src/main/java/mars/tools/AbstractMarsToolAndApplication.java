@@ -2,58 +2,50 @@
 
 package mars.tools;
 
-import javax.swing.SwingUtilities;
-import javax.swing.JTextField;
-import mars.mips.hardware.Coprocessor0;
-import mars.mips.hardware.Coprocessor1;
-import mars.mips.hardware.RegisterFile;
-import mars.ProcessingException;
-import java.util.ArrayList;
-import mars.MIPSprogram;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
-import mars.mips.hardware.Register;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.hardware.AccessNotice;
-import java.util.Observable;
-import javax.swing.AbstractAction;
-import mars.simulator.Simulator;
-import mars.venus.RunSpeedPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Insets;
-import javax.swing.filechooser.FileFilter;
-import java.io.IOException;
-import mars.util.FilenameFinder;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import java.awt.event.KeyListener;
-import javax.swing.AbstractButton;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.border.TitledBorder;
-import java.awt.Font;
-import javax.swing.Box;
-import java.awt.Frame;
-import java.awt.Container;
-import java.awt.Component;
-import javax.swing.border.Border;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
-import mars.Globals;
-import javax.swing.JComponent;
-import mars.mips.hardware.Memory;
-import javax.swing.JButton;
+import java.awt.event.WindowEvent;
 import java.io.File;
-import java.awt.Color;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import java.awt.Window;
-import javax.swing.JDialog;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Observer;
+import javax.swing.AbstractButton;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileFilter;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.ProcessingException;
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.Register;
+import mars.mips.hardware.RegisterFile;
+import mars.simulator.Simulator;
+import mars.util.FilenameFinder;
+import mars.venus.RunSpeedPanel;
 
 public abstract class AbstractMarsToolAndApplication extends JFrame implements MarsTool, Observer
 {
@@ -62,15 +54,15 @@ public abstract class AbstractMarsToolAndApplication extends JFrame implements M
     private JDialog dialog;
     protected Window theWindow;
     JLabel headingLabel;
-    private String title;
-    private String heading;
-    private EmptyBorder emptyBorder;
-    private Color backgroundColor;
-    private int lowMemoryAddress;
-    private int highMemoryAddress;
+    private final String title;
+    private final String heading;
+    private final EmptyBorder emptyBorder;
+    private final Color backgroundColor;
+    private final int lowMemoryAddress;
+    private final int highMemoryAddress;
     private volatile boolean observing;
     private File mostRecentlyOpenedFile;
-    private Runnable interactiveGUIUpdater;
+    private final Runnable interactiveGUIUpdater;
     private MessageField operationStatusMessages;
     private JButton openFileButton;
     private JButton assembleRunButton;
@@ -533,8 +525,8 @@ public abstract class AbstractMarsToolAndApplication extends JFrame implements M
         
         private class MessageWriter implements Runnable
         {
-            private String text;
-            private boolean terminatingMessage;
+            private final String text;
+            private final boolean terminatingMessage;
             
             public MessageWriter(final String text, final boolean terminating) {
                 this.text = text;

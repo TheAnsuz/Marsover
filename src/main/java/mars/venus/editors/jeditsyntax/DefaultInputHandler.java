@@ -2,13 +2,13 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import mars.Globals;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import javax.swing.KeyStroke;
-import java.util.StringTokenizer;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
+import java.util.StringTokenizer;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class DefaultInputHandler extends InputHandler
 {

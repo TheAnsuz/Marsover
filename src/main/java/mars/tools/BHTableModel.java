@@ -10,8 +10,8 @@ public class BHTableModel extends AbstractTableModel
     private Vector<BHTEntry> m_entries;
     private int m_entryCnt;
     private int m_historySize;
-    private String[] m_columnNames;
-    private Class[] m_columnClasses;
+    private final String[] m_columnNames;
+    private final Class[] m_columnClasses;
     
     public BHTableModel(final int numEntries, final int historySize, final boolean initVal) {
         this.m_columnNames = new String[] { "Index", "History", "Prediction", "Correct", "Incorrect", "Precision" };
@@ -52,7 +52,7 @@ public class BHTableModel extends AbstractTableModel
             return "";
         }
         if (col == 0) {
-            return new Integer(row);
+            return row;
         }
         if (col == 1) {
             return e.getHistoryAsStr();
@@ -61,13 +61,13 @@ public class BHTableModel extends AbstractTableModel
             return e.getPredictionAsStr();
         }
         if (col == 3) {
-            return new Integer(e.getStatsPredCorrect());
+            return e.getStatsPredCorrect();
         }
         if (col == 4) {
-            return new Integer(e.getStatsPredIncorrect());
+            return e.getStatsPredIncorrect();
         }
         if (col == 5) {
-            return new Double(e.getStatsPredPrecision());
+            return e.getStatsPredPrecision();
         }
         return "";
     }

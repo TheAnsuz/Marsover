@@ -2,15 +2,15 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import java.awt.Font;
-import javax.swing.text.Utilities;
-import java.awt.Graphics;
-import javax.swing.text.TabExpander;
-import mars.venus.editors.jeditsyntax.tokenmarker.Token;
-import mars.Globals;
 import java.awt.Color;
-import javax.swing.text.Segment;
+import java.awt.Font;
+import java.awt.Graphics;
 import javax.swing.Popup;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+import javax.swing.text.Utilities;
+import mars.Globals;
+import mars.venus.editors.jeditsyntax.tokenmarker.Token;
 
 public class SyntaxUtilities
 {

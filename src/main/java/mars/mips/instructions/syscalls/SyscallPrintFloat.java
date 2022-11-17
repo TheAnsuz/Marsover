@@ -3,9 +3,9 @@
 package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
-import mars.util.SystemIO;
-import mars.mips.hardware.Coprocessor1;
 import mars.ProgramStatement;
+import mars.mips.hardware.Coprocessor1;
+import mars.util.SystemIO;
 
 public class SyscallPrintFloat extends AbstractSyscall
 {
@@ -15,6 +15,6 @@ public class SyscallPrintFloat extends AbstractSyscall
     
     @Override
     public void simulate(final ProgramStatement statement) throws ProcessingException {
-        SystemIO.printString(new Float(Float.intBitsToFloat(Coprocessor1.getValue(12))).toString());
+        SystemIO.printString(Float.toString(Float.intBitsToFloat(Coprocessor1.getValue(12))));
     }
 }

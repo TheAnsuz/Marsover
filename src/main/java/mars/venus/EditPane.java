@@ -2,39 +2,35 @@
 
 package mars.venus;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
-import java.util.Observable;
-import javax.swing.undo.UndoManager;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.BufferedReader;
-import java.io.StringReader;
-import javax.swing.text.Document;
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import mars.venus.editors.jeditsyntax.JEditBasedTextArea;
-import javax.swing.JComponent;
-import mars.venus.editors.generic.GenericTextArea;
-import mars.Globals;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import javax.swing.undo.CompoundEdit;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import mars.venus.editors.MARSTextEditingArea;
-import java.util.Observer;
 import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoManager;
+import mars.Globals;
+import mars.venus.editors.MARSTextEditingArea;
+import mars.venus.editors.generic.GenericTextArea;
+import mars.venus.editors.jeditsyntax.JEditBasedTextArea;
 
 public class EditPane extends JPanel implements Observer
 {
     private MARSTextEditingArea sourceCode;
     private VenusUI mainUI;
     private String currentDirectoryPath;
-    private JLabel caretPositionLabel;
+    private final JLabel caretPositionLabel;
     private JCheckBox showLineNumbers;
     private JLabel lineNumbers;
     private static int count;
@@ -161,10 +157,11 @@ public class EditPane extends JPanel implements Observer
             final String lineStr = Integer.toString(i);
             final int leadingSpaces = digits - lineStr.length();
             if (leadingSpaces == 0) {
-                lineNumberList.append(lineStr + "&nbsp;<br>");
+                lineNumberList.append(lineStr).append("&nbsp;<br>");
             }
             else {
-                lineNumberList.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".substring(0, leadingSpaces * 6) + lineStr + "&nbsp;<br>");
+                lineNumberList.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".substring(0, leadingSpaces * 6))
+                        .append(lineStr).append("&nbsp;<br>");
             }
         }
         lineNumberList.append("<br></html>");

@@ -2,10 +2,10 @@
 
 package mars.util;
 
-import java.util.Arrays;
-import mars.Globals;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.util.Arrays;
+import mars.Globals;
 
 public class EditorFont
 {

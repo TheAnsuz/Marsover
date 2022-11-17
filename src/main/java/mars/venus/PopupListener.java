@@ -2,13 +2,13 @@
 
 package mars.venus;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
-import java.awt.event.MouseAdapter;
 
 public class PopupListener extends MouseAdapter
 {
-    private JPopupMenu popup;
+    private final JPopupMenu popup;
     
     public PopupListener(final JPopupMenu p) {
         this.popup = p;

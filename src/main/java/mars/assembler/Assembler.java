@@ -2,25 +2,23 @@
 
 package mars.assembler;
 
-import mars.util.Binary;
-import mars.venus.NumberDisplayBaseChooser;
-import mars.mips.instructions.Instruction;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Collections;
-import mars.util.SystemIO;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.instructions.ExtendedInstruction;
-import mars.mips.instructions.BasicInstruction;
-import mars.ProgramStatement;
-import mars.ErrorMessage;
-import java.util.Collection;
-import mars.Globals;
-import mars.mips.hardware.Memory;
-import mars.ProcessingException;
-import mars.MIPSprogram;
-import mars.ErrorList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import mars.ErrorList;
+import mars.ErrorMessage;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.ProcessingException;
+import mars.ProgramStatement;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.instructions.BasicInstruction;
+import mars.mips.instructions.ExtendedInstruction;
+import mars.mips.instructions.Instruction;
+import mars.util.Binary;
+import mars.util.SystemIO;
+import mars.venus.NumberDisplayBaseChooser;
 
 public class Assembler
 {
@@ -58,7 +56,7 @@ public class Assembler
     }
     
     public ArrayList<ProgramStatement> assemble(final ArrayList<MIPSprogram> tokenizedProgramFiles, final boolean extendedAssemblerEnabled, final boolean warningsAreErrors) throws ProcessingException {
-        if (tokenizedProgramFiles == null || tokenizedProgramFiles.size() == 0) {
+        if (tokenizedProgramFiles == null || tokenizedProgramFiles.isEmpty()) {
             return null;
         }
         this.textAddress = new UserKernelAddressSpace(Memory.textBaseAddress, Memory.kernelTextBaseAddress);
@@ -140,7 +138,7 @@ public class Assembler
                     for (int instrNumber = 0; instrNumber < templateList.size(); ++instrNumber) {
                         final String instruction = ExtendedInstruction.makeTemplateSubstitutions(this.fileCurrentlyBeingAssembled, templateList.get(instrNumber), theTokenList);
                         if (instruction != null) {
-                            if (instruction != "") {
+                            if (!"".equals(instruction)) {
                                 if (Globals.debug) {
                                     System.out.println("PSEUDO generated: " + instruction);
                                 }
@@ -194,7 +192,7 @@ public class Assembler
     }
     
     private ArrayList<ProgramStatement> parseLine(final TokenList tokenList, final String source, final int sourceLineNumber, final boolean extendedAssemblerEnabled) {
-        final ArrayList<ProgramStatement> ret = new ArrayList<ProgramStatement>();
+        final ArrayList<ProgramStatement> ret = new ArrayList<>();
         TokenList tokens = this.stripComment(tokenList);
         final MacroPool macroPool = this.fileCurrentlyBeingAssembled.getLocalMacroPool();
         if (this.inMacroSegment) {
@@ -831,7 +829,7 @@ public class Assembler
     
     private class DataSegmentForwardReferences
     {
-        private ArrayList<DataSegmentForwardReference> forwardReferenceList;
+        private final ArrayList<DataSegmentForwardReference> forwardReferenceList;
         
         private DataSegmentForwardReferences() {
             this.forwardReferenceList = new ArrayList();

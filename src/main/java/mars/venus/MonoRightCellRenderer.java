@@ -2,10 +2,10 @@
 
 package mars.venus;
 
-import javax.swing.JLabel;
 import java.awt.Component;
-import javax.swing.JTable;
 import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 class MonoRightCellRenderer extends DefaultTableCellRenderer

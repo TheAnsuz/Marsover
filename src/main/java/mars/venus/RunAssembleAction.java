@@ -2,23 +2,23 @@
 
 package mars.venus;
 
-import mars.ErrorList;
-import mars.ProcessingException;
-import mars.ErrorMessage;
-import mars.util.SystemIO;
 import java.awt.Component;
-import mars.mips.hardware.Memory;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.ErrorList;
+import mars.ErrorMessage;
+import mars.Globals;
+import mars.MIPSprogram;
+import mars.ProcessingException;
 import mars.mips.hardware.Coprocessor0;
 import mars.mips.hardware.Coprocessor1;
+import mars.mips.hardware.Memory;
 import mars.mips.hardware.RegisterFile;
 import mars.util.FilenameFinder;
-import java.io.File;
-import mars.MIPSprogram;
-import mars.Globals;
-import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
-import javax.swing.Icon;
-import java.util.ArrayList;
+import mars.util.SystemIO;
 
 public class RunAssembleAction extends GuiAction
 {

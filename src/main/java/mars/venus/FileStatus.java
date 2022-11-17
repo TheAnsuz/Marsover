@@ -2,8 +2,8 @@
 
 package mars.venus;
 
-import mars.Globals;
 import java.io.File;
+import mars.Globals;
 
 public class FileStatus
 {

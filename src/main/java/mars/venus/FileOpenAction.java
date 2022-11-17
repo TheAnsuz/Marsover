@@ -3,12 +3,12 @@
 package mars.venus;
 
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
-import javax.swing.Icon;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import javax.swing.JFileChooser;
 import java.io.File;
+import java.util.ArrayList;
+import javax.swing.Icon;
+import javax.swing.JFileChooser;
+import javax.swing.KeyStroke;
 
 public class FileOpenAction extends GuiAction
 {

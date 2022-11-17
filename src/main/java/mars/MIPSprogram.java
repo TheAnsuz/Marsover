@@ -2,21 +2,19 @@
 
 package mars;
 
-import mars.mips.hardware.RegisterFile;
-import mars.simulator.Simulator;
-import javax.swing.AbstractAction;
-import mars.assembler.Assembler;
-import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Iterator;
-import mars.assembler.Tokenizer;
-import mars.assembler.SourceLine;
-import mars.assembler.MacroPool;
-import mars.assembler.SymbolTable;
-import mars.simulator.BackStepper;
 import java.util.ArrayList;
+import javax.swing.AbstractAction;
+import mars.assembler.Assembler;
+import mars.assembler.MacroPool;
+import mars.assembler.SourceLine;
+import mars.assembler.SymbolTable;
 import mars.assembler.TokenList;
+import mars.assembler.Tokenizer;
+import mars.mips.hardware.RegisterFile;
+import mars.simulator.BackStepper;
+import mars.simulator.Simulator;
 
 public class MIPSprogram
 {
@@ -131,7 +129,7 @@ public class MIPSprogram
             final MIPSprogram preparee = filename.equals(leadFilename) ? this : new MIPSprogram();
             preparee.readSource(filename);
             preparee.tokenize();
-            if (preparee == this && MIPSprogramsToAssemble.size() > 0) {
+            if (preparee == this && !MIPSprogramsToAssemble.isEmpty()) {
                 MIPSprogramsToAssemble.add(leadFilePosition, preparee);
             }
             else {

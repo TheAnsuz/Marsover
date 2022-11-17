@@ -2,13 +2,12 @@
 
 package mars.venus;
 
-import java.awt.Component;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
-import mars.Globals;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import mars.Globals;
 
 public class HelpAboutAction extends GuiAction
 {

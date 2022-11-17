@@ -2,30 +2,26 @@
 
 package mars.tools;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
 import java.awt.Dimension;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import java.awt.LayoutManager;
-import java.awt.BorderLayout;
-import java.awt.Frame;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import java.awt.Component;
-import javax.swing.JOptionPane;
-import mars.util.Binary;
-import mars.mips.hardware.MemoryAccessNotice;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
-import mars.mips.hardware.AddressErrorException;
-import mars.Globals;
-import java.util.Random;
 import java.util.Observer;
+import java.util.Random;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import mars.Globals;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.util.Binary;
 
 public class ScavengerHunt implements Observer, MarsTool
 {
@@ -65,7 +61,7 @@ public class ScavengerHunt implements Observer, MarsTool
     private static int SetWordCounter;
     private static int accessCounter;
     private static int playerID;
-    private boolean KENVDEBUG;
+    private final boolean KENVDEBUG;
     private static PlayerData[] pd;
     private static Location[] loc;
     private Random randomStream;
@@ -448,8 +444,8 @@ public class ScavengerHunt implements Observer, MarsTool
     
     private class ScavengerHuntDisplay extends JPanel
     {
-        private int width;
-        private int height;
+        private final int width;
+        private final int height;
         private boolean clearTheDisplay;
         
         public ScavengerHuntDisplay(final int tw, final int th) {

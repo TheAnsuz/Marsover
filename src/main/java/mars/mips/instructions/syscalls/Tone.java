@@ -2,27 +2,25 @@
 
 package mars.mips.instructions.syscalls;
 
-import java.util.concurrent.locks.ReentrantLock;
-import javax.sound.midi.Track;
-import javax.sound.midi.Sequencer;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.MetaEventListener;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.MidiSystem;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
 
 class Tone implements Runnable
 {
     public static final int TEMPO = 1000;
     public static final int DEFAULT_CHANNEL = 0;
-    private byte pitch;
-    private int duration;
-    private byte instrument;
-    private byte volume;
+    private final byte pitch;
+    private final int duration;
+    private final byte instrument;
+    private final byte volume;
     private static Lock openLock;
     
     public Tone(final byte pitch, final int duration, final byte instrument, final byte volume) {

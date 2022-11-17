@@ -2,33 +2,31 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import javax.swing.undo.UndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 import java.awt.Color;
-import javax.swing.event.CaretEvent;
 import java.awt.Component;
 import java.awt.Font;
-import mars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
-import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
-import mars.Globals;
-import javax.swing.event.UndoableEditEvent;
 import javax.swing.JComponent;
-import javax.swing.undo.CompoundEdit;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.UndoManager;
-import mars.venus.EditPane;
+import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoManager;
+import mars.Globals;
+import mars.venus.EditPane;
 import mars.venus.editors.MARSTextEditingArea;
+import mars.venus.editors.jeditsyntax.tokenmarker.MIPSTokenMarker;
 
 public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditingArea, CaretListener
 {
     private EditPane editPane;
     private UndoManager undoManager;
-    private UndoableEditListener undoableEditListener;
+    private final UndoableEditListener undoableEditListener;
     private boolean isCompoundEdit;
     private CompoundEdit compoundEdit;
-    private JEditBasedTextArea sourceCode;
+    private final JEditBasedTextArea sourceCode;
     
     public JEditBasedTextArea(final EditPane editPain, final JComponent lineNumbers) {
         super(lineNumbers);
@@ -107,7 +105,7 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
     
     @Override
     public void caretUpdate(final CaretEvent e) {
-        this.editPane.displayCaretPosition(((MutableCaretEvent)e).getDot());
+        this.editPane.displayCaretPosition(e.getDot());
     }
     
     @Override

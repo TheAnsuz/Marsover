@@ -2,45 +2,39 @@
 
 package mars.venus;
 
-import javax.swing.JRadioButton;
-import java.util.Map;
-import mars.util.Binary;
-import java.util.TreeMap;
-import javax.swing.AbstractAction;
-import mars.simulator.Simulator;
-import javax.swing.JButton;
-import javax.swing.Box;
-import java.awt.Font;
-import java.util.Iterator;
-import javax.swing.BorderFactory;
-import java.awt.Color;
-import javax.swing.AbstractButton;
-import mars.mips.hardware.MemoryConfiguration;
-import javax.swing.ButtonGroup;
-import java.awt.GridLayout;
-import mars.mips.hardware.MemoryConfigurations;
-import java.awt.FlowLayout;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.Container;
-import javax.swing.JLabel;
-import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
-import mars.Globals;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.Icon;
-import javax.swing.JTextField;
-import javax.swing.JSlider;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+import mars.Globals;
+import mars.mips.hardware.MemoryConfiguration;
+import mars.mips.hardware.MemoryConfigurations;
+import mars.simulator.Simulator;
+import mars.util.Binary;
 
 public class SettingsMemoryConfigurationAction extends GuiAction
 {
@@ -242,7 +236,7 @@ public class SettingsMemoryConfigurationAction extends GuiAction
     
     private class ConfigurationButton extends JRadioButton
     {
-        private MemoryConfiguration configuration;
+        private final MemoryConfiguration configuration;
         
         public ConfigurationButton(final MemoryConfiguration config) {
             super(config.getConfigurationName(), config == MemoryConfigurations.getCurrentConfiguration());

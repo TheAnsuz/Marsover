@@ -6,8 +6,8 @@ import mars.util.Binary;
 
 public class AddressErrorException extends Exception
 {
-    private int address;
-    private int type;
+    private final int address;
+    private final int type;
     
     public AddressErrorException(final String message, final int exceptType, final int addr) {
         super(message + Binary.intToHexString(addr));

@@ -2,9 +2,9 @@
 
 package mars.mips.dump;
 
+import java.io.File;
 import java.io.IOException;
 import mars.mips.hardware.AddressErrorException;
-import java.io.File;
 
 public interface DumpFormat
 {

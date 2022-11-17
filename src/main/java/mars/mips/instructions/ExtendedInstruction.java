@@ -2,15 +2,15 @@
 
 package mars.mips.instructions;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
+import mars.Globals;
+import mars.MIPSprogram;
 import mars.assembler.Symbol;
+import mars.assembler.TokenList;
 import mars.mips.hardware.Coprocessor1;
 import mars.mips.hardware.RegisterFile;
 import mars.util.Binary;
-import mars.Globals;
-import mars.assembler.TokenList;
-import mars.MIPSprogram;
-import java.util.ArrayList;
 
 public class ExtendedInstruction extends Instruction
 {
@@ -334,7 +334,7 @@ public class ExtendedInstruction extends Instruction
     }
     
     private int getInstructionLength(final ArrayList<String> translationList) {
-        if (translationList == null || translationList.size() == 0) {
+        if (translationList == null || translationList.isEmpty()) {
             return 0;
         }
         int instructionCount = 0;

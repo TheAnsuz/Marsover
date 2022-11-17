@@ -2,14 +2,12 @@
 
 package mars.pipeline.DiagramaMulticiclo;
 
-import java.util.Iterator;
-import java.io.IOException;
-import mars.pipeline.Decode;
-import java.io.Writer;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import mars.pipeline.Decode;
 
 public class DiagramaMulticiclo
 {
@@ -26,7 +24,7 @@ public class DiagramaMulticiclo
         this.primer_ciclo = 1;
         this.ultimo_ciclo = this.ciclos_por_ventana;
         this.ultimo_ciclo_escrito = 0;
-        this.lista_instrucciones = new ArrayList<InstructionInfo>();
+        this.lista_instrucciones = new ArrayList<>();
     }
     
     public DiagramaMulticiclo(final int limite, final int ciclos_por_ventana) {
@@ -35,7 +33,7 @@ public class DiagramaMulticiclo
         this.primer_ciclo = 1;
         this.ultimo_ciclo = ciclos_por_ventana;
         this.ultimo_ciclo_escrito = 0;
-        this.lista_instrucciones = new ArrayList<InstructionInfo>();
+        this.lista_instrucciones = new ArrayList<>();
     }
     
     private void reconfigure() {

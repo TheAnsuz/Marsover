@@ -2,15 +2,14 @@
 
 package mars.pipeline.tomasulo;
 
-import java.io.Writer;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import mars.pipeline.Decode;
-import java.io.BufferedWriter;
-import mars.pipeline.Stage;
 import mars.pipeline.BranchPredictor;
-import mars.pipeline.StageRegisters;
+import mars.pipeline.Decode;
 import mars.pipeline.Pipeline;
+import mars.pipeline.Stage;
+import mars.pipeline.StageRegisters;
 
 public abstract class Tomasulo extends Pipeline
 {

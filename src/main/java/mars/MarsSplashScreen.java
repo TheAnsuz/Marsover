@@ -2,23 +2,20 @@
 
 package mars;
 
-import java.awt.image.ImageObserver;
-import java.awt.Graphics;
-import javax.swing.ImageIcon;
-import java.awt.Image;
-import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.Component;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JLabel;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.Container;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JWindow;
 
 public class MarsSplashScreen extends JWindow
 {
-    private int duration;
+    private final int duration;
     
     public MarsSplashScreen(final int d) {
         this.duration = d;

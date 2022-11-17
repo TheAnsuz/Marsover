@@ -2,16 +2,15 @@
 
 package mars.mips.dump;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import mars.Globals;
 import mars.ProgramStatement;
 import mars.mips.hardware.AddressErrorException;
-import mars.util.Binary;
 import mars.mips.hardware.Memory;
-import mars.Globals;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.FileOutputStream;
-import java.io.File;
+import mars.util.Binary;
 
 public class SegmentWindowDumpFormat extends AbstractDumpFormat
 {
@@ -66,7 +65,7 @@ public class SegmentWindowDumpFormat extends AbstractDumpFormat
                 try {
                     final ProgramStatement ps = Globals.memory.getStatement(address2);
                     string2 += (ps.getPrintableBasicAssemblyStatement() + "                      ").substring(0, 22);
-                    string2 += (((ps.getSource() == "") ? "" : new Integer(ps.getSourceLine()).toString()) + "     ").substring(0, 5);
+                    string2 += ((("".equals(ps.getSource())) ? "" : Integer.toString(ps.getSourceLine())) + "     ").substring(0, 5);
                     string2 += ps.getSource();
                 }
                 catch (AddressErrorException ex) {}

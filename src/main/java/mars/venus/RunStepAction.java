@@ -2,16 +2,14 @@
 
 package mars.venus;
 
-import mars.simulator.ProgramArgumentList;
-import mars.mips.hardware.RegisterFile;
-import javax.swing.JOptionPane;
-import mars.ProcessingException;
-import javax.swing.AbstractAction;
-import mars.Globals;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import mars.Globals;
+import mars.ProcessingException;
+import mars.mips.hardware.RegisterFile;
+import mars.simulator.ProgramArgumentList;
 
 public class RunStepAction extends GuiAction
 {

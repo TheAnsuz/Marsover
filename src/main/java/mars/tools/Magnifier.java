@@ -2,35 +2,31 @@
 
 package mars.tools;
 
-import java.awt.event.ComponentEvent;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.Rectangle;
-import javax.swing.JOptionPane;
-import java.awt.Color;
-import javax.swing.SpinnerModel;
-import javax.swing.Box;
-import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.JComponent;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.JLabel;
-import java.awt.Image;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.AWTException;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import mars.Globals;
-import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JButton;
-import java.awt.Robot;
-import java.awt.event.ComponentListener;
-import javax.swing.JFrame;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import mars.Globals;
 
 class Magnifier extends JFrame implements ComponentListener
 {

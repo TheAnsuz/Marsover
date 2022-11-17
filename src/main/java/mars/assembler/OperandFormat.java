@@ -2,12 +2,12 @@
 
 package mars.assembler;
 
-import mars.ErrorMessage;
-import mars.util.Binary;
-import mars.Globals;
 import java.util.ArrayList;
 import mars.ErrorList;
+import mars.ErrorMessage;
+import mars.Globals;
 import mars.mips.instructions.Instruction;
+import mars.util.Binary;
 
 public class OperandFormat
 {

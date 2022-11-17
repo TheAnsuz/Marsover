@@ -3,9 +3,9 @@
 package mars.mips.hardware;
 
 import java.util.Observer;
+import mars.Globals;
 import mars.assembler.SymbolTable;
 import mars.util.Binary;
-import mars.Globals;
 
 public class RegisterFile
 {

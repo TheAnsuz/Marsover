@@ -2,16 +2,16 @@
 
 package mars.assembler;
 
-import mars.util.Binary;
-import mars.Globals;
-import mars.ErrorMessage;
-import mars.ErrorList;
 import java.util.ArrayList;
+import mars.ErrorList;
+import mars.ErrorMessage;
+import mars.Globals;
+import mars.util.Binary;
 
 public class SymbolTable
 {
     private static String startLabel;
-    private String filename;
+    private final String filename;
     private ArrayList<Symbol> table;
     public static final int NOT_FOUND = -1;
     

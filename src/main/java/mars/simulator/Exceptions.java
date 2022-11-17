@@ -2,9 +2,9 @@
 
 package mars.simulator;
 
-import mars.util.Binary;
-import mars.mips.hardware.RegisterFile;
 import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.RegisterFile;
+import mars.util.Binary;
 
 public class Exceptions
 {

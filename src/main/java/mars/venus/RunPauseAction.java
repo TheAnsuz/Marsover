@@ -2,11 +2,10 @@
 
 package mars.venus;
 
-import javax.swing.AbstractAction;
-import mars.simulator.Simulator;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
+import mars.simulator.Simulator;
 
 public class RunPauseAction extends GuiAction
 {

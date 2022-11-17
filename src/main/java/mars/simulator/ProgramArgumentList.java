@@ -2,13 +2,13 @@
 
 package mars.simulator;
 
-import mars.mips.hardware.Register;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.hardware.RegisterFile;
-import mars.Globals;
-import mars.mips.hardware.Memory;
-import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
+import mars.Globals;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.Register;
+import mars.mips.hardware.RegisterFile;
 
 public class ProgramArgumentList
 {
@@ -50,7 +50,7 @@ public class ProgramArgumentList
     }
     
     public void storeProgramArguments() {
-        if (this.programArgumentList == null || this.programArgumentList.size() == 0) {
+        if (this.programArgumentList == null || this.programArgumentList.isEmpty()) {
             return;
         }
         int highAddress = Memory.stackBaseAddress;

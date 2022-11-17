@@ -2,35 +2,33 @@
 
 package mars.venus.editors.generic;
 
-import javax.swing.undo.UndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
+import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.event.UndoableEditEvent;
+import java.awt.Component;
+import java.awt.Insets;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.Component;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.Insets;
-import mars.Globals;
-import javax.swing.JComponent;
-import javax.swing.undo.CompoundEdit;
-import javax.swing.JScrollPane;
+import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
+import mars.Globals;
 import mars.venus.EditPane;
 import mars.venus.editors.MARSTextEditingArea;
-import javax.swing.JTextArea;
 
 public class GenericTextArea extends JTextArea implements MARSTextEditingArea
 {
     private EditPane editPane;
     private UndoManager undoManager;
-    private UndoableEditListener undoableEditListener;
-    private JTextArea sourceCode;
-    private JScrollPane editAreaScrollPane;
+    private final UndoableEditListener undoableEditListener;
+    private final JTextArea sourceCode;
+    private final JScrollPane editAreaScrollPane;
     private boolean isCompoundEdit;
     private CompoundEdit compoundEdit;
     

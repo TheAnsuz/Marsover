@@ -2,16 +2,16 @@
 
 package mars.mips.dump;
 
+import java.io.File;
 import java.io.IOException;
 import mars.mips.hardware.AddressErrorException;
-import java.io.File;
 
 public abstract class AbstractDumpFormat implements DumpFormat
 {
-    private String name;
-    private String commandDescriptor;
-    private String description;
-    private String extension;
+    private final String name;
+    private final String commandDescriptor;
+    private final String description;
+    private final String extension;
     
     public AbstractDumpFormat(final String name, final String commandDescriptor, final String description, final String extension) {
         this.name = name;

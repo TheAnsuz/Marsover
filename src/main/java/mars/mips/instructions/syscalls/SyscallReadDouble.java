@@ -2,11 +2,11 @@
 
 package mars.mips.instructions.syscalls;
 
+import mars.ProcessingException;
+import mars.ProgramStatement;
 import mars.mips.hardware.Coprocessor1;
 import mars.util.Binary;
-import mars.ProcessingException;
 import mars.util.SystemIO;
-import mars.ProgramStatement;
 
 public class SyscallReadDouble extends AbstractSyscall
 {

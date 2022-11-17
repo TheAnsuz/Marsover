@@ -4,16 +4,14 @@ package mars;
 
 import dev.amrv.marsover.AppProperties;
 import dev.amrv.marsover.Marsover;
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Observable;
 import java.util.StringTokenizer;
 import mars.util.Binary;
-import java.awt.Color;
 import mars.util.EditorFont;
-import java.awt.Font;
-import mars.venus.editors.jeditsyntax.SyntaxUtilities;
-import java.util.prefs.BackingStoreException;
 import mars.venus.editors.jeditsyntax.SyntaxStyle;
-import java.util.prefs.Preferences;
-import java.util.Observable;
+import mars.venus.editors.jeditsyntax.SyntaxUtilities;
 
 public class Settings extends Observable
 {

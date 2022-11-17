@@ -2,31 +2,29 @@
 
 package mars.tools;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.Insets;
-import java.awt.FlowLayout;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Dimension;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import mars.mips.hardware.AddressErrorException;
-import mars.Globals;
-import java.awt.Component;
-import java.awt.LayoutManager;
-import java.awt.GridLayout;
-import javax.swing.JComponent;
-import mars.simulator.Simulator;
-import mars.mips.hardware.Coprocessor0;
-import mars.mips.hardware.MemoryAccessNotice;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Observable;
-import mars.mips.hardware.Memory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import mars.Globals;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.Coprocessor0;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.simulator.Simulator;
 
 public class DigitalLabSim extends AbstractMarsToolAndApplication
 {
@@ -167,12 +165,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication
         else {
             this.updateMMIOControlAndData(DigitalLabSim.OUT_ADRESS_HEXA_KEYBOARD, 0);
         }
-        if ((row & '\u00f0') != 0x0) {
-            DigitalLabSim.KeyboardInterruptOnOff = true;
-        }
-        else {
-            DigitalLabSim.KeyboardInterruptOnOff = false;
-        }
+        DigitalLabSim.KeyboardInterruptOnOff = (row & '\u00f0') != 0x0;
     }
     
     public void updateOneSecondCounter(final char value) {
@@ -351,7 +344,7 @@ public class DigitalLabSim extends AbstractMarsToolAndApplication
         
         public class EcouteurClick implements MouseListener
         {
-            private int buttonValue;
+            private final int buttonValue;
             
             public EcouteurClick(final int val) {
                 this.buttonValue = val;

@@ -2,21 +2,21 @@
 
 package mars.pipeline;
 
-import mars.pipeline.tomasulo.TomasuloP3;
-import mars.pipeline.tomasulo.TomasuloP4;
-import mars.pipeline.tomasulo.TomasuloP2;
-import mars.pipeline.pipes.MulticyclePipeline;
-import mars.pipeline.pipes.StallPipeline;
-import mars.pipeline.pipes.ForwardPipeline;
-import mars.pipeline.pipes.IdealPipeline;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.File;
-import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import mars.pipeline.pipes.ForwardPipeline;
+import mars.pipeline.pipes.IdealPipeline;
+import mars.pipeline.pipes.MulticyclePipeline;
+import mars.pipeline.pipes.StallPipeline;
+import mars.pipeline.tomasulo.TomasuloP2;
+import mars.pipeline.tomasulo.TomasuloP3;
+import mars.pipeline.tomasulo.TomasuloP4;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class pipe_config
 {

@@ -2,17 +2,15 @@
 
 package mars.venus;
 
-import mars.simulator.ProgramArgumentList;
-import mars.mips.hardware.RegisterFile;
-import mars.util.SystemIO;
-import mars.ProcessingException;
-import javax.swing.AbstractAction;
-import mars.Globals;
-import java.awt.Component;
-import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
-import javax.swing.KeyStroke;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import mars.Globals;
+import mars.ProcessingException;
+import mars.mips.hardware.RegisterFile;
+import mars.simulator.ProgramArgumentList;
+import mars.util.SystemIO;
 
 public class RunGoAction extends GuiAction
 {

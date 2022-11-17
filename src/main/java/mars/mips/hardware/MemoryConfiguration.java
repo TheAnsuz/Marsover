@@ -4,10 +4,10 @@ package mars.mips.hardware;
 
 public class MemoryConfiguration
 {
-    private String configurationIdentifier;
-    private String configurationName;
-    private String[] configurationItemNames;
-    private int[] configurationItemValues;
+    private final String configurationIdentifier;
+    private final String configurationName;
+    private final String[] configurationItemNames;
+    private final int[] configurationItemValues;
     
     public MemoryConfiguration(final String ident, final String name, final String[] items, final int[] values) {
         this.configurationIdentifier = ident;

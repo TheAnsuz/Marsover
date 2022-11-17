@@ -2,12 +2,12 @@
 
 package mars.mips.instructions;
 
-import mars.mips.instructions.syscalls.SyscallNumberOverride;
+import java.util.ArrayList;
+import java.util.HashMap;
 import mars.Globals;
 import mars.mips.instructions.syscalls.Syscall;
-import java.util.HashMap;
+import mars.mips.instructions.syscalls.SyscallNumberOverride;
 import mars.util.FilenameFinder;
-import java.util.ArrayList;
 
 class SyscallLoader
 {

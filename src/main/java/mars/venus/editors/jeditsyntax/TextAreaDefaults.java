@@ -2,9 +2,9 @@
 
 package mars.venus.editors.jeditsyntax;
 
-import mars.Globals;
-import javax.swing.JPopupMenu;
 import java.awt.Color;
+import javax.swing.JPopupMenu;
+import mars.Globals;
 
 public class TextAreaDefaults
 {

@@ -2,17 +2,16 @@
 
 package mars.venus;
 
-import java.awt.Component;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
-import javax.swing.Icon;
-import javax.swing.Action;
-import javax.swing.Timer;
-import java.awt.event.MouseListener;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class RepeatButton extends JButton implements ActionListener, MouseListener
 {

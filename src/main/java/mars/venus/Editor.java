@@ -10,13 +10,13 @@ public class Editor
     public static final int MAX_TAB_SIZE = 32;
     public static final int MIN_BLINK_RATE = 0;
     public static final int MAX_BLINK_RATE = 1000;
-    private VenusUI mainUI;
+    private final VenusUI mainUI;
     private EditTabbedPane editTabbedPane;
-    private String mainUIbaseTitle;
+    private final String mainUIbaseTitle;
     private int newUsageCount;
-    private String defaultOpenDirectory;
+    private final String defaultOpenDirectory;
     private String currentOpenDirectory;
-    private String defaultSaveDirectory;
+    private final String defaultSaveDirectory;
     private String currentSaveDirectory;
     
     public Editor(final VenusUI ui) {

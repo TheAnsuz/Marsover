@@ -2,17 +2,17 @@
 
 package mars;
 
-import mars.venus.NumberDisplayBaseChooser;
 import java.util.ArrayList;
 import mars.assembler.Token;
-import mars.util.Binary;
+import mars.assembler.TokenList;
+import mars.assembler.TokenTypes;
 import mars.mips.hardware.Coprocessor1;
 import mars.mips.hardware.RegisterFile;
-import mars.assembler.TokenTypes;
 import mars.mips.instructions.BasicInstruction;
 import mars.mips.instructions.BasicInstructionFormat;
 import mars.mips.instructions.Instruction;
-import mars.assembler.TokenList;
+import mars.util.Binary;
+import mars.venus.NumberDisplayBaseChooser;
 
 public class ProgramStatement
 {
@@ -224,7 +224,7 @@ public class ProgramStatement
         final String blanks = "                               ";
         String result = "[" + this.textAddress + "]";
         if (this.basicAssemblyStatement != null) {
-            final int firstSpace = this.basicAssemblyStatement.indexOf(" ");
+            final int firstSpace = this.basicAssemblyStatement.indexOf(' ');
             result = result + blanks.substring(0, 16 - result.length()) + this.basicAssemblyStatement.substring(0, firstSpace);
             result = result + blanks.substring(0, 24 - result.length()) + this.basicAssemblyStatement.substring(firstSpace + 1);
         }
@@ -383,7 +383,7 @@ public class ProgramStatement
     
     private class BasicStatementList
     {
-        private ArrayList<ListElement> list;
+        private final ArrayList<ListElement> list;
         
         BasicStatementList() {
             this.list = new ArrayList();

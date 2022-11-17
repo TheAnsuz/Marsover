@@ -2,16 +2,16 @@
 
 package mars;
 
-import java.util.Enumeration;
-import mars.mips.instructions.syscalls.SyscallNumberOverride;
-import java.util.StringTokenizer;
-import java.util.Properties;
-import mars.util.PropertiesFile;
 import java.util.ArrayList;
-import mars.venus.VenusUI;
-import mars.mips.hardware.Memory;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.StringTokenizer;
 import mars.assembler.SymbolTable;
+import mars.mips.hardware.Memory;
 import mars.mips.instructions.InstructionSet;
+import mars.mips.instructions.syscalls.SyscallNumberOverride;
+import mars.util.PropertiesFile;
+import mars.venus.VenusUI;
 
 public class Globals
 {

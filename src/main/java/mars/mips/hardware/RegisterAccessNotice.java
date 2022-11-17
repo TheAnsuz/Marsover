@@ -4,8 +4,8 @@ package mars.mips.hardware;
 
 public class RegisterAccessNotice extends AccessNotice
 {
-    private String registerName;
-    private int id;
+    private final String registerName;
+    private final int id;
     
     RegisterAccessNotice(final int type, final String registerName, final int id) {
         super(type);

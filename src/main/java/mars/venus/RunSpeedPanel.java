@@ -2,16 +2,14 @@
 
 package mars.venus;
 
-import javax.swing.event.ChangeEvent;
-import java.awt.Component;
-import javax.swing.event.ChangeListener;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import mars.Globals;
-import javax.swing.JSlider;
+import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import mars.Globals;
 
 public class RunSpeedPanel extends JPanel
 {
@@ -20,7 +18,7 @@ public class RunSpeedPanel extends JPanel
     private static final int SPEED_INDEX_MAX = 40;
     private static final int SPEED_INDEX_INIT = 40;
     private static final int SPEED_INDEX_INTERACTION_LIMIT = 35;
-    private double[] speedTable;
+    private final double[] speedTable;
     private JLabel sliderLabel;
     private JSlider runSpeedSlider;
     private static RunSpeedPanel runSpeedPanel;

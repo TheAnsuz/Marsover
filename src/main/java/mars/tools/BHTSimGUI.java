@@ -2,24 +2,21 @@
 
 package mars.tools;
 
-import java.util.Vector;
-import javax.swing.JLabel;
-import java.awt.Insets;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import javax.swing.table.TableCellRenderer;
-import java.text.DecimalFormat;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import java.awt.LayoutManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.JTextArea;
-import javax.swing.JTable;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.text.DecimalFormat;
+import java.util.Vector;
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class BHTSimGUI extends JPanel
 {
@@ -29,7 +26,7 @@ public class BHTSimGUI extends JPanel
     private JComboBox m_cbBHTentries;
     private JComboBox m_cbBHThistory;
     private JComboBox m_cbBHTinitVal;
-    private JTable m_tabBHT;
+    private final JTable m_tabBHT;
     private JTextArea m_taLog;
     public static final Color COLOR_PREPREDICTION;
     public static final Color COLOR_PREDICTION_CORRECT;
@@ -52,7 +49,7 @@ public class BHTSimGUI extends JPanel
     private JTable createAndInitTable() {
         final JTable theTable = new JTable();
         final DefaultTableCellRenderer doubleRenderer = new DefaultTableCellRenderer() {
-            private DecimalFormat formatter = new DecimalFormat("##0.00");
+            private final DecimalFormat formatter = new DecimalFormat("##0.00");
             
             public void setValue(final Object value) {
                 this.setText((value == null) ? "" : this.formatter.format(value));
@@ -114,12 +111,12 @@ public class BHTSimGUI extends JPanel
     private JPanel buildConfigPanel() {
         final JPanel panel = new JPanel();
         final Vector sizes = new Vector();
-        sizes.add(new Integer(8));
-        sizes.add(new Integer(16));
-        sizes.add(new Integer(32));
+        sizes.add(8);
+        sizes.add(16);
+        sizes.add(32);
         final Vector bits = new Vector();
-        bits.add(new Integer(1));
-        bits.add(new Integer(2));
+        bits.add(1);
+        bits.add(2);
         final Vector initVals = new Vector();
         initVals.add("NOT TAKE");
         initVals.add("TAKE");

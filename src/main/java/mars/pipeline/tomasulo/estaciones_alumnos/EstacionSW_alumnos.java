@@ -3,10 +3,10 @@
 package mars.pipeline.tomasulo.estaciones_alumnos;
 
 import mars.pipeline.Decode;
-import mars.pipeline.tomasulo.RoB_entry;
-import mars.pipeline.tomasulo.ReorderBuffer;
-import mars.pipeline.tomasulo.Tomasulo_conf;
 import mars.pipeline.tomasulo.Estacion;
+import mars.pipeline.tomasulo.ReorderBuffer;
+import mars.pipeline.tomasulo.RoB_entry;
+import mars.pipeline.tomasulo.Tomasulo_conf;
 
 public class EstacionSW_alumnos extends Estacion
 {

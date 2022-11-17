@@ -2,24 +2,23 @@
 
 package mars.assembler;
 
-import java.util.Iterator;
 import java.util.ArrayList;
 import mars.MIPSprogram;
 
 public class MacroPool
 {
-    private MIPSprogram program;
-    private ArrayList<Macro> macroList;
+    private final MIPSprogram program;
+    private final ArrayList<Macro> macroList;
     private Macro current;
-    private ArrayList<Integer> callStack;
-    private ArrayList<Integer> callStackOrigLines;
+    private final ArrayList<Integer> callStack;
+    private final ArrayList<Integer> callStackOrigLines;
     private int counter;
     
     public MacroPool(final MIPSprogram mipsProgram) {
         this.program = mipsProgram;
-        this.macroList = new ArrayList<Macro>();
-        this.callStack = new ArrayList<Integer>();
-        this.callStackOrigLines = new ArrayList<Integer>();
+        this.macroList = new ArrayList<>();
+        this.callStack = new ArrayList<>();
+        this.callStackOrigLines = new ArrayList<>();
         this.current = null;
         this.counter = 0;
     }
